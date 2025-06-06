@@ -1,0 +1,25 @@
+Package: BLSloadR
+Type: Package
+Title: Streamlines Downloading State Data from the U.S. Bureau of Labor Statistics
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "David", "Schmidt",
+      email = "deschmidt@detr.nv.gov",
+      role = c("aut", "cre")
+    )
+  )
+Description: More about what it does (maybe more than one line).
+    Continuation lines should be indented.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports:
+    data.table,
+    httr,
+    dplyr,
+    stringr,
+    lubridate,
+    readxl,
+    zoo
+RoxygenNote: 7.3.2
