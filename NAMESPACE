@@ -2,6 +2,7 @@
 
 export(fread_bls)
 export(get_ces)
+export(get_national_ces)
 export(get_jolts)
 export(get_laus)
 export(get_oews)
