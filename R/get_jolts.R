@@ -66,34 +66,34 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
   jolts_sizeclass <- fread_bls("https://download.bls.gov/pub/time.series/jt/jt.sizeclass")
   jolts_industry <- fread_bls("https://download.bls.gov/pub/time.series/jt/jt.industry")
 
-  jolts <- jolts_import %>%
-    select(-c(footnote_codes)) %>%
-    left_join(jolts_series %>% select(-footnote_codes), by = "series_id") %>%
-    left_join(jolts_states %>% select(-c(display_level:sort_sequence)), by = "state_code") %>%
-    left_join(jolts_elements %>% select(-c(display_level:sort_sequence)), by = "dataelement_code") %>%
-    left_join(jolts_area %>% select(-c(display_level:sort_sequence)), by = "area_code") %>%
-    left_join(jolts_sizeclass %>% select(-c(display_level:sort_sequence)), by = "sizeclass_code") %>%
-    left_join(jolts_industry %>% select(-c(display_level:sort_sequence)), by = "industry_code")
+  jolts <- jolts_import |>
+    select(-c(footnote_codes)) |>
+    left_join(jolts_series |> select(-footnote_codes), by = "series_id") |>
+    left_join(jolts_states |> select(-c(display_level:sort_sequence)), by = "state_code") |>
+    left_join(jolts_elements |> select(-c(display_level:sort_sequence)), by = "dataelement_code") |>
+    left_join(jolts_area |> select(-c(display_level:sort_sequence)), by = "area_code") |>
+    left_join(jolts_sizeclass |> select(-c(display_level:sort_sequence)), by = "sizeclass_code") |>
+    left_join(jolts_industry |> select(-c(display_level:sort_sequence)), by = "industry_code")
 
   if(monthly_only){
-    jolts <- jolts %>%
+    jolts <- jolts |>
       filter(period != "M13")
   }
 
   if(remove_regions){
-    jolts <- jolts %>%
+    jolts <- jolts |>
       filter(!(state_code %in% c("MW", "NE", "SO", "WE")))
 
   }
 
   if(remove_national){
-    jolts <- jolts %>%
+    jolts <- jolts |>
       filter(!(state_code %in% c("00")))
 
   }
 
-  jolts <- jolts %>%
-    mutate(date = ym(paste(year, str_remove(period, "M"), sep="-")))%>%
+  jolts <- jolts |>
+    mutate(date = ym(paste(year, str_remove(period, "M"), sep="-")))|>
     mutate(
       value = as.numeric(value),
       ratelevel_code = case_when(

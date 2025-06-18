@@ -38,11 +38,11 @@ get_oews <- function(){
   oews_area <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.area")
   oews_datatype <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.datatype")
 
-  oews_import <- oews_current %>% select(-footnote_codes) %>%
-    left_join(oews_series) %>% select(-footnote_codes) %>%
-    left_join(oews_occupation) %>%
-    left_join(oews_area) %>%
-    left_join(oews_datatype) %>%
+  oews_import <- oews_current |> select(-footnote_codes) |>
+    left_join(oews_series) |> select(-footnote_codes) |>
+    left_join(oews_occupation) |>
+    left_join(oews_area) |>
+    left_join(oews_datatype) |>
     mutate(value = as.numeric(value))
 
   return(oews_import)

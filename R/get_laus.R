@@ -116,25 +116,25 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
   laus_measure <- fread_bls("https://download.bls.gov/pub/time.series/la/la.measure")
 
   # Join all the data together
-  laus <- laus_import %>%
-    select(-footnote_codes) %>%
-    left_join(laus_series %>% select(-footnote_codes), by = c("series_id")) %>%
-    left_join(laus_area, by = c("area_code", "area_type_code")) %>%
-    left_join(laus_measure, by = "measure_code") %>%
-    mutate(value = as.numeric(value)) %>%
-    filter(!is.na(value)) %>%
-    select(-c(display_level:sort_sequence)) %>%
+  laus <- laus_import |>
+    select(-footnote_codes) |>
+    left_join(laus_series |> select(-footnote_codes), by = c("series_id")) |>
+    left_join(laus_area, by = c("area_code", "area_type_code")) |>
+    left_join(laus_measure, by = "measure_code") |>
+    mutate(value = as.numeric(value)) |>
+    filter(!is.na(value)) |>
+    select(-c(display_level:sort_sequence)) |>
     select(-c(series_title:end_period))
 
   # Handle monthly filtering and date creation
   if (monthly_only) {
-    laus <- laus %>%
-      filter(period != "M13") %>%
+    laus <- laus |>
+      filter(period != "M13") |>
       mutate(date = lubridate::ym(paste(as.character(year), substr(period, 2, 3), sep = "-")))
   }
 
   if(transform){
-    laus <- laus %>%
+    laus <- laus |>
       mutate(value = if_else(str_detect(measure_text, "rate")|str_detect(measure_text, "ratio"),value/100,value))
   }
 

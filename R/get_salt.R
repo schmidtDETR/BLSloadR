@@ -67,19 +67,14 @@ get_salt <- function(only_states = TRUE){
 
   response <- GET(salt_url, write_disk(tf <- tempfile(fileext = ".xlsx")), add_headers(headers))
 
-  salt_data <- read_excel(tf, skip = 1) %>%
-    rename_with(.fn = str_to_lower) %>%
-    # left_join(state_names, by = "state") %>%
-    # filter(!is.na(st)) %>%
-    mutate(date = yq(paste0(`end year`, `end quarter`))) %>%
-    select(-c(record, `start year`, `start quarter`, `end year`, `end quarter`, `unique period`)) %>%
-    mutate(across(starts_with("u-"), function(x){x = x/100})) %>%
-    rename_with(.cols = starts_with("u-"), .fn = str_remove, pattern = "-") %>%
-    rename_with(.cols = everything(), .fn = str_replace_all, pattern = " ", replacement = "_") %>%
+  salt_data <- read_excel(tf, skip = 1) |>
+    rename_with(.fn = str_to_lower) |>
+    mutate(date = yq(paste0(`end year`, `end quarter`))) |>
+    select(-c(record, `start year`, `start quarter`, `end year`, `end quarter`, `unique period`)) |>
+    mutate(across(starts_with("u-"), function(x){x = x/100})) |>
+    rename_with(.cols = starts_with("u-"), .fn = str_remove, pattern = "-") |>
+    rename_with(.cols = everything(), .fn = str_replace_all, pattern = " ", replacement = "_") |>
     mutate(not_job_losers = unemployed - job_losers,
-           # job_losers_noclaim = job_losers - ann_avg_claims,
-           # u2c = job_losers_noclaim / civilian_labor_force,
-           # u2d = ann_avg_claims / civilian_labor_force,
            unemployed_under_14_weeks = unemployed - `unemployed_15+_weeks`,
            losers_notlosers_ratio = job_losers / not_job_losers,
            u1b = u3-u1,
@@ -94,14 +89,14 @@ get_salt <- function(only_states = TRUE){
            period_name = as.yearqtr(date))
 
   if(only_states){
-    salt_data <- salt_data %>%
-      mutate(fips_len = str_length(fips)) %>%
-      filter(fips_len == 2) %>%
+    salt_data <- salt_data |>
+      mutate(fips_len = str_length(fips)) |>
+      filter(fips_len == 2) |>
       select(-fips_len)
   }
 
-  salt_data <- salt_data %>%
-    group_by(date) %>%
+  salt_data <- salt_data |>
+    group_by(date) |>
     mutate(u1_25 = quantile(u1, probs = c(0.25), na.rm = TRUE),
            u1_50 = median(u1),
            u1_75 = quantile(u1, probs = c(0.75), na.rm = TRUE),
@@ -117,19 +112,19 @@ get_salt <- function(only_states = TRUE){
            u5b_25 = quantile(u5b, probs = c(0.25), na.rm = TRUE),
            u5b_50 = median(u5b),
            u5b_75 = quantile(u5b, probs = c(0.75), na.rm = TRUE)
-    ) %>%
-    ungroup() %>%
-    group_by(state) %>%
+    ) |>
+    ungroup() |>
+    group_by(state) |>
     mutate(
       across(matches("^u[0-9]"),
-             .fns = \(x) lag(x, 4),
+             .fns = function(x){lag(x, 4)},
              .names = "py_{.col}")
-    ) %>%
+    ) |>
     mutate(
       across(matches("^u[0-9]"),
-             .fns = \(x) lag(x, 1),
+             .fns = function(x){lag(x, 1)},
              .names = "pq_{.col}")
-    ) %>%
+    ) |>
     ungroup()
 
   return(salt_data)

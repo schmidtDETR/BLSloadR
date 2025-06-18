@@ -3,6 +3,12 @@
 \name{get_laus}
 \alias{get_laus}
 \title{Download Local Area Unemployment Statistics (LAUS) Data}
+\description{
+This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
+of Labor Statistics. Due to the large size of some LAUS datasets (county and city
+files are >300MB), users must specify which geographic level to download. The function
+provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+}
 \usage{
 get_laus(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE)
 }
@@ -28,39 +34,33 @@ and creates a date column from year and period.}
 
 \item{transform}{Logical. If TRUE (default), converts rate and ratio measures from
 percentages to proportions by dividing by 100. Unemployment rates will be expressed
-as decimals (e.g., 0.05 for 5% unemployment) rather than percentages.}
-}
-\value{
-A data.table containing LAUS data with the following key columns:
-  \describe{
-    \item{series_id}{BLS series identifier}
-    \item{year}{Year of observation}
-    \item{period}{Time period (M01-M12 for months, M13 for annual)}
-    \item{value}{Employment statistic value (transformed if transform = TRUE)}
-    \item{date}{Date of observation (if monthly_only = TRUE)}
-    \item{area_text}{Geographic area name}
-    \item{area_type_code}{Code indicating area type}
-    \item{measure_text}{Type of measure (unemployment rate, labor force, employment, etc.)}
-    \item{seasonal}{Seasonal adjustment status}
-  }
-}
-\description{
-This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
-of Labor Statistics. Due to the large size of some LAUS datasets (county and city
-files are >300MB), users must specify which geographic level to download. The function
-provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.}
 }
 \details{
 The function joins data from multiple BLS files:
-  \itemize{
-    \item Main data file (varies by geography selection)
-    \item Series definitions (la.series)
-    \item Area codes and names (la.area)
-    \item Measure definitions (la.measure)
-  }
+\itemize{
+  \item Main data file (varies by geography selection)
+  \item Series definitions (la.series)
+  \item Area codes and names (la.area)
+  \item Measure definitions (la.measure)
+}
 
-  Large files (county and city) contain over 300MB of data and may take several
-  minutes to download and process.
+Large files (county and city) contain over 300MB of data and may take several
+minutes to download and process.
+}
+\value{
+A data.table containing LAUS data with the following key columns:
+\describe{
+  \item{series_id}{BLS series identifier}
+  \item{year}{Year of observation}
+  \item{period}{Time period (M01-M12 for months, M13 for annual)}
+  \item{value}{Employment statistic value (transformed if transform = TRUE)}
+  \item{date}{Date of observation (if monthly_only = TRUE)}
+  \item{area_text}{Geographic area name}
+  \item{area_type_code}{Code indicating area type}
+  \item{measure_text}{Type of measure (unemployment rate, labor force, employment, etc.)}
+  \item{seasonal}{Seasonal adjustment status}
+}
 }
 \examples{
 \dontrun{

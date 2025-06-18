@@ -4,7 +4,7 @@
 \alias{get_ces}
 \title{Download Current Employment Statistics (CES) Data}
 \usage{
-get_ces(transform = TRUE, monthly_only = TRUE)
+get_ces(transform = TRUE, monthly_only = TRUE, simplify_table=TRUE)
 }
 \arguments{
 \item{transform}{Logical. If TRUE (default), converts employment values from thousands
