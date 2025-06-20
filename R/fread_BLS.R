@@ -47,7 +47,7 @@ fread_bls <- function(url){
   writeBin(raw_data, temp_file)
 
   # fread directly from the file (very efficient)
-  return_data <- data.table::fread(temp_file)
+  return_data <- data.table::fread(temp_file, colClasses = "character")
 
   return(return_data)
 }
