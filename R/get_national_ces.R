@@ -65,6 +65,11 @@
 #' \url{https://www.bls.gov/ces/} for more information about CES data
 #' 
 #' @export
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr left_join
+#' @importFrom dplyr select
+#' @importFrom lubridate ym
 get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE){
   
   ces_data <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.data.0.AllCESSeries")
@@ -74,22 +79,22 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE){
   ces_datatype <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.datatype")
   ces_supersector <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.supersector")
   
-  ces_full <- ces_data %>% select(-footnote_codes) %>%
-    left_join(ces_series) %>% select(-footnote_codes) %>%
-    left_join(ces_industry) %>%
-    left_join(ces_period) %>%
-    left_join(ces_datatype) %>%
-    left_join(ces_supersector)
+  ces_full <- ces_data |> dplyr::select(-footnote_codes) |>
+    dplyr::left_join(ces_series) |> dplyr::select(-footnote_codes) |>
+    dplyr::left_join(ces_industry) |>
+    dplyr::left_join(ces_period) |>
+    dplyr::left_join(ces_datatype) |>
+    dplyr::left_join(ces_supersector)
   
   if(monthly_only){
-    ces_full <- ces_full %>%
-      filter(period != "M13")
+    ces_full <- ces_full |>
+      dplyr::filter(period != "M13")
   }
   
   if(simplify_table){
-    ces_full <- ces_full %>%
-      select(-c(series_title, begin_year, begin_period, end_year, end_period, naics_code, publishing_status, display_level, selectable, sort_sequence)) %>%
-      mutate(date = lubridate::ym(paste0(year,period)))
+    ces_full <- ces_full |>
+      dplyr::select(-c(series_title, begin_year, begin_period, end_year, end_period, naics_code, publishing_status, display_level, selectable, sort_sequence)) |>
+      dplyr::mutate(date = lubridate::ym(paste0(year,period)))
     
   }
   

@@ -4,15 +4,17 @@
 \alias{get_ces}
 \title{Download Current Employment Statistics (CES) Data}
 \usage{
-get_ces(transform = TRUE, monthly_only = TRUE)
+get_ces(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE)
 }
 \arguments{
 \item{transform}{Logical. If TRUE (default), converts employment values from thousands
 to actual counts by multiplying by 1000 for specific data types (codes 1, 6, 26)
 and removes ", In Thousands" from data type labels.}
 
-\item{monthly_only}{Logical. If TRUE (default), filters out annual data (period M13)
-and creates a date column from year and period.}
+\item{monthly_only}{Logical. If TRUE (default), filters out annual data (period M13).}
+
+\item{simplify_table}{Logical. If TRUE (default), removes excess columns and creates 
+a date column from Year and Period in the original data.}
 }
 \value{
 A data.table containing CES data with the following key columns:
@@ -21,7 +23,7 @@ A data.table containing CES data with the following key columns:
     \item{year}{Year of observation}
     \item{period}{Time period (M01-M12 for months, M13 for annual)}
     \item{value}{Employment statistic value}
-    \item{date}{Date column (if monthly_only = TRUE)}
+    \item{date}{Date column (if simplify_table = TRUE)}
     \item{industry_text}{Industry description}
     \item{state_text}{State name}
     \item{area_text}{Area description}

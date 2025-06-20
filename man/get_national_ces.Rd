@@ -51,12 +51,12 @@ The function downloads the following BLS CES datasets:
 }
 
 These datasets are joined together to provide context and labels for the 
-employment statistics. The function relies on a helper function \code{fread_bls()} 
+employment statistics. The function relies on a helper function `fread_bls()` 
 to download and read the BLS data files.
 }
 \note{
 This function requires the following packages: dplyr, data.table, httr, and 
-lubridate (for date formatting when simplify_table=TRUE). The \code{fread_bls()} 
+lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()` 
 helper function must be defined elsewhere in your environment.
 }
 \examples{
@@ -70,6 +70,7 @@ ces_full <- get_national_ces(monthly_only = FALSE, simplify_table = FALSE)
 # Get monthly data but keep all metadata columns
 ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
 }
+
 }
 \seealso{
 \url{https://www.bls.gov/ces/} for more information about CES data
