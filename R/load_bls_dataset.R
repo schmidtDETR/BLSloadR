@@ -204,7 +204,7 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
     
     full_dt <- full_dt |>
       dplyr::mutate(value = as.numeric(value),
-                    period_type_code = substr(period,2,2),
+                    period_type_code = substr(period,1,1),
                     date = case_when(
                       period %in% c("M13", "Q05") ~ lubridate::ym(paste0(year,period)),
                       period_type_code == "Q" ~ lubridate::yq(paste(year, "Q", substr(period,3,3))),
