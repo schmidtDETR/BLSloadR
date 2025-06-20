@@ -98,20 +98,20 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   # Join mapping files
   for (map_file in mapping_files) {
     try({
-    map_url <- paste0(base_url, map_file)
-    message("Reading mapping file: ", map_url)
-    map_dt <- fread_bls(map_url)
-    join_col <- names(map_dt)[1]
-    
-    if (join_col %in% names(series_dt)) {
-      series_dt <- left_join(series_dt, map_dt)
-    }
-    if (join_col %in% names(data_dt)) {
-      data_dt <- left_join(data_dt, map_dt)
-    }
-    
-  })
-}
+      map_url <- paste0(base_url, map_file)
+      message("Reading mapping file: ", map_url)
+      map_dt <- fread_bls(map_url)
+      join_col <- names(map_dt)[1]
+      
+      if (join_col %in% names(series_dt)) {
+        series_dt <- left_join(series_dt, map_dt)
+      }
+      if (join_col %in% names(data_dt)) {
+        data_dt <- left_join(data_dt, map_dt)
+      }
+      
+    })
+  }
   
   full_dt <- left_join(data_dt, series_dt, by = "series_id")
   
@@ -126,13 +126,13 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   }
   
   if(return_full){
-  return(list(
-    full_file = full_dt,
-    data = data_dt,
-    series = series_dt,
-    mapping_files = mapping_files,
-    file_table = file_table
-  ))
+    return(list(
+      full_file = full_dt,
+      data = data_dt,
+      series = series_dt,
+      mapping_files = mapping_files,
+      file_table = file_table
+    ))
   } else {
     return(full_dt)
   }
