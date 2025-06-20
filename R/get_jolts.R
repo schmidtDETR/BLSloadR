@@ -38,6 +38,12 @@
 #'   }
 #'
 #' @export
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr left_join
+#' @importFrom dplyr select
+#' @importFrom dplyr case_when
+#' @importFrom lubridate ym
 #' @examples
 #' \dontrun{
 #' # Download state-level JOLTS data (default)
@@ -67,34 +73,34 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
   jolts_industry <- fread_bls("https://download.bls.gov/pub/time.series/jt/jt.industry")
 
   jolts <- jolts_import |>
-    select(-c(footnote_codes)) |>
-    left_join(jolts_series |> select(-footnote_codes), by = "series_id") |>
-    left_join(jolts_states |> select(-c(display_level:sort_sequence)), by = "state_code") |>
-    left_join(jolts_elements |> select(-c(display_level:sort_sequence)), by = "dataelement_code") |>
-    left_join(jolts_area |> select(-c(display_level:sort_sequence)), by = "area_code") |>
-    left_join(jolts_sizeclass |> select(-c(display_level:sort_sequence)), by = "sizeclass_code") |>
-    left_join(jolts_industry |> select(-c(display_level:sort_sequence)), by = "industry_code")
+    dplyr::select(-c(footnote_codes)) |>
+    dplyr::left_join(jolts_series |> dplyr::select(-footnote_codes), by = "series_id") |>
+    dplyr::left_join(jolts_states |> dplyr::select(-c(display_level:sort_sequence)), by = "state_code") |>
+    dplyr::left_join(jolts_elements |> dplyr::select(-c(display_level:sort_sequence)), by = "dataelement_code") |>
+    dplyr::left_join(jolts_area |> dplyr::select(-c(display_level:sort_sequence)), by = "area_code") |>
+    dplyr::left_join(jolts_sizeclass |> dplyr::select(-c(display_level:sort_sequence)), by = "sizeclass_code") |>
+    dplyr::left_join(jolts_industry |> dplyr::select(-c(display_level:sort_sequence)), by = "industry_code")
 
   if(monthly_only){
     jolts <- jolts |>
-      filter(period != "M13")
+      dplyr::filter(period != "M13")
   }
 
   if(remove_regions){
     jolts <- jolts |>
-      filter(!(state_code %in% c("MW", "NE", "SO", "WE")))
+      dplyr::filter(!(state_code %in% c("MW", "NE", "SO", "WE")))
 
   }
 
   if(remove_national){
     jolts <- jolts |>
-      filter(!(state_code %in% c("00")))
+      dplyr::filter(!(state_code %in% c("00")))
 
   }
 
   jolts <- jolts |>
-    mutate(date = ym(paste(year, str_remove(period, "M"), sep="-")))|>
-    mutate(
+    dplyr::mutate(date = ym(paste(year, stringr::str_remove(period, "M"), sep="-")))|>
+    dplyr::mutate(
       value = as.numeric(value),
       ratelevel_code = case_when(
       ratelevel_code == "L" ~ "Level",

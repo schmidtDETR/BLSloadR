@@ -6,6 +6,9 @@
 #' @param url Character string. URL to the BLS flat file
 #' @return A data.table containing the downloaded data
 #' @export
+#' @importFrom httr GET
+#' @importFrom httr stop_for_status
+#' @importFrom httr content
 #' @examples
 #' \dontrun{
 #' data <- fread_bls("https://download.bls.gov/pub/time.series/sm/sm.series")

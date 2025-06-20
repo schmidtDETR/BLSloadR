@@ -11,6 +11,9 @@
 #' @return Invisibly returns the text content
 #' @export
 #' @importFrom httr GET add_headers stop_for_status content
+#' @importFrom htmltools HTML
+#' @importFrom htmltools htmlEscape
+#' @importFrom rstudioapi isAvailable
 #'
 #' @examples
 #' \dontrun{

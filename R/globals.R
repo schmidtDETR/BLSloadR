@@ -60,6 +60,8 @@ utils::globalVariables(c(
   "dataelement_code",
   "measure_text",
   "ratelevel_code",
+  "file_type",
+  "file_name",
   
   # Statistical functions (base R)
   "median",

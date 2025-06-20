@@ -1,9 +1,9 @@
 #' Download Local Area Unemployment Statistics (LAUS) Data
 #'
-#' This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
-#' of Labor Statistics. Due to the large size of some LAUS datasets (county and city
-#' files are >300MB), users must specify which geographic level to download. The function
-#' provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+#' @description This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
+#'  of Labor Statistics. Due to the large size of some LAUS datasets (county and city
+#'  files are >300MB), users must specify which geographic level to download. The function
+#'  provides access to both seasonally adjusted and unadjusted data at various geographic levels.
 #'
 #' @param geography Character string specifying the geographic level and adjustment type.
 #'   Default is "state_adjusted". Valid options are:
@@ -24,7 +24,7 @@
 #'   and creates a date column from year and period.
 #' @param transform Logical. If TRUE (default), converts rate and ratio measures from
 #'   percentages to proportions by dividing by 100. Unemployment rates will be expressed
-#'   as decimals (e.g., 0.05 for 5% unemployment) rather than percentages.
+#'   as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.
 #'
 #' @return A data.table containing LAUS data with the following key columns:
 #'   \describe{
@@ -46,11 +46,16 @@
 #'     \item Area codes and names (la.area)
 #'     \item Measure definitions (la.measure)
 #'   }
-#'
-#'   Large files (county and city) contain over 300MB of data and may take several
-#'   minutes to download and process.
-#'
 #' @export
+#' 
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr left_join
+#' @importFrom dplyr select
+#' @importFrom dplyr if_else
+#' @importFrom stringr str_detect
+#' @importFrom lubridate ym
+#' 
 #' @examples
 #' \dontrun{
 #' # Download state-level seasonally adjusted data (default)
@@ -117,25 +122,25 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
 
   # Join all the data together
   laus <- laus_import |>
-    select(-footnote_codes) |>
-    left_join(laus_series |> select(-footnote_codes), by = c("series_id")) |>
-    left_join(laus_area, by = c("area_code", "area_type_code")) |>
-    left_join(laus_measure, by = "measure_code") |>
-    mutate(value = as.numeric(value)) |>
-    filter(!is.na(value)) |>
-    select(-c(display_level:sort_sequence)) |>
+    dplyr::select(-footnote_codes) |>
+    dplyr::left_join(laus_series |> dplyr::select(-footnote_codes), by = c("series_id")) |>
+    dplyr::left_join(laus_area, by = c("area_code", "area_type_code")) |>
+    dplyr::left_join(laus_measure, by = "measure_code") |>
+    dplyr::mutate(value = as.numeric(value)) |>
+    dplyr::filter(!is.na(value)) |>
+    dplyr::select(-c(display_level:sort_sequence)) |>
     select(-c(series_title:end_period))
 
   # Handle monthly filtering and date creation
   if (monthly_only) {
     laus <- laus |>
-      filter(period != "M13") |>
-      mutate(date = lubridate::ym(paste(as.character(year), substr(period, 2, 3), sep = "-")))
+      dplyr::filter(period != "M13") |>
+      dplyr::mutate(date = lubridate::ym(paste(as.character(year), substr(period, 2, 3), sep = "-")))
   }
 
   if(transform){
     laus <- laus |>
-      mutate(value = if_else(str_detect(measure_text, "rate")|str_detect(measure_text, "ratio"),value/100,value))
+      dplyr::mutate(value = if_else(str_detect(measure_text, "rate")|str_detect(measure_text, "ratio"),value/100,value))
   }
 
 

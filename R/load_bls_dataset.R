@@ -1,10 +1,52 @@
-# This function generalizes a method to download all BLS data for a given time series database.
-# It currently merges all .data files (not ideal)
-# It should prompt when multiple data files exist which one to load.
-# It needs a simplify_table function to:
-#   * remove _code columns
-#   * convert value to numeric (and maybe multiply/divide to appropriate level)
-#   * create a date column from year/period
+#' Generic BLS Dataset Download
+#' 
+#' This function generalizes a method to download all BLS data for a given time series database.
+#' These files are accessed from https://download.bls.gov/pub/time.series/ and several datasets
+#' are available. A summary of an identified database can be generated using the `bls_overiew()`
+#' function. When multiple potential data files exist (common in large data sets), the function
+#' will prompt for an input of which file to use.
+#' 
+#' @param database_code This is the two digit character identifier for the desired database.
+#'   Some Valid options are:
+#'   \itemize{
+#'     \item "ce" - National Current Employment Statistics Data
+#'     \item "sm" - State and Metro area Current Employment Statistics Data
+#'     \item "mp" - Major Sector Total Factor Productivity
+#'     \item "ci" - Employment Cost Index
+#'     \item "eb" - Employee Benefits Survey
+#'   }
+#'   
+#' @param return_full This argument defaults to FALSE. If set to TRUE it will return
+#'   a list of the elements of data retrieved from the BLS separating the data, series, and
+#'   mapping values downloaded.
+#'  
+#' @param simplify_table This parameter defaults to TRUE. When TRUE it will remove all
+#'  columns from the date with "_code" in the column name, as well as a series of internal
+#'  identifiers which provide general information about the series but which are not needed for
+#'  performing time series analysis. This parameter also converts the column "value" to numeric
+#'  and generates a date column from the year and period columns in the data.
+#'  
+#' @returns This function will return either a data table (if return_full is FALSE or not provided)
+#'  or a named list of the returned data.
+#'  
+#' @export
+#' @importFrom data.table data.table
+#' @importFrom data.table fcase
+#' @importFrom data.table rbindlist
+#' @importFrom data.table :=
+#' 
+#' @examples
+#' \dontrun{
+#' # Download Employer Cost Index Data
+#' cost_index <- load_bls_dataset("ci")
+#'
+#' # Download separated data, series, and mapping columns
+#' benefits <- load_bls_dataset("eb", return_full = TRUE)
+#'
+#' # Download data without removing excess columns and value conversions
+#' productivity <- load_bls_dataset("mp", simplify_table = FALSE)
+#' }
+
 
 load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE) {
   
@@ -28,8 +70,8 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   
   # Extract filenames from the cleaned section
   file_names <- section2_lines |>
-    str_extract("^\\s*\\S+") |>
-    str_trim()
+    stringr::str_extract("^\\s*\\S+") |>
+    stringr::str_trim()
   
   # Create file table and classify by pattern
   file_table <- data.table(file_name = file_names)

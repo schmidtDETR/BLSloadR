@@ -28,7 +28,7 @@ and creates a date column from year and period.}
 
 \item{transform}{Logical. If TRUE (default), converts rate and ratio measures from
 percentages to proportions by dividing by 100. Unemployment rates will be expressed
-as decimals (e.g., 0.05 for 5% unemployment) rather than percentages.}
+as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.}
 }
 \value{
 A data.table containing LAUS data with the following key columns:
@@ -46,9 +46,9 @@ A data.table containing LAUS data with the following key columns:
 }
 \description{
 This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
-of Labor Statistics. Due to the large size of some LAUS datasets (county and city
-files are >300MB), users must specify which geographic level to download. The function
-provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+ of Labor Statistics. Due to the large size of some LAUS datasets (county and city
+ files are >300MB), users must specify which geographic level to download. The function
+ provides access to both seasonally adjusted and unadjusted data at various geographic levels.
 }
 \details{
 The function joins data from multiple BLS files:
@@ -58,9 +58,6 @@ The function joins data from multiple BLS files:
     \item Area codes and names (la.area)
     \item Measure definitions (la.measure)
   }
-
-  Large files (county and city) contain over 300MB of data and may take several
-  minutes to download and process.
 }
 \examples{
 \dontrun{

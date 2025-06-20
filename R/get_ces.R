@@ -25,6 +25,11 @@
 #'   }
 #'
 #' @export
+#' @importFrom dplyr filter
+#' @importFrom dplyr mutate
+#' @importFrom dplyr left_join
+#' @importFrom dplyr select
+#' @importFrom stringr str_remove
 #' @examples
 #' \dontrun{
 #' # Download all CES data with default settings
@@ -38,27 +43,27 @@
 #' }
 get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE) {
 
-  ces_import <- fread_bls("https://download.bls.gov/pub/time.series/sm/sm.data.1.AllData") |> select(-footnote_codes) |>
-    left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.series"), by = "series_id") |>  select(-footnote_codes) |>
-    left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.industry"), by = "industry_code") |>
-    left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.state"), by = "state_code") |>
-    left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.area"), by = "area_code") |>
-    left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.data_type"), by = "data_type_code") |>
-    left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.supersector"), by = "supersector_code") |>
-    mutate(value = as.numeric(value),
+  ces_import <- fread_bls("https://download.bls.gov/pub/time.series/sm/sm.data.1.AllData") |> dplyr::select(-footnote_codes) |>
+    dplyr::left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.series"), by = "series_id") |>  dplyr::select(-footnote_codes) |>
+    dplyr::left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.industry"), by = "industry_code") |>
+    dplyr::left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.state"), by = "state_code") |>
+    dplyr::left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.area"), by = "area_code") |>
+    dplyr::left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.data_type"), by = "data_type_code") |>
+    dplyr::left_join(fread_bls("https://download.bls.gov/pub/time.series/sm/sm.supersector"), by = "supersector_code") |>
+    dplyr::mutate(value = as.numeric(value),
            industry_code = substr(series_id,11,18)) |>
-    filter(!is.na(value))
+    dplyr::filter(!is.na(value))
 
   if(transform){
 
     ces_import <- ces_import |>
-      mutate(
+      dplyr::mutate(
         value = if_else(
           data_type_code %in% c(1,6,26),
           value * 1000,
           value
         ),
-        data_type_text = str_remove(data_type_text, ", In Thousands")
+        data_type_text = stringr::str_remove(data_type_text, ", In Thousands")
         )
 
   }
@@ -66,15 +71,15 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
   if(monthly_only){
 
     ces_import <- ces_import |>
-      filter(period != "M13")
+      dplyr::filter(period != "M13")
   }
   
   if(simplify_table){
     
     ces_import <- ces_import |>
-      mutate(date = lubridate::ym(paste0(year,period))) |>
-      select(-c(benchmark_year:end_period,year,period)) |>
-      filter(state_code != 0)
+      dplyr::mutate(date = lubridate::ym(paste0(year,period))) |>
+      dplyr::select(-c(benchmark_year:end_period,year,period)) |>
+      dplyr::filter(state_code != 0)
   }
 
   return(ces_import)

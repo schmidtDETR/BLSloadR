@@ -1,7 +1,7 @@
 Package: BLSloadR
 Type: Package
 Title: Streamlines Downloading State Data from the U.S. Bureau of Labor Statistics
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person(
       "David", "Schmidt",
@@ -23,5 +23,7 @@ Imports:
     lubridate (>= 1.9),
     readxl,
     tidyselect,
-    zoo
+    zoo,
+    htmltools,
+    rstudioapi
 RoxygenNote: 7.3.2
