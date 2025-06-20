@@ -19,11 +19,12 @@ Imports:
     data.table (>= 1.16),
     httr (>= 1.4.7),
     dplyr (>= 1.1),
-    stringr,
+    stringr (>= 1.5),
     lubridate (>= 1.9),
-    readxl,
-    tidyselect,
-    zoo,
+    rvest (>= 1.0.4),
+    readxl (>= 1.4.5),
+    tidyselect (>= 1.2),
+    zoo (>= 1.8),
     htmltools,
     rstudioapi
 RoxygenNote: 7.3.2
