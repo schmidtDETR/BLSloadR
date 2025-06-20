@@ -4,7 +4,7 @@
 \alias{get_ces}
 \title{Download Current Employment Statistics (CES) Data}
 \usage{
-get_ces(transform = TRUE, monthly_only = TRUE, simplify_table=TRUE)
+get_ces(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE)
 }
 \arguments{
 \item{transform}{Logical. If TRUE (default), converts employment values from thousands
@@ -13,8 +13,8 @@ and removes ", In Thousands" from data type labels.}
 
 \item{monthly_only}{Logical. If TRUE (default), filters out annual data (period M13).}
 
-\item{simplify_table}{Logical. If TRUE (default), removes some excess columns and
-creates a date column from year and period.}
+\item{simplify_table}{Logical. If TRUE (default), removes excess columns and creates 
+a date column from Year and Period in the original data.}
 }
 \value{
 A data.table containing CES data with the following key columns:
