@@ -36,6 +36,7 @@
 #' @importFrom data.table :=
 #' @importFrom rvest read_html html_elements html_attr
 #' @importFrom httr GET add_headers stop_for_status content
+#' @importFrom dplyr left_join
 #' 
 #' @examples
 #' \dontrun{
@@ -118,7 +119,7 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   # Create file table and classify by pattern
   file_table <- data.table(file_name = file_names)
   file_table[, file_type := fcase(
-    grepl("\\.data", file_name), "data",
+    grepl("\\.data\\.", file_name), "data",
     grepl("\\.series$", file_name), "series",
     default = "mapping"
   )]
@@ -180,25 +181,31 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   message("Reading series file: ", series_url)
   series_dt <- fread_bls(series_url)
   
-  # Join mapping files
+  # STEP 1: Join data to series first to get lookup codes
+  message("Joining data to series file...")
+  full_dt <- left_join(data_dt, series_dt, by = "series_id")
+  
+  # STEP 2: Now join mapping files to the combined data+series table
+  # This ensures that all lookup codes from the series are available for mapping joins
   for (map_file in mapping_files) {
-    try({
+    tryCatch({
       map_url <- paste0(base_url, map_file)
       message("Reading mapping file: ", map_url)
       map_dt <- fread_bls(map_url)
       join_col <- names(map_dt)[1]
       
-      if (join_col %in% names(series_dt)) {
-        series_dt <- left_join(series_dt, map_dt)
-      }
-      if (join_col %in% names(data_dt)) {
-        data_dt <- left_join(data_dt, map_dt)
+      # Only join to the combined full_dt table, not separately to data_dt and series_dt
+      if (join_col %in% names(full_dt)) {
+        message("Joining mapping file on column: ", join_col)
+        full_dt <- left_join(full_dt, map_dt, by = join_col)
+      } else {
+        message("Skipping mapping file - join column '", join_col, "' not found in data")
       }
       
+    }, error = function(e) {
+      message("Error processing mapping file ", map_file, ": ", e$message)
     })
   }
-  
-  full_dt <- left_join(data_dt, series_dt, by = "series_id")
   
   if (simplify_table) {
     
