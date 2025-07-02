@@ -9,6 +9,7 @@
 #' @importFrom httr GET
 #' @importFrom httr stop_for_status
 #' @importFrom httr content
+#' @importFrom data.table fread
 #' @examples
 #' \dontrun{
 #' data <- fread_bls("https://download.bls.gov/pub/time.series/sm/sm.series")
@@ -47,7 +48,7 @@ fread_bls <- function(url){
   writeBin(raw_data, temp_file)
 
   # fread directly from the file (very efficient)
-  return_data <- data.table::fread(temp_file, colClasses = "character")
+  return_data <- fread(temp_file, colClasses = "character")
 
   return(return_data)
 }
