@@ -4,7 +4,12 @@
 \alias{get_jolts}
 \title{Download Job Openings and Labor Turnover Survey (JOLTS) Data}
 \usage{
-get_jolts(monthly_only = TRUE, remove_regions = TRUE, remove_national = TRUE)
+get_jolts(
+  monthly_only = TRUE,
+  remove_regions = TRUE,
+  remove_national = TRUE,
+  suppress_warnings = FALSE
+)
 }
 \arguments{
 \item{monthly_only}{Logical. If TRUE (default), excludes annual data (period M13)
@@ -16,9 +21,12 @@ and includes only monthly observations.}
 \item{remove_national}{Logical. If TRUE (default), excludes national-level data
 (state code 00). Set to FALSE to include national data with industry and
 size class breakdowns.}
+
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
+for cleaner output during batch processing.}
 }
 \value{
-A data.table containing JOLTS data with the following key columns:
+A bls_data_collection object containing JOLTS data with the following key columns:
   \describe{
     \item{series_id}{BLS series identifier}
     \item{year}{Year of observation}
@@ -64,7 +72,10 @@ jolts_regions <- get_jolts(remove_regions = FALSE)
 jolts_annual <- get_jolts(monthly_only = FALSE)
 
 # View job openings by state for latest period
-job_openings <- jolts_states[dataelement_text == "Job openings" &
-                             date == max(date)]
+job_openings <- get_bls_data(jolts_states)[dataelement_text == "Job openings" &
+                                           date == max(date)]
+
+# Check for download issues
+print_bls_warnings(jolts_states)
 }
 }

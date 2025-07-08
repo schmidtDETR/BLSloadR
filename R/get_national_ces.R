@@ -111,29 +111,29 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE,
   
   # Join all datasets together
   cat("Joining CES datasets...\n")
-  ces_full <- ces_data %>%
-    dplyr::select(-footnote_codes) %>%
-    dplyr::left_join(ces_series, by = "series_id") %>%
-    dplyr::select(-footnote_codes) %>%
-    dplyr::left_join(ces_industry, by = "industry_code") %>%
-    dplyr::left_join(ces_period, by = "period") %>%
-    dplyr::left_join(ces_datatype, by = "datatype_code") %>%
+  ces_full <- ces_data |>
+    dplyr::select(-footnote_codes) |>
+    dplyr::left_join(ces_series, by = "series_id") |>
+    dplyr::select(-footnote_codes) |>
+    dplyr::left_join(ces_industry, by = "industry_code") |>
+    dplyr::left_join(ces_period, by = "period") |>
+    dplyr::left_join(ces_datatype, by = "datatype_code") |>
     dplyr::left_join(ces_supersector, by = "supersector_code")
   
   processing_steps <- c(processing_steps, "joined_all_datasets")
   
   # Filter to monthly data only if requested
   if (monthly_only) {
-    ces_full <- ces_full %>%
+    ces_full <- ces_full |>
       dplyr::filter(period != "M13")
     processing_steps <- c(processing_steps, "filtered_monthly_only")
   }
   
   # Simplify table structure if requested
   if (simplify_table) {
-    ces_full <- ces_full %>%
+    ces_full <- ces_full |>
       dplyr::select(-c(series_title, begin_year, begin_period, end_year, end_period, 
-                       naics_code, publishing_status, display_level, selectable, sort_sequence)) %>%
+                       naics_code, publishing_status, display_level, selectable, sort_sequence)) |>
       dplyr::mutate(date = lubridate::ym(paste0(year, period)))
     processing_steps <- c(processing_steps, "simplified_table", "added_date_column")
   }

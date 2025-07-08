@@ -4,14 +4,17 @@
 \alias{get_salt}
 \title{Download State Alternative Labor Market Measures (SALT) Data}
 \usage{
-get_salt(only_states = TRUE)
+get_salt(only_states = TRUE, show_warnings = TRUE)
 }
 \arguments{
 \item{only_states}{Logical. If TRUE (default), includes only state-level data.
 If FALSE, includes sub-state areas like New York City where available.}
+
+\item{show_warnings}{Logical. If TRUE (default), displays download warnings 
+and diagnostics. If FALSE, suppresses warning output.}
 }
 \value{
-A data.table containing SALT data with the following key measures:
+A bls_data_collection object containing SALT data with the following key measures:
   \describe{
     \item{date}{Date of observation (quarterly)}
     \item{state}{State name}
@@ -43,8 +46,11 @@ salt_data <- get_salt()
 # Include sub-state areas
 salt_all <- get_salt(only_states = FALSE)
 
+# Access the data component
+salt_df <- get_bls_data(salt_data)
+
 # View latest U-6 rates by state
-latest <- salt_data[date == max(date), .(state, u6)]
+latest <- salt_df[date == max(date), .(state, u6)]
 latest[order(-u6)]
 }
 }

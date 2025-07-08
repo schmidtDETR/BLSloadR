@@ -4,7 +4,12 @@
 \alias{get_laus}
 \title{Download Local Area Unemployment Statistics (LAUS) Data}
 \usage{
-get_laus(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE)
+get_laus(
+  geography = "state_adjusted",
+  monthly_only = TRUE,
+  transform = TRUE,
+  suppress_warnings = FALSE
+)
 }
 \arguments{
 \item{geography}{Character string specifying the geographic level and adjustment type.
@@ -29,9 +34,12 @@ and creates a date column from year and period.}
 \item{transform}{Logical. If TRUE (default), converts rate and ratio measures from
 percentages to proportions by dividing by 100. Unemployment rates will be expressed
 as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.}
+
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
+for cleaner output during batch processing.}
 }
 \value{
-A data.table containing LAUS data with the following key columns:
+A bls_data_collection object containing LAUS data with the following key columns:
   \describe{
     \item{series_id}{BLS series identifier}
     \item{year}{Year of observation}
@@ -81,6 +89,9 @@ laus_current <- get_laus("state_current_adjusted")
 laus_annual <- get_laus("state_adjusted", monthly_only = FALSE)
 
 # View unemployment rates by state for latest period
-unemployment <- laus_states[grepl("rate", measure_text) & date == max(date)]
+unemployment <- get_bls_data(laus_states)[grepl("rate", measure_text) & date == max(date)]
+
+# Check for download issues
+print_bls_warnings(laus_states)
 }
 }

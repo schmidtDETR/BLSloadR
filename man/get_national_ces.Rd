@@ -4,7 +4,12 @@
 \alias{get_national_ces}
 \title{Get National Current Employment Statistics (CES) Data from BLS}
 \usage{
-get_national_ces(monthly_only = TRUE, simplify_table = TRUE)
+get_national_ces(
+  monthly_only = TRUE,
+  simplify_table = TRUE,
+  show_warnings = TRUE,
+  detailed_warnings = FALSE
+)
 }
 \arguments{
 \item{monthly_only}{Logical. If TRUE (default), excludes annual averages 
@@ -16,9 +21,15 @@ columns (series_title, begin_year, begin_period, end_year, end_period,
 naics_code, publishing_status, display_level, selectable, sort_sequence) 
 and adds a formatted date column. If FALSE, returns the full dataset 
 with all available columns.}
+
+\item{show_warnings}{Logical. If TRUE (default), displays download warnings 
+and diagnostics. If FALSE, suppresses warning output.}
+
+\item{detailed_warnings}{Logical. If TRUE, shows detailed diagnostics for 
+each downloaded file. If FALSE (default), shows summary warnings only.}
 }
 \value{
-A data.frame containing CES employment data with the following key columns:
+A bls_data_collection object containing CES employment data with the following key columns:
   \describe{
     \item{series_id}{BLS series identifier}
     \item{year}{Year of the observation}
@@ -51,13 +62,14 @@ The function downloads the following BLS CES datasets:
 }
 
 These datasets are joined together to provide context and labels for the 
-employment statistics. The function relies on a helper function `fread_bls()` 
-to download and read the BLS data files.
+employment statistics. The function uses the `fread_bls()` helper function 
+to download and read the BLS data files with robust error handling and 
+diagnostic reporting.
 }
 \note{
 This function requires the following packages: dplyr, data.table, httr, and 
 lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()` 
-helper function must be defined elsewhere in your environment.
+and `create_bls_object()` helper functions must be available in your environment.
 }
 \examples{
 \dontrun{
@@ -69,6 +81,12 @@ ces_full <- get_national_ces(monthly_only = FALSE, simplify_table = FALSE)
 
 # Get monthly data but keep all metadata columns
 ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
+
+# Access the data component
+ces_data <- get_bls_data(ces_monthly)
+
+# Check for download issues
+print_bls_warnings(ces_monthly)
 }
 
 }

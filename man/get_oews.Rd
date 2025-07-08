@@ -4,10 +4,14 @@
 \alias{get_oews}
 \title{Download Occupational Employment and Wage Statistics (OEWS) Data}
 \usage{
-get_oews()
+get_oews(suppress_warnings = FALSE)
+}
+\arguments{
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
+for cleaner output during batch processing.}
 }
 \value{
-A data.table containing OEWS data with the following key columns:
+A bls_data_collection object containing OEWS data with the following key columns:
   \describe{
     \item{series_id}{BLS series identifier}
     \item{year}{Year of observation}
@@ -29,9 +33,12 @@ and wage estimates by occupation and geographic area.
 oews_data <- get_oews()
 
 # View available occupations
-unique(oews_data$occupation_title)
+unique(get_bls_data(oews_data)$occupation_title)
 
 # Filter for specific occupation
-software_devs <- oews_data[grepl("Software", occupation_title)]
+software_devs <- get_bls_data(oews_data)[grepl("Software", occupation_title)]
+
+# Check for download issues
+print_bls_warnings(oews_data)
 }
 }

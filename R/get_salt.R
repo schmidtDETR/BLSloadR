@@ -104,13 +104,13 @@ get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
   
   # Read and process Excel file
   cat("Processing SALT Excel file...\n")
-  salt_data <- readxl::read_excel(tf, skip = 1) %>%
-    dplyr::rename_with(.fn = stringr::str_to_lower) %>%
-    dplyr::mutate(date = lubridate::yq(paste0(`end year`, `end quarter`))) %>%
-    dplyr::select(-c(record, `start year`, `start quarter`, `end year`, `end quarter`, `unique period`)) %>%
-    dplyr::mutate(dplyr::across(tidyselect::starts_with("u-"), function(x){x = x/100})) %>%
-    dplyr::rename_with(.cols = tidyselect::starts_with("u-"), .fn = stringr::str_remove, pattern = "-") %>%
-    dplyr::rename_with(.cols = tidyselect::everything(), .fn = stringr::str_replace_all, pattern = " ", replacement = "_") %>%
+  salt_data <- readxl::read_excel(tf, skip = 1) |>
+    dplyr::rename_with(.fn = stringr::str_to_lower) |>
+    dplyr::mutate(date = lubridate::yq(paste0(`end year`, `end quarter`))) |>
+    dplyr::select(-c(record, `start year`, `start quarter`, `end year`, `end quarter`, `unique period`)) |>
+    dplyr::mutate(dplyr::across(tidyselect::starts_with("u-"), function(x){x = x/100})) |>
+    dplyr::rename_with(.cols = tidyselect::starts_with("u-"), .fn = stringr::str_remove, pattern = "-") |>
+    dplyr::rename_with(.cols = tidyselect::everything(), .fn = stringr::str_replace_all, pattern = " ", replacement = "_") |>
     dplyr::mutate(not_job_losers = unemployed - job_losers,
                   unemployed_under_14_weeks = unemployed - `unemployed_15+_weeks`,
                   losers_notlosers_ratio = job_losers / not_job_losers,
@@ -128,16 +128,16 @@ get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
   
   # Filter to states only if requested
   if (only_states) {
-    salt_data <- salt_data %>%
-      dplyr::mutate(fips_len = stringr::str_length(fips)) %>%
-      dplyr::filter(fips_len == 2) %>%
+    salt_data <- salt_data |>
+      dplyr::mutate(fips_len = stringr::str_length(fips)) |>
+      dplyr::filter(fips_len == 2) |>
       dplyr::select(-fips_len)
     processing_steps <- c(processing_steps, "filtered_states_only")
   }
   
   # Add quartile comparisons and lagged values
-  salt_data <- salt_data %>%
-    dplyr::group_by(date) %>%
+  salt_data <- salt_data |>
+    dplyr::group_by(date) |>
     dplyr::mutate(u1_25 = quantile(u1, probs = c(0.25), na.rm = TRUE),
                   u1_50 = median(u1, na.rm = TRUE),
                   u1_75 = quantile(u1, probs = c(0.75), na.rm = TRUE),
@@ -153,19 +153,19 @@ get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
                   u5b_25 = quantile(u5b, probs = c(0.25), na.rm = TRUE),
                   u5b_50 = median(u5b, na.rm = TRUE),
                   u5b_75 = quantile(u5b, probs = c(0.75), na.rm = TRUE)
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::group_by(state) %>%
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::group_by(state) |>
     dplyr::mutate(
       dplyr::across(tidyselect::matches("^u[0-9]"),
                     .fns = function(x){dplyr::lag(x, 4)},
                     .names = "py_{.col}")
-    ) %>%
+    ) |>
     dplyr::mutate(
       dplyr::across(tidyselect::matches("^u[0-9]"),
                     .fns = function(x){dplyr::lag(x, 1)},
                     .names = "pq_{.col}")
-    ) %>%
+    ) |>
     dplyr::ungroup()
   
   processing_steps <- c(processing_steps, "added_quartile_comparisons", "added_lagged_values")

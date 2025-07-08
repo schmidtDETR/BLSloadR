@@ -39,6 +39,8 @@
 #' @importFrom rvest read_html html_elements html_attr
 #' @importFrom httr GET add_headers stop_for_status content
 #' @importFrom dplyr left_join
+#' @importFrom stats setNames
+#' @importFrom utils head
 #' 
 #' @examples
 #' \dontrun{
