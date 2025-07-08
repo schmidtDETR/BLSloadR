@@ -4,7 +4,10 @@
 #' from the Bureau of Labor Statistics OEWS program. The data includes employment
 #' and wage estimates by occupation and geographic area.
 #'
-#' @return A data.table containing OEWS data with the following key columns:
+#' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
+#'   for cleaner output during batch processing.
+#'
+#' @return A bls_data_collection object containing OEWS data with the following key columns:
 #'   \describe{
 #'     \item{series_id}{BLS series identifier}
 #'     \item{year}{Year of observation}
@@ -26,32 +29,58 @@
 #' oews_data <- get_oews()
 #'
 #' # View available occupations
-#' unique(oews_data$occupation_title)
+#' unique(get_bls_data(oews_data)$occupation_title)
 #'
 #' # Filter for specific occupation
-#' software_devs <- oews_data[grepl("Software", occupation_title)]
+#' software_devs <- get_bls_data(oews_data)[grepl("Software", occupation_title)]
+#' 
+#' # Check for download issues
+#' print_bls_warnings(oews_data)
 #' }
 
-# This downloads and joins together selected data for the OEWS program using fread_bls
-
-get_oews <- function(){
-
-  oews_current <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.data.0.Current")
-  oews_series <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.series")
-  oews_occupation <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.occupation")
-  oews_area <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.area")
-  oews_datatype <- fread_bls("https://download.bls.gov/pub/time.series/oe/oe.datatype")
-
-  oews_import <- oews_current |> dplyr::select(-footnote_codes) |>
-    dplyr::left_join(oews_series) |> dplyr::select(-footnote_codes) |>
-    dplyr::left_join(oews_occupation) |>
-    dplyr::left_join(oews_area) |>
-    dplyr::left_join(oews_datatype) |>
+get_oews <- function(suppress_warnings = FALSE) {
+  
+  # Define all URLs we need to download
+  download_urls <- c(
+    "data" = "https://download.bls.gov/pub/time.series/oe/oe.data.0.Current",
+    "series" = "https://download.bls.gov/pub/time.series/oe/oe.series",
+    "occupation" = "https://download.bls.gov/pub/time.series/oe/oe.occupation",
+    "area" = "https://download.bls.gov/pub/time.series/oe/oe.area",
+    "datatype" = "https://download.bls.gov/pub/time.series/oe/oe.datatype"
+  )
+  
+  # Download all files
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings)
+  
+  # Extract data from downloads
+  oews_current <- get_bls_data(downloads$data)
+  oews_series <- get_bls_data(downloads$series)
+  oews_occupation <- get_bls_data(downloads$occupation)
+  oews_area <- get_bls_data(downloads$area)
+  oews_datatype <- get_bls_data(downloads$datatype)
+  
+  # Join all the data together
+  oews_import <- oews_current |> 
+    dplyr::select(-footnote_codes) |>
+    dplyr::left_join(oews_series |> dplyr::select(-footnote_codes), by = "series_id") |>
+    dplyr::left_join(oews_occupation, by = "occupation_code") |>
+    dplyr::left_join(oews_area, by = "area_code") |>
+    dplyr::left_join(oews_datatype, by = "datatype_code") |>
     dplyr::mutate(value = as.numeric(value))
-
-  return(oews_import)
-
+  
+  # Track processing steps
+  processing_steps <- c(
+    "Joined series, occupation, area, and datatype metadata",
+    "Converted values to numeric"
+  )
+  
+  # Create the BLS data collection object
+  result <- create_bls_object(
+    data = oews_import,
+    downloads = downloads,
+    data_type = "OEWS",
+    processing_steps = processing_steps
+  )
+  
+  return(result)
 }
-
-
-
