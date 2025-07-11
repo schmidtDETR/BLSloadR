@@ -58,10 +58,10 @@ get_oews <- function(suppress_warnings = FALSE, return_diagnostics = FALSE) {
   # Join all the data together
   oews <- oews_current |> 
     dplyr::select(-footnote_codes) |>
-    dplyr::left_join(oews_series |> dplyr::select(-footnote_codes), by = "series_id") |>
-    dplyr::left_join(oews_occupation, by = "occupation_code") |>
-    dplyr::left_join(oews_area, by = "area_code") |>
-    dplyr::left_join(oews_datatype, by = "datatype_code") |>
+    dplyr::left_join(oews_series) |>
+    dplyr::left_join(oews_occupation) |>
+    dplyr::left_join(oews_area) |>
+    dplyr::left_join(oews_datatype) |>
     dplyr::mutate(value = as.numeric(value))
   
   # Track processing steps
