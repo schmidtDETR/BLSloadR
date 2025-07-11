@@ -6,8 +6,12 @@
 #'
 #' @param only_states Logical. If TRUE (default), includes only state-level data.
 #'   If FALSE, includes sub-state areas like New York City where available.
+#' @param geometry Logical. If TRUE, uses tigris::states() to download shapefiles for the states 
+#'   to include in the data. If FALSE (default), only returns data table.
 #' @param show_warnings Logical. If TRUE (default), displays download warnings 
 #'   and diagnostics. If FALSE, suppresses warning output.
+#' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
+#'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
 #' @return A bls_data_collection object containing SALT data with the following key measures:
 #'   \describe{
@@ -42,6 +46,7 @@
 #' @importFrom dplyr lag
 #' @importFrom dplyr group_by
 #' @importFrom dplyr ungroup
+#' @importFrom sf st_as_sf
 #' @importFrom stringr str_remove
 #' @importFrom stringr str_length
 #' @importFrom stringr str_to_lower
@@ -50,6 +55,8 @@
 #' @importFrom tidyselect matches
 #' @importFrom tidyselect starts_with
 #' @importFrom tidyselect everything
+#' @importFrom tigris states
+#' @importFrom tigris shift_geometry
 #' @importFrom zoo as.yearqtr
 #' @importFrom readxl read_excel
 #' @examples
@@ -60,15 +67,23 @@
 #' # Include sub-state areas
 #' salt_all <- get_salt(only_states = FALSE)
 #'
-#' # Access the data component
-#' salt_df <- get_bls_data(salt_data)
-#'
 #' # View latest U-6 rates by state
 #' latest <- salt_df[date == max(date), .(state, u6)]
 #' latest[order(-u6)]
+#' 
+#' # Download and display ratio of job losers to not job losers by state
+#' get_salt(geometry = TRUE) |>
+#'  dplyr::filter(date == max(date)) |> # To use only most current date
+#'   ggplot2::ggplot() +
+#'    ggplot2::geom_sf(ggplot2::aes(fill = losers_notlosers_ratio))
+#' 
+#' # Get full diagnostic object if needed
+#' data_with_diagnostics <- get_salt(return_diagnostics = TRUE)
+#' print_bls_warnings(data_with_diagnostics)
 #' }
+#' 
 
-get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
+get_salt <- function(only_states = TRUE, geometry = FALSE, show_warnings = TRUE, return_diagnostics = FALSE) {
   
   salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
   
@@ -127,7 +142,7 @@ get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
   processing_steps <- c(processing_steps, "read_excel", "standardized_columns", "calculated_derived_measures")
   
   # Filter to states only if requested
-  if (only_states) {
+  if (only_states | geometry) {
     salt_data <- salt_data |>
       dplyr::mutate(fips_len = stringr::str_length(fips)) |>
       dplyr::filter(fips_len == 2) |>
@@ -170,6 +185,18 @@ get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
   
   processing_steps <- c(processing_steps, "added_quartile_comparisons", "added_lagged_values")
   
+  if(geometry){
+    shapes <- tigris::states() |>
+      tigris::shift_geometry() |>
+      select(NAME, geometry)
+    
+    salt_data <- salt_data |>
+      dplyr::left_join(shapes, by = c("state"="NAME")) |>
+      sf::st_as_sf()
+    
+    processing_steps <- c(processing_steps, "added U.S. state geometry")
+  }
+  
   # Clean up temporary file
   unlink(tf)
   
@@ -191,17 +218,32 @@ get_salt <- function(only_states = TRUE, show_warnings = TRUE) {
     )
   )
   
-  # Create BLS data collection object
-  result <- create_bls_object(
+  # # Create BLS data collection object
+  # result <- create_bls_object(
+  #   data = salt_data,
+  #   downloads = list("salt_excel" = list(diagnostics = download_info$salt_excel)),
+  #   data_type = "SALT",
+  #   processing_steps = processing_steps
+  # )
+  
+  # Create the BLS data collection object
+  bls_collection <- create_bls_object(
     data = salt_data,
     downloads = list("salt_excel" = list(diagnostics = download_info$salt_excel)),
     data_type = "SALT",
     processing_steps = processing_steps
   )
   
-  # Display warnings if requested
+    # Display warnings if requested
   if (show_warnings) {
-    print_bls_warnings(result, detailed = FALSE)
+    print_bls_warnings(bls_collection, detailed = FALSE)
+  }
+  
+  # Return either the collection object or just the data
+  if (return_diagnostics) {
+    return(bls_collection)
+  } else {
+    return(salt_data)
   }
   
   cat("SALT data download and processing complete.\n")

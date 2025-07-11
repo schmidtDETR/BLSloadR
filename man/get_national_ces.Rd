@@ -8,7 +8,7 @@ get_national_ces(
   monthly_only = TRUE,
   simplify_table = TRUE,
   show_warnings = TRUE,
-  detailed_warnings = FALSE
+  return_diagnostics = FALSE
 )
 }
 \arguments{
@@ -25,8 +25,8 @@ with all available columns.}
 \item{show_warnings}{Logical. If TRUE (default), displays download warnings 
 and diagnostics. If FALSE, suppresses warning output.}
 
-\item{detailed_warnings}{Logical. If TRUE, shows detailed diagnostics for 
-each downloaded file. If FALSE (default), shows summary warnings only.}
+\item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
+with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
 A bls_data_collection object containing CES employment data with the following key columns:
@@ -85,9 +85,11 @@ ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
 # Access the data component
 ces_data <- get_bls_data(ces_monthly)
 
-# Check for download issues
-print_bls_warnings(ces_monthly)
+# Get full diagnostic object if needed
+data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
+print_bls_warnings(data_with_diagnostics)
 }
+
 
 }
 \seealso{

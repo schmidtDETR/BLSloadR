@@ -8,7 +8,8 @@ get_ces(
   transform = TRUE,
   monthly_only = TRUE,
   simplify_table = TRUE,
-  suppress_warnings = FALSE
+  suppress_warnings = FALSE,
+  return_diagnostics = FALSE
 )
 }
 \arguments{
@@ -23,9 +24,13 @@ a date column from Year and Period in the original data.}
 
 \item{suppress_warnings}{Logical. If FALSE (default), prints warnings for any BLS 
 download issues. If TRUE, warnings are suppressed but still returned invisibly.}
+
+\item{return_diagnostics}{Logical. If FALSE (default), returns only the data. If TRUE,
+returns the full bls_data_collection object with diagnostics.}
 }
 \value{
-A bls_data_collection object containing CES data with comprehensive diagnostics
+By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
 This function downloads Current Employment Statistics data from the Bureau of Labor Statistics.
@@ -34,8 +39,11 @@ By default, all available areas, data types, and periods are included.
 }
 \examples{
 \dontrun{
-# Download all CES data with default settings
-ces_result <- get_ces()
+# Download CES data (streamlined approach)
+ces_data <- get_ces()
+
+# Download with full diagnostics if needed
+ces_result <- get_ces(return_diagnostics = TRUE)
 ces_data <- get_bls_data(ces_result)
 
 # Check for download issues

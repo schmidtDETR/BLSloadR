@@ -27,8 +27,11 @@
 #'   as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
 #'   for cleaner output during batch processing.
+#' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
+#'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
-#' @return A bls_data_collection object containing LAUS data with the following key columns:
+#' @return By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
+#'   returns a bls_data_collection object containing LAUS data with the following key columns:
 #'   \describe{
 #'     \item{series_id}{BLS series identifier}
 #'     \item{year}{Year of observation}
@@ -60,7 +63,7 @@
 #' 
 #' @examples
 #' \dontrun{
-#' # Download state-level seasonally adjusted data (default)
+#' # Download state-level seasonally adjusted data (default - returns data directly)
 #' laus_states <- get_laus()
 #'
 #' # Download unadjusted state data
@@ -69,24 +72,20 @@
 #' # Download metro area data with rates as percentages
 #' laus_metro <- get_laus("metro", transform = FALSE)
 #'
-#' # Download current state data only
-#' laus_current <- get_laus("state_current_adjusted")
+#' # Get full diagnostic object if needed
+#' laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
+#' print_bls_warnings(laus_with_diagnostics)
 #'
 #' # Warning: Large files - county and city data
 #' # laus_counties <- get_laus("county")
 #' # laus_cities <- get_laus("city")
 #'
-#' # Include annual data
-#' laus_annual <- get_laus("state_adjusted", monthly_only = FALSE)
-#'
 #' # View unemployment rates by state for latest period
-#' unemployment <- get_bls_data(laus_states)[grepl("rate", measure_text) & date == max(date)]
-#' 
-#' # Check for download issues
-#' print_bls_warnings(laus_states)
+#' unemployment <- laus_states[grepl("rate", measure_text) & date == max(date)]
 #' }
 
-get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE, suppress_warnings = FALSE) {
+get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE, 
+                     suppress_warnings = FALSE, return_diagnostics = FALSE) {
   
   # Define the URL mapping
   laus_urls <- list(
@@ -167,12 +166,22 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
   }
   
   # Create the BLS data collection object
-  result <- create_bls_object(
+  bls_collection <- create_bls_object(
     data = laus,
     downloads = downloads,
     data_type = "LAUS",
     processing_steps = processing_steps
   )
   
-  return(result)
+  # Show warnings if any issues were detected
+  if (has_bls_issues(bls_collection) && !suppress_warnings) {
+    print_bls_warnings(bls_collection)
+  }
+  
+  # Return either the collection object or just the data
+  if (return_diagnostics) {
+    return(bls_collection)
+  } else {
+    return(laus)
+  }
 }

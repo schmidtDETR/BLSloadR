@@ -5,6 +5,7 @@
 #' bls_data class that can be used in the BLSloadR package.
 #'
 #' @param url Character string. URL to the BLS flat file
+#' @param verbose Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.
 #' @return A data.table containing the downloaded data
 #' @export
 #' @importFrom httr GET

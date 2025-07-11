@@ -15,8 +15,8 @@
 #'   with all available columns.
 #' @param show_warnings Logical. If TRUE (default), displays download warnings 
 #'   and diagnostics. If FALSE, suppresses warning output.
-#' @param detailed_warnings Logical. If TRUE, shows detailed diagnostics for 
-#'   each downloaded file. If FALSE (default), shows summary warnings only.
+#' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
+#'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
 #' @return A bls_data_collection object containing CES employment data with the following key columns:
 #'   \describe{
@@ -68,9 +68,11 @@
 #' # Access the data component
 #' ces_data <- get_bls_data(ces_monthly)
 #' 
-#' # Check for download issues
-#' print_bls_warnings(ces_monthly)
+#' # Get full diagnostic object if needed
+#' data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
+#' print_bls_warnings(data_with_diagnostics)
 #' }
+#'
 #'
 #' @seealso 
 #' \url{https://www.bls.gov/ces/} for more information about CES data
@@ -82,7 +84,7 @@
 #' @importFrom dplyr select
 #' @importFrom lubridate ym
 get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE, 
-                             show_warnings = TRUE, detailed_warnings = FALSE) {
+                             show_warnings = TRUE, return_diagnostics = FALSE) {
   
   # Define URLs for all CES datasets
   ces_urls <- c(
@@ -117,7 +119,7 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE,
     dplyr::select(-footnote_codes) |>
     dplyr::left_join(ces_industry, by = "industry_code") |>
     dplyr::left_join(ces_period, by = "period") |>
-    dplyr::left_join(ces_datatype, by = "datatype_code") |>
+    dplyr::left_join(ces_datatype, by = "data_type_code") |>
     dplyr::left_join(ces_supersector, by = "supersector_code")
   
   processing_steps <- c(processing_steps, "joined_all_datasets")
@@ -138,17 +140,24 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE,
     processing_steps <- c(processing_steps, "simplified_table", "added_date_column")
   }
   
-  # Create BLS data collection object
-  result <- create_bls_object(
+  # Create the BLS data collection object
+  bls_collection <- create_bls_object(
     data = ces_full,
     downloads = downloads,
     data_type = "CES",
     processing_steps = processing_steps
   )
-  
+
   # Display warnings if requested
   if (show_warnings) {
-    print_bls_warnings(result, detailed = detailed_warnings)
+    print_bls_warnings(bls_collection)
+  }
+    
+  # Return either the collection object or just the data
+  if (return_diagnostics) {
+    return(bls_collection)
+  } else {
+    return(ces_full)
   }
   
   cat("CES data download and processing complete.\n")

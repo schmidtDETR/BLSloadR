@@ -12,8 +12,11 @@
 #'   a date column from Year and Period in the original data.
 #' @param suppress_warnings Logical. If FALSE (default), prints warnings for any BLS 
 #'   download issues. If TRUE, warnings are suppressed but still returned invisibly.
+#' @param return_diagnostics Logical. If FALSE (default), returns only the data. If TRUE,
+#'   returns the full bls_data_collection object with diagnostics.
 #'
-#' @return A bls_data_collection object containing CES data with comprehensive diagnostics
+#' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+#'   returns a bls_data_collection object containing data and comprehensive diagnostics.
 #'
 #' @export
 #' @importFrom dplyr filter
@@ -23,16 +26,20 @@
 #' @importFrom stringr str_remove
 #' @examples
 #' \dontrun{
-#' # Download all CES data with default settings
-#' ces_result <- get_ces()
-#' ces_data <- get_bls_data(ces_result)
+#' # Download CES data (streamlined approach)
+#' ces_data <- get_ces()
 #'
+#' # Download with full diagnostics if needed
+#' ces_result <- get_ces(return_diagnostics = TRUE)
+#' ces_data <- get_bls_data(ces_result)
+#' 
 #' # Check for download issues
 #' if (has_bls_issues(ces_result)) {
 #'   print_bls_warnings(ces_result)
 #' }
 #' }
-get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE, suppress_warnings = FALSE) {
+get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE, 
+                    suppress_warnings = FALSE, return_diagnostics = FALSE) {
   
   # Define URLs for CES data files
   ces_urls <- c(
@@ -131,5 +138,12 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
     cat("No download issues detected.\n")
   }
   
-  return(result)
+  # Return based on user preference
+  if (return_diagnostics) {
+    return(result)
+  } else {
+    # Store diagnostics as attributes for later access if needed
+    attr(ces_data, "bls_diagnostics") <- result
+    return(ces_data)
+  }
 }

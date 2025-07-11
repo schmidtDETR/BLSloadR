@@ -8,6 +8,8 @@ fread_bls(url, verbose = FALSE)
 }
 \arguments{
 \item{url}{Character string. URL to the BLS flat file}
+
+\item{verbose}{Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.}
 }
 \value{
 A data.table containing the downloaded data

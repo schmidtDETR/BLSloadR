@@ -14,8 +14,11 @@
 #'   size class breakdowns.
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
 #'   for cleaner output during batch processing.
+#' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
+#'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
-#' @return A bls_data_collection object containing JOLTS data with the following key columns:
+#' @return By default, returns a data.table with JOLTS data. If return_diagnostics = TRUE,
+#'   returns a bls_data_collection object containing JOLTS data with the following key columns:
 #'   \describe{
 #'     \item{series_id}{BLS series identifier}
 #'     \item{year}{Year of observation}
@@ -48,27 +51,23 @@
 #' @importFrom lubridate ym
 #' @examples
 #' \dontrun{
-#' # Download state-level JOLTS data (default)
-#' jolts_states <- get_jolts()
+#' # Download state-level JOLTS data (default - returns data directly)
+#' jolts_data <- get_jolts()
 #'
 #' # Include national data with industry breakdowns
 #' jolts_national <- get_jolts(remove_national = FALSE)
 #'
-#' # Include regional aggregates
-#' jolts_regions <- get_jolts(remove_regions = FALSE)
-#'
-#' # Include annual data
-#' jolts_annual <- get_jolts(monthly_only = FALSE)
+#' # Get full diagnostic object if needed
+#' jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
+#' print_bls_warnings(jolts_with_diagnostics)
 #'
 #' # View job openings by state for latest period
-#' job_openings <- get_bls_data(jolts_states)[dataelement_text == "Job openings" &
-#'                                            date == max(date)]
-#' 
-#' # Check for download issues
-#' print_bls_warnings(jolts_states)
+#' job_openings <- jolts_data[dataelement_text == "Job openings" & 
+#'                           date == max(date)]
 #' }
 
-get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_national = TRUE, suppress_warnings = FALSE) {
+get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_national = TRUE, 
+                      suppress_warnings = FALSE, return_diagnostics = FALSE) {
   
   # Define all URLs we need to download
   download_urls <- c(
@@ -153,12 +152,22 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
                         "Applied value transformations (rates to proportions, levels to counts)")
   
   # Create the BLS data collection object
-  result <- create_bls_object(
+  bls_collection <- create_bls_object(
     data = jolts,
     downloads = downloads,
     data_type = "JOLTS",
     processing_steps = processing_steps
   )
   
-  return(result)
+  # Show warnings if any issues were detected
+  if (has_bls_issues(bls_collection) && !suppress_warnings) {
+    print_bls_warnings(bls_collection)
+  }
+  
+  # Return either the collection object or just the data
+  if (return_diagnostics) {
+    return(bls_collection)
+  } else {
+    return(jolts)
+  }
 }

@@ -6,6 +6,8 @@
 #'
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
 #'   for cleaner output during batch processing.
+#' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
+#'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
 #' @return A bls_data_collection object containing OEWS data with the following key columns:
 #'   \describe{
@@ -34,11 +36,13 @@
 #' # Filter for specific occupation
 #' software_devs <- get_bls_data(oews_data)[grepl("Software", occupation_title)]
 #' 
-#' # Check for download issues
-#' print_bls_warnings(oews_data)
-#' }
+#' # Get full diagnostic object if needed
+#' oews_with_diagnostics <- get_oews(return_diagnostics = TRUE)
+#' print_bls_warnings(oews_with_diagnostics)
+#'}
+#'
 
-get_oews <- function(suppress_warnings = FALSE) {
+get_oews <- function(suppress_warnings = FALSE, return_diagnostics = FALSE) {
   
   # Define all URLs we need to download
   download_urls <- c(
@@ -60,7 +64,7 @@ get_oews <- function(suppress_warnings = FALSE) {
   oews_datatype <- get_bls_data(downloads$datatype)
   
   # Join all the data together
-  oews_import <- oews_current |> 
+  oews <- oews_current |> 
     dplyr::select(-footnote_codes) |>
     dplyr::left_join(oews_series |> dplyr::select(-footnote_codes), by = "series_id") |>
     dplyr::left_join(oews_occupation, by = "occupation_code") |>
@@ -75,12 +79,19 @@ get_oews <- function(suppress_warnings = FALSE) {
   )
   
   # Create the BLS data collection object
-  result <- create_bls_object(
-    data = oews_import,
+  bls_collection <- create_bls_object(
+    data = oews,
     downloads = downloads,
     data_type = "OEWS",
     processing_steps = processing_steps
   )
+
+  # Return either the collection object or just the data
+  if (return_diagnostics) {
+    return(bls_collection)
+  } else {
+    return(oews)
+  }
   
   return(result)
 }
