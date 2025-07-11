@@ -4,7 +4,13 @@
 \alias{get_laus}
 \title{Download Local Area Unemployment Statistics (LAUS) Data}
 \usage{
-get_laus(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE)
+get_laus(
+  geography = "state_adjusted",
+  monthly_only = TRUE,
+  transform = TRUE,
+  suppress_warnings = FALSE,
+  return_diagnostics = FALSE
+)
 }
 \arguments{
 \item{geography}{Character string specifying the geographic level and adjustment type.
@@ -29,9 +35,16 @@ and creates a date column from year and period.}
 \item{transform}{Logical. If TRUE (default), converts rate and ratio measures from
 percentages to proportions by dividing by 100. Unemployment rates will be expressed
 as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.}
+
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
+for cleaner output during batch processing.}
+
+\item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
+with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-A data.table containing LAUS data with the following key columns:
+By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing LAUS data with the following key columns:
   \describe{
     \item{series_id}{BLS series identifier}
     \item{year}{Year of observation}
@@ -61,7 +74,7 @@ The function joins data from multiple BLS files:
 }
 \examples{
 \dontrun{
-# Download state-level seasonally adjusted data (default)
+# Download state-level seasonally adjusted data (default - returns data directly)
 laus_states <- get_laus()
 
 # Download unadjusted state data
@@ -70,15 +83,13 @@ laus_states_raw <- get_laus("state_unadjusted")
 # Download metro area data with rates as percentages
 laus_metro <- get_laus("metro", transform = FALSE)
 
-# Download current state data only
-laus_current <- get_laus("state_current_adjusted")
+# Get full diagnostic object if needed
+laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
+print_bls_warnings(laus_with_diagnostics)
 
 # Warning: Large files - county and city data
 # laus_counties <- get_laus("county")
 # laus_cities <- get_laus("city")
-
-# Include annual data
-laus_annual <- get_laus("state_adjusted", monthly_only = FALSE)
 
 # View unemployment rates by state for latest period
 unemployment <- laus_states[grepl("rate", measure_text) & date == max(date)]

@@ -4,7 +4,12 @@
 \alias{load_bls_dataset}
 \title{Generic BLS Dataset Download}
 \usage{
-load_bls_dataset(database_code, return_full = FALSE, simplify_table = TRUE)
+load_bls_dataset(
+  database_code,
+  return_full = FALSE,
+  simplify_table = TRUE,
+  suppress_warnings = FALSE
+)
 }
 \arguments{
 \item{database_code}{This is the two digit character identifier for the desired database.
@@ -26,10 +31,12 @@ columns from the date with "_code" in the column name, as well as a series of in
 identifiers which provide general information about the series but which are not needed for
 performing time series analysis. This parameter also converts the column "value" to numeric
 and generates a date column from the year and period columns in the data.}
+
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings during processing.}
 }
 \value{
-This function will return either a data table (if return_full is FALSE or not provided)
- or a named list of the returned data.
+This function will return either a bls_data_collection object (if return_full is FALSE or not provided)
+ or a named list of the returned data including the bls_data_collection object.
 }
 \description{
 This function generalizes a method to download all BLS data for a given time series database.
@@ -48,5 +55,10 @@ benefits <- load_bls_dataset("eb", return_full = TRUE)
 
 # Download data without removing excess columns and value conversions
 productivity <- load_bls_dataset("mp", simplify_table = FALSE)
+
+# Check for download issues
+if (has_bls_issues(cost_index)) {
+  print_bls_warnings(cost_index, detailed = TRUE)
+}
 }
 }

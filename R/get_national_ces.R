@@ -13,21 +13,13 @@
 #'   naics_code, publishing_status, display_level, selectable, sort_sequence) 
 #'   and adds a formatted date column. If FALSE, returns the full dataset 
 #'   with all available columns.
+#' @param show_warnings Logical. If TRUE (default), displays download warnings 
+#'   and diagnostics. If FALSE, suppresses warning output.
+#' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
+#'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
-#' @return A data.frame containing CES employment data with the following key columns:
-#'   \describe{
-#'     \item{series_id}{BLS series identifier}
-#'     \item{year}{Year of the observation}
-#'     \item{period}{Time period (M01-M12 for months, M13 for annual average)}
-#'     \item{value}{Employment statistic value}
-#'     \item{industry_code}{Industry classification code}
-#'     \item{industry_name}{Industry name/description}
-#'     \item{datatype_code}{Type of employment statistic code}
-#'     \item{datatype_text}{Description of the employment statistic}
-#'     \item{supersector_code}{Supersector classification code}
-#'     \item{supersector_name}{Supersector name/description}
-#'     \item{date}{Date column (lubridate yearmonth format, only if simplify_table=TRUE)}
-#'   }
+#' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+#'   returns a bls_data_collection object containing data and comprehensive diagnostics.
 #'
 #' @details 
 #' The function downloads the following BLS CES datasets:
@@ -41,13 +33,14 @@
 #' }
 #' 
 #' These datasets are joined together to provide context and labels for the 
-#' employment statistics. The function relies on a helper function `fread_bls()` 
-#' to download and read the BLS data files.
+#' employment statistics. The function uses the `fread_bls()` helper function 
+#' to download and read the BLS data files with robust error handling and 
+#' diagnostic reporting.
 #'
 #' @note 
 #' This function requires the following packages: dplyr, data.table, httr, and 
 #' lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()` 
-#' helper function must be defined elsewhere in your environment.
+#' and `create_bls_object()` helper functions must be available in your environment.
 #'
 #' @examples
 #' \dontrun{
@@ -59,7 +52,15 @@
 #' 
 #' # Get monthly data but keep all metadata columns
 #' ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
+#' 
+#' # Access the data component
+#' ces_data <- get_bls_data(ces_monthly)
+#' 
+#' # Get full diagnostic object if needed
+#' data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
+#' print_bls_warnings(data_with_diagnostics)
 #' }
+#'
 #'
 #' @seealso 
 #' \url{https://www.bls.gov/ces/} for more information about CES data
@@ -70,35 +71,85 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr select
 #' @importFrom lubridate ym
-get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE){
+get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE, 
+                             show_warnings = TRUE, return_diagnostics = FALSE) {
   
-  ces_data <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.data.0.AllCESSeries")
-  ces_series <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.series")
-  ces_industry <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.industry")
-  ces_period <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.period")
-  ces_datatype <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.datatype")
-  ces_supersector <- fread_bls("https://download.bls.gov/pub/time.series/ce/ce.supersector")
+  # Define URLs for all CES datasets
+  ces_urls <- c(
+    "data" = "https://download.bls.gov/pub/time.series/ce/ce.data.0.AllCESSeries",
+    "series" = "https://download.bls.gov/pub/time.series/ce/ce.series",
+    "industry" = "https://download.bls.gov/pub/time.series/ce/ce.industry",
+    "period" = "https://download.bls.gov/pub/time.series/ce/ce.period",
+    "datatype" = "https://download.bls.gov/pub/time.series/ce/ce.datatype",
+    "supersector" = "https://download.bls.gov/pub/time.series/ce/ce.supersector"
+  )
   
-  ces_full <- ces_data |> dplyr::select(-footnote_codes) |>
-    dplyr::left_join(ces_series) |> dplyr::select(-footnote_codes) |>
-    dplyr::left_join(ces_industry) |>
-    dplyr::left_join(ces_period) |>
-    dplyr::left_join(ces_datatype) |>
-    dplyr::left_join(ces_supersector)
+  # Download all files
+  cat("Downloading CES datasets...\n")
+  downloads <- download_bls_files(ces_urls, suppress_warnings = !show_warnings)
   
-  if(monthly_only){
+  # Extract data from each download
+  ces_data <- get_bls_data(downloads$data)
+  ces_series <- get_bls_data(downloads$series)
+  ces_industry <- get_bls_data(downloads$industry)
+  ces_period <- get_bls_data(downloads$period)
+  ces_datatype <- get_bls_data(downloads$datatype)
+  ces_supersector <- get_bls_data(downloads$supersector)
+  
+  # Track processing steps
+  processing_steps <- character(0)
+  
+  # Join all datasets together
+  cat("Joining CES datasets...\n")
+  ces_full <- ces_data |>
+    dplyr::select(-footnote_codes) |>
+    dplyr::left_join(ces_series, by = "series_id") |>
+    dplyr::select(-footnote_codes) |>
+    dplyr::left_join(ces_industry, by = "industry_code") |>
+    dplyr::left_join(ces_period, by = "period") |>
+    dplyr::left_join(ces_datatype, by = "data_type_code") |>
+    dplyr::left_join(ces_supersector, by = "supersector_code")
+  
+  processing_steps <- c(processing_steps, "joined_all_datasets")
+  
+  # Filter to monthly data only if requested
+  if (monthly_only) {
     ces_full <- ces_full |>
       dplyr::filter(period != "M13")
+    processing_steps <- c(processing_steps, "filtered_monthly_only")
   }
   
-  if(simplify_table){
+  # Simplify table structure if requested
+  if (simplify_table) {
     ces_full <- ces_full |>
-      dplyr::select(-c(series_title, begin_year, begin_period, end_year, end_period, naics_code, publishing_status, display_level, selectable, sort_sequence)) |>
-      dplyr::mutate(date = lubridate::ym(paste0(year,period)))
-    
+      dplyr::select(-c(series_title, begin_year, begin_period, end_year, end_period, 
+                       naics_code, publishing_status, display_level, selectable, sort_sequence)) |>
+      dplyr::mutate(date = lubridate::ym(paste0(year, period)))
+    processing_steps <- c(processing_steps, "simplified_table", "added_date_column")
   }
   
+  # Create the BLS data collection object
+  bls_collection <- create_bls_object(
+    data = ces_full,
+    downloads = downloads,
+    data_type = "CES",
+    processing_steps = processing_steps
+  )
+
+  # Display warnings if requested
+  if (show_warnings) {
+    print_bls_warnings(bls_collection)
+  }
+    
+  # Return either the collection object or just the data
+  if (return_diagnostics) {
+    return(bls_collection)
+  } else {
+    return(ces_full)
+  }
   
-  return(ces_full)
+  cat("CES data download and processing complete.\n")
+  cat("Final dimensions:", paste(dim(ces_full), collapse = " x "), "\n")
   
+  return(result)
 }

@@ -4,20 +4,23 @@
 \alias{fread_bls}
 \title{Download BLS Time Series Data}
 \usage{
-fread_bls(url)
+fread_bls(url, verbose = FALSE)
 }
 \arguments{
 \item{url}{Character string. URL to the BLS flat file}
+
+\item{verbose}{Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.}
 }
 \value{
 A data.table containing the downloaded data
 }
 \description{
-This function uses data.table::fread and httr to retrieve data from BLS
-time series flat files, adding appropriate headers to avoid 403 errors.
+This function downloads a tab-delimited BLS flat file, incorporating 
+diagnostic information about the file and returning an object with the
+bls_data class that can be used in the BLSloadR package.
 }
 \examples{
 \dontrun{
-data <- fread_bls("https://download.bls.gov/pub/time.series/sm/sm.series")
+data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
 }
 }

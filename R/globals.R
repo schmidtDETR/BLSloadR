@@ -54,7 +54,7 @@ utils::globalVariables(c(
   "u5",
   "u5b",
   
-  # Data classification codes
+  # Data classification codes and column names
   "data_type_code",
   "data_type_text",
   "dataelement_code",
@@ -62,10 +62,15 @@ utils::globalVariables(c(
   "ratelevel_code",
   "file_type",
   "file_name",
+  "NAME",
   
   # Statistical functions (base R)
   "median",
-  "quantile"
+  "quantile",
+  
+  # Placeholders within functions
+  "result"
+  
 ))
 
 # Note: This file declares global variables used throughout the BLSloadR package

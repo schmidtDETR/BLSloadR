@@ -4,7 +4,13 @@
 \alias{get_jolts}
 \title{Download Job Openings and Labor Turnover Survey (JOLTS) Data}
 \usage{
-get_jolts(monthly_only = TRUE, remove_regions = TRUE, remove_national = TRUE)
+get_jolts(
+  monthly_only = TRUE,
+  remove_regions = TRUE,
+  remove_national = TRUE,
+  suppress_warnings = FALSE,
+  return_diagnostics = FALSE
+)
 }
 \arguments{
 \item{monthly_only}{Logical. If TRUE (default), excludes annual data (period M13)
@@ -16,9 +22,16 @@ and includes only monthly observations.}
 \item{remove_national}{Logical. If TRUE (default), excludes national-level data
 (state code 00). Set to FALSE to include national data with industry and
 size class breakdowns.}
+
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
+for cleaner output during batch processing.}
+
+\item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
+with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-A data.table containing JOLTS data with the following key columns:
+By default, returns a data.table with JOLTS data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing JOLTS data with the following key columns:
   \describe{
     \item{series_id}{BLS series identifier}
     \item{year}{Year of observation}
@@ -51,20 +64,18 @@ The function performs several data transformations:
 }
 \examples{
 \dontrun{
-# Download state-level JOLTS data (default)
-jolts_states <- get_jolts()
+# Download state-level JOLTS data (default - returns data directly)
+jolts_data <- get_jolts()
 
 # Include national data with industry breakdowns
 jolts_national <- get_jolts(remove_national = FALSE)
 
-# Include regional aggregates
-jolts_regions <- get_jolts(remove_regions = FALSE)
-
-# Include annual data
-jolts_annual <- get_jolts(monthly_only = FALSE)
+# Get full diagnostic object if needed
+jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
+print_bls_warnings(jolts_with_diagnostics)
 
 # View job openings by state for latest period
-job_openings <- jolts_states[dataelement_text == "Job openings" &
-                             date == max(date)]
+job_openings <- jolts_data[dataelement_text == "Job openings" & 
+                          date == max(date)]
 }
 }

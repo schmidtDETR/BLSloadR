@@ -4,19 +4,18 @@
 \alias{get_oews}
 \title{Download Occupational Employment and Wage Statistics (OEWS) Data}
 \usage{
-get_oews()
+get_oews(suppress_warnings = FALSE, return_diagnostics = FALSE)
+}
+\arguments{
+\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
+for cleaner output during batch processing.}
+
+\item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
+with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-A data.table containing OEWS data with the following key columns:
-  \describe{
-    \item{series_id}{BLS series identifier}
-    \item{year}{Year of observation}
-    \item{period}{Time period}
-    \item{value}{Employment or wage statistic value}
-    \item{occupation_title}{Occupation name/title}
-    \item{area_title}{Geographic area name}
-    \item{datatype_text}{Type of statistic (employment, wages, etc.)}
-  }
+By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
 This function downloads and joins together occupational employment and wage data
@@ -29,9 +28,14 @@ and wage estimates by occupation and geographic area.
 oews_data <- get_oews()
 
 # View available occupations
-unique(oews_data$occupation_title)
+unique(get_bls_data(oews_data)$occupation_title)
 
 # Filter for specific occupation
-software_devs <- oews_data[grepl("Software", occupation_title)]
+software_devs <- get_bls_data(oews_data)[grepl("Software", occupation_title)]
+
+# Get full diagnostic object if needed
+oews_with_diagnostics <- get_oews(return_diagnostics = TRUE)
+print_bls_warnings(oews_with_diagnostics)
 }
+
 }

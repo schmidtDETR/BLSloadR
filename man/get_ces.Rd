@@ -4,7 +4,13 @@
 \alias{get_ces}
 \title{Download Current Employment Statistics (CES) Data}
 \usage{
-get_ces(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE)
+get_ces(
+  transform = TRUE,
+  monthly_only = TRUE,
+  simplify_table = TRUE,
+  suppress_warnings = FALSE,
+  return_diagnostics = FALSE
+)
 }
 \arguments{
 \item{transform}{Logical. If TRUE (default), converts employment values from thousands
@@ -15,20 +21,16 @@ and removes ", In Thousands" from data type labels.}
 
 \item{simplify_table}{Logical. If TRUE (default), removes excess columns and creates 
 a date column from Year and Period in the original data.}
+
+\item{suppress_warnings}{Logical. If FALSE (default), prints warnings for any BLS 
+download issues. If TRUE, warnings are suppressed but still returned invisibly.}
+
+\item{return_diagnostics}{Logical. If FALSE (default), returns only the data. If TRUE,
+returns the full bls_data_collection object with diagnostics.}
 }
 \value{
-A data.table containing CES data with the following key columns:
-  \describe{
-    \item{series_id}{BLS series identifier}
-    \item{year}{Year of observation}
-    \item{period}{Time period (M01-M12 for months, M13 for annual)}
-    \item{value}{Employment statistic value}
-    \item{date}{Date column (if simplify_table = TRUE)}
-    \item{industry_text}{Industry description}
-    \item{state_text}{State name}
-    \item{area_text}{Area description}
-    \item{data_type_text}{Type of employment statistic}
-  }
+By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
 This function downloads Current Employment Statistics data from the Bureau of Labor Statistics.
@@ -37,13 +39,16 @@ By default, all available areas, data types, and periods are included.
 }
 \examples{
 \dontrun{
-# Download all CES data with default settings
+# Download CES data (streamlined approach)
 ces_data <- get_ces()
 
-# Download without transformation
-ces_raw <- get_ces(transform = FALSE)
+# Download with full diagnostics if needed
+ces_result <- get_ces(return_diagnostics = TRUE)
+ces_data <- get_bls_data(ces_result)
 
-# Include annual data
-ces_all <- get_ces(monthly_only = FALSE)
+# Check for download issues
+if (has_bls_issues(ces_result)) {
+  print_bls_warnings(ces_result)
+}
 }
 }

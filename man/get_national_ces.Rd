@@ -4,7 +4,12 @@
 \alias{get_national_ces}
 \title{Get National Current Employment Statistics (CES) Data from BLS}
 \usage{
-get_national_ces(monthly_only = TRUE, simplify_table = TRUE)
+get_national_ces(
+  monthly_only = TRUE,
+  simplify_table = TRUE,
+  show_warnings = TRUE,
+  return_diagnostics = FALSE
+)
 }
 \arguments{
 \item{monthly_only}{Logical. If TRUE (default), excludes annual averages 
@@ -16,22 +21,16 @@ columns (series_title, begin_year, begin_period, end_year, end_period,
 naics_code, publishing_status, display_level, selectable, sort_sequence) 
 and adds a formatted date column. If FALSE, returns the full dataset 
 with all available columns.}
+
+\item{show_warnings}{Logical. If TRUE (default), displays download warnings 
+and diagnostics. If FALSE, suppresses warning output.}
+
+\item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
+with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-A data.frame containing CES employment data with the following key columns:
-  \describe{
-    \item{series_id}{BLS series identifier}
-    \item{year}{Year of the observation}
-    \item{period}{Time period (M01-M12 for months, M13 for annual average)}
-    \item{value}{Employment statistic value}
-    \item{industry_code}{Industry classification code}
-    \item{industry_name}{Industry name/description}
-    \item{datatype_code}{Type of employment statistic code}
-    \item{datatype_text}{Description of the employment statistic}
-    \item{supersector_code}{Supersector classification code}
-    \item{supersector_name}{Supersector name/description}
-    \item{date}{Date column (lubridate yearmonth format, only if simplify_table=TRUE)}
-  }
+By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
 This function downloads and processes national Current Employment Statistics (CES) 
@@ -51,13 +50,14 @@ The function downloads the following BLS CES datasets:
 }
 
 These datasets are joined together to provide context and labels for the 
-employment statistics. The function relies on a helper function `fread_bls()` 
-to download and read the BLS data files.
+employment statistics. The function uses the `fread_bls()` helper function 
+to download and read the BLS data files with robust error handling and 
+diagnostic reporting.
 }
 \note{
 This function requires the following packages: dplyr, data.table, httr, and 
 lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()` 
-helper function must be defined elsewhere in your environment.
+and `create_bls_object()` helper functions must be available in your environment.
 }
 \examples{
 \dontrun{
@@ -69,7 +69,15 @@ ces_full <- get_national_ces(monthly_only = FALSE, simplify_table = FALSE)
 
 # Get monthly data but keep all metadata columns
 ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
+
+# Access the data component
+ces_data <- get_bls_data(ces_monthly)
+
+# Get full diagnostic object if needed
+data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
+print_bls_warnings(data_with_diagnostics)
 }
+
 
 }
 \seealso{

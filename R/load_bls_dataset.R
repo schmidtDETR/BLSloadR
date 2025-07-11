@@ -26,8 +26,10 @@
 #'  performing time series analysis. This parameter also converts the column "value" to numeric
 #'  and generates a date column from the year and period columns in the data.
 #'  
-#' @returns This function will return either a data table (if return_full is FALSE or not provided)
-#'  or a named list of the returned data.
+#' @param suppress_warnings Logical. If TRUE, suppress individual download warnings during processing.
+#'  
+#' @returns This function will return either a bls_data_collection object (if return_full is FALSE or not provided)
+#'  or a named list of the returned data including the bls_data_collection object.
 #'  
 #' @export
 #' @importFrom data.table data.table
@@ -36,6 +38,9 @@
 #' @importFrom data.table :=
 #' @importFrom rvest read_html html_elements html_attr
 #' @importFrom httr GET add_headers stop_for_status content
+#' @importFrom dplyr left_join
+#' @importFrom stats setNames
+#' @importFrom utils head
 #' 
 #' @examples
 #' \dontrun{
@@ -47,10 +52,14 @@
 #'
 #' # Download data without removing excess columns and value conversions
 #' productivity <- load_bls_dataset("mp", simplify_table = FALSE)
+#' 
+#' # Check for download issues
+#' if (has_bls_issues(cost_index)) {
+#'   print_bls_warnings(cost_index, detailed = TRUE)
+#' }
 #' }
 
-
-load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE) {
+load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE, suppress_warnings = FALSE) {
   
   # Validate inputs
   if (!is.character(database_code) || length(database_code) != 1) {
@@ -118,8 +127,9 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   # Create file table and classify by pattern
   file_table <- data.table(file_name = file_names)
   file_table[, file_type := fcase(
-    grepl("\\.data", file_name), "data",
-    grepl("\\.series$", file_name), "series",
+    grepl("\\.data\\.", file_name), "data",
+    grepl("\\.series($|\\.)", file_name), "series",
+    grepl("\\.aspect($|\\.)", file_name), "aspect",
     default = "mapping"
   )]
   
@@ -127,15 +137,33 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   mapping_files <- file_table[file_type == "mapping", file_name]
   data_files <- file_table[file_type == "data", file_name]
   series_file <- file_table[file_type == "series", file_name]
+  aspect_files <- file_table[file_type == "aspect", file_name]
   
   if (length(series_file) == 0) {
     stop("Could not find a series file in the BLS database directory.")
   }
   
-  # Handle multiple series files (take the first one if multiple exist)
+  # Handle multiple series files (prompt user to choose)
   if (length(series_file) > 1) {
-    series_file <- series_file[1]
-    message("Multiple series files found. Using: ", series_file)
+    cat("Multiple series files found. Please select a file to load:\n")
+    for (i in seq_along(series_file)) {
+      cat(i, ": ", series_file[i], "\n")
+    }
+    
+    # Get user input for series file selection
+    selected_series_index <- as.integer(readline(prompt = "Enter the number of the series file you want to load: "))
+    
+    # Validate the input
+    if (is.na(selected_series_index) || selected_series_index < 1 || selected_series_index > length(series_file)) {
+      stop("Invalid selection. Please run the function again and enter a valid number.")
+    }
+    
+    # Get the selected series file name
+    series_file <- series_file[selected_series_index]
+    cat("Loading series file:", series_file, "\n")
+    
+  } else if (length(series_file) == 1) {
+    cat("Loading series file:", series_file, "\n")
   }
   
   # --- Logic for data file selection ---
@@ -166,66 +194,198 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
     stop("No data files found in the BLS database directory.")
   }
   
-  # Download and combine data files
-  data_list <- lapply(selected_data_file, function(fname) {
-    full_url <- paste0(base_url, fname)
-    message("Reading data file: ", full_url)
-    fread_bls(full_url)
-  })
+  # --- Logic for aspect file selection ---
+  selected_aspect_file <- NULL
+  if (length(aspect_files) > 1) {
+    cat("Multiple aspect files found. Please select a file to load:\n")
+    for (i in seq_along(aspect_files)) {
+      cat(i, ": ", aspect_files[i], "\n")
+    }
+    
+    # Get user input for aspect file selection
+    selected_aspect_index <- as.integer(readline(prompt = "Enter the number of the aspect file you want to load: "))
+    
+    # Validate the input
+    if (is.na(selected_aspect_index) || selected_aspect_index < 1 || selected_aspect_index > length(aspect_files)) {
+      stop("Invalid selection. Please run the function again and enter a valid number.")
+    }
+    
+    # Get the selected aspect file name
+    selected_aspect_file <- aspect_files[selected_aspect_index]
+    cat("Loading aspect file:", selected_aspect_file, "\n")
+    
+  } else if (length(aspect_files) == 1) {
+    # If there is only one aspect file, use it directly
+    selected_aspect_file <- aspect_files[1]
+    cat("Loading aspect file:", selected_aspect_file, "\n")
+  } else if (length(aspect_files) == 0) {
+    if (!suppress_warnings) message("No aspect files found in the BLS database directory.")
+  }
   
-  data_dt <- rbindlist(data_list, use.names = TRUE, fill = TRUE)
+  # Create URLs for downloading
+  urls <- c(
+    setNames(paste0(base_url, selected_data_file), selected_data_file),
+    setNames(paste0(base_url, series_file), series_file)
+  )
   
-  # Download series file
-  series_url <- paste0(base_url, series_file)
-  message("Reading series file: ", series_url)
-  series_dt <- fread_bls(series_url)
+  # Add aspect file URL if it exists
+  if (!is.null(selected_aspect_file)) {
+    aspect_url <- setNames(paste0(base_url, selected_aspect_file), selected_aspect_file)
+    urls <- c(urls, aspect_url)
+  }
   
-  # Join mapping files
-  for (map_file in mapping_files) {
-    try({
-      map_url <- paste0(base_url, map_file)
-      message("Reading mapping file: ", map_url)
-      map_dt <- fread_bls(map_url)
-      join_col <- names(map_dt)[1]
+  # Add mapping file URLs
+  if (length(mapping_files) > 0) {
+    mapping_urls <- setNames(paste0(base_url, mapping_files), mapping_files)
+    urls <- c(urls, mapping_urls)
+  }
+  
+  # Download all files using the new system
+  downloads <- download_bls_files(urls, suppress_warnings = suppress_warnings)
+  
+  # Extract data from downloads
+  data_dt <- get_bls_data(downloads[[selected_data_file]])
+  series_dt <- get_bls_data(downloads[[series_file]])
+  
+  # Remove unwanted columns from all files
+  columns_to_remove <- c("display_level", "sort_sequence", "selectable", "footnote_codes")
+  data_dt <- data_dt |> dplyr::select(-tidyselect::any_of(columns_to_remove))
+  series_dt <- series_dt |> dplyr::select(-tidyselect::any_of(columns_to_remove))
+  
+  # Track processing steps
+  processing_steps <- character(0)
+  
+  # STEP 1: Join data to series first to get lookup codes
+  if (!suppress_warnings) message("Joining data to series file...")
+  full_dt <- left_join(data_dt, series_dt, by = "series_id")
+  processing_steps <- c(processing_steps, "joined_data_to_series")
+  
+  # STEP 2: Join aspect file if it exists (after series, before mapping files)
+  if (!is.null(selected_aspect_file) && selected_aspect_file %in% names(downloads)) {
+    tryCatch({
+      if (!suppress_warnings) message("Joining aspect file...")
+      aspect_dt <- get_bls_data(downloads[[selected_aspect_file]])
       
-      if (join_col %in% names(series_dt)) {
-        series_dt <- left_join(series_dt, map_dt)
-      }
-      if (join_col %in% names(data_dt)) {
-        data_dt <- left_join(data_dt, map_dt)
+      # Remove unwanted columns from aspect file
+      aspect_dt <- aspect_dt |> dplyr::select(-tidyselect::any_of(columns_to_remove))
+      
+      # Rename the value column in aspect file to aspect_value to avoid conflicts
+      if ("value" %in% names(aspect_dt)) {
+        aspect_dt <- aspect_dt |>
+          dplyr::rename(aspect_value = value)
       }
       
+      # Join aspect file on series_id, year, and period
+      join_cols <- c("series_id", "year", "period")
+      available_join_cols <- intersect(join_cols, names(aspect_dt))
+      
+      if (length(available_join_cols) > 0) {
+        full_dt <- left_join(full_dt, aspect_dt, by = available_join_cols)
+        processing_steps <- c(processing_steps, "joined_aspect_file")
+        if (!suppress_warnings) message("Aspect file joined successfully on: ", paste(available_join_cols, collapse = ", "))
+      } else {
+        if (!suppress_warnings) message("Warning: Could not join aspect file - no matching columns found")
+      }
+      
+    }, error = function(e) {
+      if (!suppress_warnings) message("Error processing aspect file ", selected_aspect_file, ": ", e$message)
     })
   }
   
-  full_dt <- left_join(data_dt, series_dt, by = "series_id")
+  # STEP 3: Now join mapping files to the combined table
+  for (map_file in mapping_files) {
+    if (map_file %in% names(downloads)) {
+      tryCatch({
+        map_dt <- get_bls_data(downloads[[map_file]])
+        
+        # Remove unwanted columns from mapping file
+        map_dt <- map_dt |> dplyr::select(-tidyselect::any_of(columns_to_remove))
+        
+        if (ncol(map_dt) == 2) {
+          
+          # For mapping files with exactly 2 columns, assume first is join column
+          join_col <- names(map_dt)[1]
+          
+          if (join_col %in% names(full_dt)) {
+            if (!suppress_warnings) message("Joining mapping file ", map_file, " on column: ", join_col)
+            full_dt <- left_join(full_dt, map_dt, by = join_col)
+            processing_steps <- c(processing_steps, paste0("joined_mapping_", gsub("\\.", "_", map_file)))
+          } else {
+            if (!suppress_warnings) message("Skipping mapping file ", map_file, " - join column '", join_col, "' not found in data")
+          }
+          
+        } else {
+          
+          # For mapping files with >2 columns, use all except last as potential join columns
+          potential_join_cols <- names(map_dt)[1:(ncol(map_dt) - 1)]
+          join_cols <- intersect(potential_join_cols, names(full_dt))
+          
+          if (length(join_cols) > 0) {
+            if (!suppress_warnings) message("Joining mapping file ", map_file, " on column(s): ", paste(join_cols, collapse = ", "))
+            full_dt <- left_join(full_dt, map_dt, by = join_cols)
+            processing_steps <- c(processing_steps, paste0("joined_mapping_", gsub("\\.", "_", map_file)))
+          } else {
+            if (!suppress_warnings) message("Skipping mapping file ", map_file, " - no join columns found in data")
+          }
+          
+        }
+        
+      }, error = function(e) {
+        if (!suppress_warnings) message("Error processing mapping file ", map_file, ": ", e$message)
+      })
+    }
+  }
   
+  # STEP 4: Apply table simplification if requested
   if (simplify_table) {
+    if (!suppress_warnings) message("Simplifying table structure...")
     
     full_dt <- full_dt |>
       dplyr::mutate(value = as.numeric(value),
                     period_type_code = substr(period,1,1),
                     date = case_when(
-                      period %in% c("M13", "Q05") ~ lubridate::ym(paste0(year,period)),
+                      period %in% c("M13", "Q05") ~ lubridate::ym(paste0(year,"-01")),
                       period_type_code == "Q" ~ lubridate::yq(paste(year, "Q", substr(period,3,3))),
                       TRUE ~ lubridate::ym(paste0(year,period))
                     )
       ) |>
-      dplyr::select(-tidyselect::contains("_code"),
-                    -tidyselect::matches(c("begin_year", "begin_period", "end_year", "end_period", "selectable", "sort_sequence", "display_level")))
+      dplyr::select(-tidyselect::contains("_code"))
     
+    processing_steps <- c(processing_steps, "simplified_table")
   }
   
-  if(return_full){
+  # Create the BLS data collection object
+  bls_collection <- create_bls_object(
+    data = full_dt,
+    downloads = downloads,
+    data_type = paste0("BLS-", toupper(database_code)),
+    processing_steps = processing_steps
+  )
+  
+  # Print summary unless suppressed
+  if (!suppress_warnings) {
+    if (has_bls_issues(bls_collection)) {
+      cat("\n")
+      print_bls_warnings(bls_collection, detailed = FALSE)
+      cat("\nUse print_bls_warnings(result, detailed = TRUE) for detailed diagnostics\n")
+    } else {
+      cat("\nDownload completed successfully with no issues detected.\n")
+    }
+  }
+  
+  # Return based on return_full parameter
+  if (return_full) {
     return(list(
-      full_file = full_dt,
+      bls_collection = bls_collection,
+      full_file = get_bls_data(bls_collection),
       data = data_dt,
       series = series_dt,
+      aspect = if (!is.null(selected_aspect_file)) get_bls_data(downloads[[selected_aspect_file]]) else NULL,
       mapping_files = mapping_files,
-      file_table = file_table
+      file_table = file_table,
+      downloads = downloads
     ))
   } else {
-    return(full_dt)
+    return(bls_collection)
   }
-  
 }
