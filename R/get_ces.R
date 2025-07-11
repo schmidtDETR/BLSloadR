@@ -90,7 +90,7 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
     ces_data <- ces_data |>
       dplyr::mutate(
         value = if_else(
-          data_type_code %in% c(1,6,26),
+          data_type_code %in% c("01","06","26"),
           value * 1000,
           value
         ),
@@ -132,7 +132,7 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
       cat("\nDownload Issues Summary:\n")
       cat("Total warnings:", result$summary$total_warnings, "\n")
       cat("Files with issues:", result$summary$files_with_issues, "of", result$summary$files_downloaded, "\n")
-      cat("Use print_bls_warnings() for details\n")
+      cat("Run with return_diagnostics = TRUE and use print_bls_warnings() for details\n")
     }
   } else {
     cat("No download issues detected.\n")

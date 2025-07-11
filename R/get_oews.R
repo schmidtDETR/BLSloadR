@@ -9,17 +9,9 @@
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
-#' @return A bls_data_collection object containing OEWS data with the following key columns:
-#'   \describe{
-#'     \item{series_id}{BLS series identifier}
-#'     \item{year}{Year of observation}
-#'     \item{period}{Time period}
-#'     \item{value}{Employment or wage statistic value}
-#'     \item{occupation_title}{Occupation name/title}
-#'     \item{area_title}{Geographic area name}
-#'     \item{datatype_text}{Type of statistic (employment, wages, etc.)}
-#'   }
-#'
+#' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+#'   returns a bls_data_collection object containing data and comprehensive diagnostics.
+#'   
 #' @export
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate

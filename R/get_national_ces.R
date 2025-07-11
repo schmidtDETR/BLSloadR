@@ -18,20 +18,8 @@
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
-#' @return A bls_data_collection object containing CES employment data with the following key columns:
-#'   \describe{
-#'     \item{series_id}{BLS series identifier}
-#'     \item{year}{Year of the observation}
-#'     \item{period}{Time period (M01-M12 for months, M13 for annual average)}
-#'     \item{value}{Employment statistic value}
-#'     \item{industry_code}{Industry classification code}
-#'     \item{industry_name}{Industry name/description}
-#'     \item{datatype_code}{Type of employment statistic code}
-#'     \item{datatype_text}{Description of the employment statistic}
-#'     \item{supersector_code}{Supersector classification code}
-#'     \item{supersector_name}{Supersector name/description}
-#'     \item{date}{Date column (lubridate yearmonth format, only if simplify_table=TRUE)}
-#'   }
+#' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+#'   returns a bls_data_collection object containing data and comprehensive diagnostics.
 #'
 #' @details 
 #' The function downloads the following BLS CES datasets:

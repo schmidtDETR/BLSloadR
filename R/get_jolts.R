@@ -95,7 +95,7 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
   # Join all the data together
   jolts <- jolts_import |>
     dplyr::select(-c(footnote_codes)) |>
-    dplyr::left_join(jolts_series |> dplyr::select(-footnote_codes), by = "series_id") |>
+    dplyr::left_join(jolts_series, by = "series_id") |>
     dplyr::left_join(jolts_states |> dplyr::select(-c(display_level:sort_sequence)), by = "state_code") |>
     dplyr::left_join(jolts_elements |> dplyr::select(-c(display_level:sort_sequence)), by = "dataelement_code") |>
     dplyr::left_join(jolts_area |> dplyr::select(-c(display_level:sort_sequence)), by = "area_code") |>

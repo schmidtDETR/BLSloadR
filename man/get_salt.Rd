@@ -25,23 +25,8 @@ and diagnostics. If FALSE, suppresses warning output.}
 with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-A bls_data_collection object containing SALT data with the following key measures:
-  \describe{
-    \item{date}{Date of observation (quarterly)}
-    \item{state}{State name}
-    \item{fips}{FIPS code}
-    \item{u1}{U-1: Persons unemployed 15+ weeks as percent of civilian labor force}
-    \item{u2}{U-2: Job losers as percent of civilian labor force}
-    \item{u3}{U-3: Standard unemployment rate}
-    \item{u4}{U-4: U-3 + discouraged workers}
-    \item{u5}{U-5: U-4 + marginally attached workers}
-    \item{u6}{U-6: U-5 + involuntary part-time workers}
-    \item{civilian_labor_force}{Size of civilian labor force}
-    \item{unemployed}{Number of unemployed persons}
-    \item{job_losers}{Number of job losers}
-    \item{discouraged_workers}{Number of discouraged workers}
-  }
-
+By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing data and comprehensive diagnostics.
   The function also adds derived measures and quartile comparisons across states.
 }
 \description{

@@ -160,7 +160,7 @@ print_bls_warnings <- function(bls_obj, detailed = FALSE, silent = FALSE) {
     }
     
     if (!detailed && length(diagnostics) > 1) {
-      cat("\nUse print_bls_warnings(data, detailed = TRUE) for file-by-file details\n")
+      cat("\nRun with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details\n")
     }
   }
   

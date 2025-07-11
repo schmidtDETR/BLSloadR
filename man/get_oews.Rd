@@ -14,16 +14,8 @@ for cleaner output during batch processing.}
 with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-A bls_data_collection object containing OEWS data with the following key columns:
-  \describe{
-    \item{series_id}{BLS series identifier}
-    \item{year}{Year of observation}
-    \item{period}{Time period}
-    \item{value}{Employment or wage statistic value}
-    \item{occupation_title}{Occupation name/title}
-    \item{area_title}{Geographic area name}
-    \item{datatype_text}{Type of statistic (employment, wages, etc.)}
-  }
+By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+  returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
 This function downloads and joins together occupational employment and wage data
