@@ -29,6 +29,7 @@
 #'     \item "2015-2019" - Comprehensive unadjusted data for 2015-2019
 #'     \item "2020-2024" - Comprehensive unadjusted data for 2020-2024
 #'     \item "2025-2029" - Comprehensive unadjusted data for 2025-2029
+#'     \item "ST" - Any state two-character USPS abbreviation, plus DC and PR
 #'   }
 #' @param monthly_only Logical. If TRUE (default), excludes annual data (period M13)
 #'   and creates a date column from year and period.
@@ -117,7 +118,59 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
     "2005-2009" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU05-09",
     "2000-2004" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU00-04",
     "1995-1999" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU95-99",
-    "1990-1994" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU90-94"
+    "1990-1994" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU90-94",
+    'AR' = 'https://download.bls.gov/pub/time.series/la/la.data.10.Arkansas',
+    'CA' = 'https://download.bls.gov/pub/time.series/la/la.data.11.California',
+    'CO' = 'https://download.bls.gov/pub/time.series/la/la.data.12.Colorado',
+    'CT' = 'https://download.bls.gov/pub/time.series/la/la.data.13.Connecticut',
+    'DE' = 'https://download.bls.gov/pub/time.series/la/la.data.14.Delaware',
+    'DC' = 'https://download.bls.gov/pub/time.series/la/la.data.15.DC',
+    'FL' = 'https://download.bls.gov/pub/time.series/la/la.data.16.Florida',
+    'GA' = 'https://download.bls.gov/pub/time.series/la/la.data.17.Georgia',
+    'HI' = 'https://download.bls.gov/pub/time.series/la/la.data.18.Hawaii',
+    'ID' = 'https://download.bls.gov/pub/time.series/la/la.data.19.Idaho',
+    'IL' = 'https://download.bls.gov/pub/time.series/la/la.data.20.Illinois',
+    'IN' = 'https://download.bls.gov/pub/time.series/la/la.data.21.Indiana',
+    'IA' = 'https://download.bls.gov/pub/time.series/la/la.data.22.Iowa',
+    'KS' = 'https://download.bls.gov/pub/time.series/la/la.data.23.Kansas',
+    'KY' = 'https://download.bls.gov/pub/time.series/la/la.data.24.Kentucky',
+    'LA' = 'https://download.bls.gov/pub/time.series/la/la.data.25.Louisiana',
+    'ME' = 'https://download.bls.gov/pub/time.series/la/la.data.26.Maine',
+    'MD' = 'https://download.bls.gov/pub/time.series/la/la.data.27.Maryland',
+    'MA' = 'https://download.bls.gov/pub/time.series/la/la.data.28.Massachusetts',
+    'MI' = 'https://download.bls.gov/pub/time.series/la/la.data.29.Michigan',
+    'MN' = 'https://download.bls.gov/pub/time.series/la/la.data.30.Minnesota',
+    'MS' = 'https://download.bls.gov/pub/time.series/la/la.data.31.Mississippi',
+    'MO' = 'https://download.bls.gov/pub/time.series/la/la.data.32.Missouri',
+    'MT' = 'https://download.bls.gov/pub/time.series/la/la.data.33.Montana',
+    'ME' = 'https://download.bls.gov/pub/time.series/la/la.data.34.Nebraska',
+    'NV' = 'https://download.bls.gov/pub/time.series/la/la.data.35.Nevada',
+    'NH' = 'https://download.bls.gov/pub/time.series/la/la.data.36.NewHampshire',
+    'NJ' = 'https://download.bls.gov/pub/time.series/la/la.data.37.NewJersey',
+    'NM' = 'https://download.bls.gov/pub/time.series/la/la.data.38.NewMexico',
+    'NY' = 'https://download.bls.gov/pub/time.series/la/la.data.39.NewYork',
+    'NC' = 'https://download.bls.gov/pub/time.series/la/la.data.40.NorthCarolina',
+    'ND' = 'https://download.bls.gov/pub/time.series/la/la.data.41.NorthDakota',
+    'OH' = 'https://download.bls.gov/pub/time.series/la/la.data.42.Ohio',
+    'OK' = 'https://download.bls.gov/pub/time.series/la/la.data.43.Oklahoma',
+    'OR' = 'https://download.bls.gov/pub/time.series/la/la.data.44.Oregon',
+    'PA' = 'https://download.bls.gov/pub/time.series/la/la.data.45.Pennsylvania',
+    'PR' = 'https://download.bls.gov/pub/time.series/la/la.data.46.PuertoRico',
+    'RI' = 'https://download.bls.gov/pub/time.series/la/la.data.47.RhodeIsland',
+    'SC' = 'https://download.bls.gov/pub/time.series/la/la.data.48.SouthCarolina',
+    'SD' = 'https://download.bls.gov/pub/time.series/la/la.data.49.SouthDakota',
+    'TN' = 'https://download.bls.gov/pub/time.series/la/la.data.50.Tennessee',
+    'TX' = 'https://download.bls.gov/pub/time.series/la/la.data.51.Texas',
+    'UT' = 'https://download.bls.gov/pub/time.series/la/la.data.52.Utah',
+    'VT' = 'https://download.bls.gov/pub/time.series/la/la.data.53.Vermont',
+    'VA' = 'https://download.bls.gov/pub/time.series/la/la.data.54.Virginia',
+    'WA' = 'https://download.bls.gov/pub/time.series/la/la.data.56.Washington',
+    'WV' = 'https://download.bls.gov/pub/time.series/la/la.data.57.WestVirginia',
+    'WI' = 'https://download.bls.gov/pub/time.series/la/la.data.58.Wisconsin',
+    'WY' = 'https://download.bls.gov/pub/time.series/la/la.data.59.Wyoming',
+    'AL' = 'https://download.bls.gov/pub/time.series/la/la.data.7.Alabama',
+    'AK' = 'https://download.bls.gov/pub/time.series/la/la.data.8.Alaska',
+    'AZ' = 'https://download.bls.gov/pub/time.series/la/la.data.9.Arizona'
   )
   
   # Validate geography argument
