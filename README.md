@@ -1,5 +1,5 @@
 # Overview
-BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at https://download.bls.gov/pub/time.series/. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the load_bls_dataset() function to provide generalized access to the other databases at this website.
+BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at https://download.bls.gov/pub/time.series/. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the `load_bls_dataset()` and `bls_overview()` functions to provide generalized access to the other databases at this website within an R environment.
 
 # Installing the Package
 BLSloadR can be installed from Github with the following R commands:
