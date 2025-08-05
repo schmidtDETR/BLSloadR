@@ -35,7 +35,7 @@
 #'   and creates a date column from year and period.
 #' @param transform Logical. If TRUE (default), converts rate and ratio measures from
 #'   percentages to proportions by dividing by 100. Unemployment rates will be expressed
-#'   as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.
+#'   as decimals (e.g., 0.05 for 5\% unemployment) rather than as whole numbers (e.g. 5).
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
 #'   for cleaner output during batch processing.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object

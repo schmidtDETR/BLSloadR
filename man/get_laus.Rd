@@ -27,6 +27,15 @@ Default is "state_adjusted". Valid options are:
   \item "combined" - Combined statistical area data
   \item "county" - County-level data (large file >300MB)
   \item "city" - City and town data (large file >300MB)
+  \item "1990-1994" - Comprehensive unadjusted data for 1990-1994
+  \item "1995-1999" - Comprehensive unadjusted data for 1995-1999
+  \item "2000-2004" - Comprehensive unadjusted data for 2000-2004
+  \item "2005-2009" - Comprehensive unadjusted data for 2005-2009
+  \item "2010-2014" - Comprehensive unadjusted data for 2010-2014
+  \item "2015-2019" - Comprehensive unadjusted data for 2015-2019
+  \item "2020-2024" - Comprehensive unadjusted data for 2020-2024
+  \item "2025-2029" - Comprehensive unadjusted data for 2025-2029
+  \item "ST" - Any state two-character USPS abbreviation, plus DC and PR
 }}
 
 \item{monthly_only}{Logical. If TRUE (default), excludes annual data (period M13)
@@ -34,7 +43,7 @@ and creates a date column from year and period.}
 
 \item{transform}{Logical. If TRUE (default), converts rate and ratio measures from
 percentages to proportions by dividing by 100. Unemployment rates will be expressed
-as decimals (e.g., 0.05 for 5\% unemployment) rather than percentages.}
+as decimals (e.g., 0.05 for 5\% unemployment) rather than as whole numbers (e.g. 5).}
 
 \item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
 for cleaner output during batch processing.}
@@ -61,7 +70,9 @@ By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
 This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
  of Labor Statistics. Due to the large size of some LAUS datasets (county and city
  files are >300MB), users must specify which geographic level to download. The function
- provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+ provides access to both seasonally adjusted and unadjusted data at various geographic levels. 
+ Additional datasets provide comprehensive non-seasonally-adjusted data for all areas broken out 
+ in 5-year increments
 }
 \details{
 The function joins data from multiple BLS files:
@@ -74,13 +85,13 @@ The function joins data from multiple BLS files:
 }
 \examples{
 \dontrun{
-# Download state-level seasonally adjusted data (default - returns data directly)
+# Download state-level seasonally adjusted data (default operation)
 laus_states <- get_laus()
 
 # Download unadjusted state data
 laus_states_raw <- get_laus("state_unadjusted")
 
-# Download metro area data with rates as percentages
+# Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
 laus_metro <- get_laus("metro", transform = FALSE)
 
 # Get full diagnostic object if needed
