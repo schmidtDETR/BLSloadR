@@ -3,7 +3,9 @@
 #' @description This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
 #'  of Labor Statistics. Due to the large size of some LAUS datasets (county and city
 #'  files are >300MB), users must specify which geographic level to download. The function
-#'  provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+#'  provides access to both seasonally adjusted and unadjusted data at various geographic levels. 
+#'  Additional datasets provide comprehensive non-seasonally-adjusted data for all areas broken out 
+#'  in 5-year increments
 #'
 #' @param geography Character string specifying the geographic level and adjustment type.
 #'   Default is "state_adjusted". Valid options are:
@@ -19,6 +21,14 @@
 #'     \item "combined" - Combined statistical area data
 #'     \item "county" - County-level data (large file >300MB)
 #'     \item "city" - City and town data (large file >300MB)
+#'     \item "1990-1994" - Comprehensive unadjusted data for 1990-1994
+#'     \item "1995-1999" - Comprehensive unadjusted data for 1995-1999
+#'     \item "2000-2004" - Comprehensive unadjusted data for 2000-2004
+#'     \item "2005-2009" - Comprehensive unadjusted data for 2005-2009
+#'     \item "2010-2014" - Comprehensive unadjusted data for 2010-2014
+#'     \item "2015-2019" - Comprehensive unadjusted data for 2015-2019
+#'     \item "2020-2024" - Comprehensive unadjusted data for 2020-2024
+#'     \item "2025-2029" - Comprehensive unadjusted data for 2025-2029
 #'   }
 #' @param monthly_only Logical. If TRUE (default), excludes annual data (period M13)
 #'   and creates a date column from year and period.
@@ -63,13 +73,13 @@
 #' 
 #' @examples
 #' \dontrun{
-#' # Download state-level seasonally adjusted data (default - returns data directly)
+#' # Download state-level seasonally adjusted data (default operation)
 #' laus_states <- get_laus()
 #'
 #' # Download unadjusted state data
 #' laus_states_raw <- get_laus("state_unadjusted")
 #'
-#' # Download metro area data with rates as percentages
+#' # Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
 #' laus_metro <- get_laus("metro", transform = FALSE)
 #'
 #' # Get full diagnostic object if needed
@@ -99,7 +109,15 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
     "micro" = "https://download.bls.gov/pub/time.series/la/la.data.62.Micro",
     "combined" = "https://download.bls.gov/pub/time.series/la/la.data.63.Combined",
     "county" = "https://download.bls.gov/pub/time.series/la/la.data.64.County",
-    "city" = "https://download.bls.gov/pub/time.series/la/la.data.65.City"
+    "city" = "https://download.bls.gov/pub/time.series/la/la.data.65.City",
+    "2025-2029" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU25-29",
+    "2020-2024" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU20-24",
+    "2015-2019" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU15-19",
+    "2010-2014" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU10-14",
+    "2005-2009" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU05-09",
+    "2000-2004" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU00-04",
+    "1995-1999" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU95-99",
+    "1990-1994" = "https://download.bls.gov/pub/time.series/la/la.data.0.CurrentU90-94"
   )
   
   # Validate geography argument
@@ -110,7 +128,7 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
   
   # Warn about large files
   if (geography %in% c("city", "county")) {
-    message("Warning: ", geography, " data file is very large (>300MB). Download may take several minutes.")
+    message("Warning: ", geography, " data file is very large (>300MB).")
   }
   
   # Define all URLs we need to download
