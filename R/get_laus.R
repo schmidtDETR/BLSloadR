@@ -143,7 +143,7 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
     'MS' = 'https://download.bls.gov/pub/time.series/la/la.data.31.Mississippi',
     'MO' = 'https://download.bls.gov/pub/time.series/la/la.data.32.Missouri',
     'MT' = 'https://download.bls.gov/pub/time.series/la/la.data.33.Montana',
-    'ME' = 'https://download.bls.gov/pub/time.series/la/la.data.34.Nebraska',
+    'NE' = 'https://download.bls.gov/pub/time.series/la/la.data.34.Nebraska',
     'NV' = 'https://download.bls.gov/pub/time.series/la/la.data.35.Nevada',
     'NH' = 'https://download.bls.gov/pub/time.series/la/la.data.36.NewHampshire',
     'NJ' = 'https://download.bls.gov/pub/time.series/la/la.data.37.NewJersey',
