@@ -63,7 +63,7 @@
 #'
 #'
 #' @seealso 
-#' \url{https://www.bls.gov/ces/} for more information about CES data
+#' Please visit the Bureau of Labor Statistics at https://www.bls.gov/ces/ for more information about CES data
 #' 
 #' @export
 #' @importFrom dplyr filter

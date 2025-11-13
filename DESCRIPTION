@@ -1,7 +1,7 @@
 Package: BLSloadR
 Type: Package
-Title: Streamlines Downloading State Data from the U.S. Bureau of Labor Statistics
-Version: 0.1.4
+Title: Download Time Series Data from the U.S. Bureau of Labor Statistics
+Version: 0.1.5
 Authors@R: c(
     person(
       "David", "Schmidt",
@@ -9,12 +9,9 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: This package includes several functions to make it easier to download 
-    time series data from the U.S. Bureau of Labor Statistics with a focus on the
-    data sets that provide informaiton about the states.
+Description: These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics (BLS).  Due to limitations with the BLS API the functions in this package utilize flat files from the BLS, which contain full series history.  These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series.  Individual functions are included for those programs which have data available at the state level, as these series are more useful to the states.  The core functions provide direct access to the Current Employment Statistics (CES), Local Area Unemployment Statistics (LAUS), Occupational Employment and Wage Statistics (OEWS) and Alternative Measures of Labor Underutilization (SALT) data produced by the BLS.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports:
     data.table (>= 1.16),
     httr (>= 1.4.7),

@@ -9,7 +9,7 @@
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
-#' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+#' @return By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics.
 #'   
 #' @export

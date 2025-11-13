@@ -14,7 +14,7 @@ for cleaner output during batch processing.}
 with full diagnostics. If FALSE (default), returns just the data table.}
 }
 \value{
-By default, returns a data.table with CES data. If return_diagnostics = TRUE,
+By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,
   returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
