@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  BLSloadR-intro: BLSloadR-intro.html
+last_built: 2025-11-17T22:36Z
+urls:
+  reference: https://schmidtdetr.github.io/BLSloadR/reference
+  article: https://schmidtdetr.github.io/BLSloadR/articles
