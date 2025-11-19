@@ -32,3 +32,4 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 URL: https://schmidtdetr.github.io/BLSloadR/
+Config/Needs/website: rmarkdown
