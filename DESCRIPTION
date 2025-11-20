@@ -1,15 +1,19 @@
 Package: BLSloadR
 Type: Package
 Title: Download Time Series Data from the U.S. Bureau of Labor Statistics
-Version: 0.1.5
+Version: 0.2
 Authors@R: c(
     person(
-      "David", "Schmidt",
+    given = "Nevada Department of Employment, Training, and Rehabilitation",
+    role = "cph"
+    ),
+    person(
+      first = "David", last = "Schmidt",
       email = "deschmidt@detr.nv.gov",
       role = c("aut", "cre")
     )
   )
-Description: These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics (BLS).  Due to limitations with the BLS API the functions in this package utilize flat files from the BLS, which contain full series history.  These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series.  Individual functions are included for those programs which have data available at the state level.  The core functions provide direct access to the Current Employment Statistics (CES), Local Area Unemployment Statistics (LAUS), Occupational Employment and Wage Statistics (OEWS) and Alternative Measures of Labor Underutilization (SALT) data produced by the BLS.
+Description: These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics <https://www.bls.gov>.  The functions in this package utilize flat files produced by the Bureau of Labor Statistics, which contain full series history.  These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series.  Individual functions are included for those programs which have data available at the state level.  The core functions provide direct access to the Current Employment Statistics (CES) <https://www.bls.gov/ces/>, Local Area Unemployment Statistics (LAUS) <https://www.bls.gov/lau/>, Occupational Employment and Wage Statistics (OEWS) <https://www.bls.gov/oes/> and Alternative Measures of Labor Underutilization (SALT) <https://www.bls.gov/lau/stalt.htm> data produced by the Bureau of Labor Statistics.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports:
@@ -26,7 +30,7 @@ Imports:
     zoo (>= 1.8),
     htmltools,
     rstudioapi
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown

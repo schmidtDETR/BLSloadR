@@ -12,8 +12,8 @@
 #' @param remove_national Logical. If TRUE (default), excludes national-level data
 #'   (state code 00). Set to FALSE to include national data with industry and
 #'   size class breakdowns.
-#' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
-#'   for cleaner output during batch processing.
+#' @param suppress_warnings Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+#'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
@@ -50,7 +50,7 @@
 #' @importFrom dplyr case_when
 #' @importFrom lubridate ym
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Download state-level JOLTS data (default - returns data directly)
 #' jolts_data <- get_jolts()
 #'
@@ -67,7 +67,7 @@
 #' }
 
 get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_national = TRUE, 
-                      suppress_warnings = FALSE, return_diagnostics = FALSE) {
+                      suppress_warnings = TRUE, return_diagnostics = FALSE) {
   
   # Define all URLs we need to download
   download_urls <- c(

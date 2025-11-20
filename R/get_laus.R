@@ -36,8 +36,8 @@
 #' @param transform Logical. If TRUE (default), converts rate and ratio measures from
 #'   percentages to proportions by dividing by 100. Unemployment rates will be expressed
 #'   as decimals (e.g., 0.05 for 5\% unemployment) rather than as whole numbers (e.g. 5).
-#' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
-#'   for cleaner output during batch processing.
+#' @param suppress_warnings Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+#'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
@@ -73,13 +73,16 @@
 #' @importFrom lubridate ym
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Download state-level seasonally adjusted data (default operation)
 #' laus_states <- get_laus()
+#' 
+#' # View unemployment rates by state for latest period
+#' unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 #'
 #' # Download unadjusted state data
-#' laus_states_raw <- get_laus("state_unadjusted")
-#'
+#' laus_states_unadjusted <- get_laus("state_unadjusted")
+#' 
 #' # Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
 #' laus_metro <- get_laus("metro", transform = FALSE)
 #'
@@ -87,16 +90,13 @@
 #' laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
 #' print_bls_warnings(laus_with_diagnostics)
 #'
-#' # Warning: Large files - county and city data
-#' # laus_counties <- get_laus("county")
-#' # laus_cities <- get_laus("city")
-#'
-#' # View unemployment rates by state for latest period
-#' unemployment <- laus_states[grepl("rate", measure_text) & date == max(date)]
+#' # Download larger city/county files
+#' laus_counties <- get_laus("county")
+#' laus_cities <- get_laus("city")
 #' }
 
 get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE, 
-                     suppress_warnings = FALSE, return_diagnostics = FALSE) {
+                     suppress_warnings = TRUE, return_diagnostics = FALSE) {
   
   # Define the URL mapping
   laus_urls <- list(

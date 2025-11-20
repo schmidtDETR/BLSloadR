@@ -29,7 +29,7 @@ The function will stop with an error if the HTTP request fails (e.g., if the
 URL is invalid or the server is unavailable).
 }
 \examples{
-\dontrun{
+\donttest{
 # Read the overview file for Current Employment Statistics
 ces_overview <- read_bls_text(
   "https://download.bls.gov/pub/time.series/ce/ce.txt"

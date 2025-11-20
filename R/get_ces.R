@@ -10,8 +10,8 @@
 #' @param monthly_only Logical. If TRUE (default), filters out annual data (period M13).
 #' @param simplify_table Logical. If TRUE (default), removes excess columns and creates 
 #'   a date column from Year and Period in the original data.
-#' @param suppress_warnings Logical. If FALSE (default), prints warnings for any BLS 
-#'   download issues. If TRUE, warnings are suppressed but still returned invisibly.
+#' @param suppress_warnings Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+#'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If FALSE (default), returns only the data. If TRUE,
 #'   returns the full bls_data_collection object with diagnostics.
 #'
@@ -25,7 +25,7 @@
 #' @importFrom dplyr select
 #' @importFrom stringr str_remove
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Download CES data (streamlined approach)
 #' ces_data <- get_ces()
 #'
@@ -39,7 +39,7 @@
 #' }
 #' }
 get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE, 
-                    suppress_warnings = FALSE, return_diagnostics = FALSE) {
+                    suppress_warnings = TRUE, return_diagnostics = FALSE) {
   
   # Define URLs for CES data files
   ces_urls <- c(
@@ -53,7 +53,7 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
   )
   
   # Download all files
-  cat("Starting CES data download...\n")
+  if(!suppress_warnings){message("Starting CES data download...\n")}
   downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings)
   
   # Extract data from downloads
@@ -69,7 +69,7 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
   processing_steps <- character(0)
   
   # Combine all data
-  cat("Combining datasets...\n")
+  if(!suppress_warnings){message("Combining datasets...\n")}
   ces_data <- data_main |> 
     dplyr::select(-footnote_codes) |>
     dplyr::left_join(data_series, by = "series_id") |>  
@@ -86,7 +86,7 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
   processing_steps <- c(processing_steps, "joined_metadata", "converted_values", "removed_na")
   
   if(transform){
-    cat("Applying value transformations...\n")
+    if(!suppress_warnings){message("Applying value transformations...\n")}
     ces_data <- ces_data |>
       dplyr::mutate(
         value = if_else(
@@ -100,14 +100,14 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
   }
   
   if(monthly_only){
-    cat("Filtering to monthly data only...\n")
+    if(!suppress_warnings){message("Filtering to monthly data only...\n")}
     ces_data <- ces_data |>
       dplyr::filter(period != "M13")
     processing_steps <- c(processing_steps, "monthly_only")
   }
   
   if(simplify_table){
-    cat("Simplifying table structure...\n")
+    if(!suppress_warnings){message("Simplifying table structure...\n")}
     ces_data <- ces_data |>
       dplyr::mutate(date = lubridate::ym(paste0(year,period))) |>
       dplyr::select(-c(benchmark_year:end_period,year,period)) |>
@@ -124,18 +124,18 @@ get_ces <- function(transform = TRUE, monthly_only = TRUE, simplify_table = TRUE
   )
   
   # Print summary
-  cat("CES data download complete!\n")
-  cat("Final dataset dimensions:", paste(dim(ces_data), collapse = " x "), "\n")
+  if(!suppress_warnings){message("CES data download complete!\n")}
+  if(!suppress_warnings){message("Final dataset dimensions:", paste(dim(ces_data), collapse = " x "), "\n")}
   
   if (has_bls_issues(result)) {
     if (!suppress_warnings) {
-      cat("\nDownload Issues Summary:\n")
-      cat("Total warnings:", result$summary$total_warnings, "\n")
-      cat("Files with issues:", result$summary$files_with_issues, "of", result$summary$files_downloaded, "\n")
-      cat("Run with return_diagnostics = TRUE and use print_bls_warnings() for details\n")
+      message("\nDownload Issues Summary:\n")
+      message("Total warnings:", result$summary$total_warnings, "\n")
+      message("Files with issues:", result$summary$files_with_issues, "of", result$summary$files_downloaded, "\n")
+      message("Run with return_diagnostics = TRUE and use print_bls_warnings() for details\n")
     }
   } else {
-    cat("No download issues detected.\n")
+    message("No download issues detected.\n")
   }
   
   # Return based on user preference
