@@ -33,6 +33,7 @@ Imports:
     rstudioapi
 RoxygenNote: 7.3.3
 Suggests: 
+    ggplot2,
     knitr,
     rmarkdown
 VignetteBuilder: knitr

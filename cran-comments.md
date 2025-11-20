@@ -1,6 +1,9 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+BLSloadR 0.2 ────
+Duration: 5m 47.6s
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+R CMD check succeeded
 
 * New package (3rd submission attempt)
 
@@ -24,11 +27,13 @@ This package is designed to access data for specific programs at the United Stat
 - Added acronym definitions and broadly replaced BLS in DESCRIPTION with full agency title.
 - Added URLs in angle brackets for individual programs (CES, LAUS, OEWS, SALT).
 - Removed print.bls_data_collection function and associated Rd, as this was not used elsewhere in package.
-- Changed dontrun to donttest in examples.  All package functionality is centered on downloading data from the BLS, so all examples are still wrapped in donttest because they download data.  However, users should not need any resources beyond this package to download data.
+- Generally changed dontrun to donttest in examples.  All package functionality is centered on downloading data from the BLS, so all examples are still wrapped in donttest because they download data.  However, users should not need any resources beyond this package to download data.
+- Put examples for `load_bls_dataset()` back in \dontrun because they require manual input during loading process to select from multiple data files (most BLS series appear to have at a minimum a "Current" and an "All" data file, even when the contents are the same).
 - Reviewed examples to ensure none include unexported functions.
 - Removed comments from get_laus.Rd example code.  Removed examples due to size of download.
 - Changed all print() or cat() calls to message() or warning().
 - Changed default behavior to not dump as many messages to the console.
 - Added Nevada Department of Employment, Training, and Rehabilitation to Authors in DESCRIPTION with role = 'cph'.  Package author (David Schmidt) developed code as an employee of the Department, so the Department properly owns the copyright.
-- Corrected errors in examples and successfully ran code through multiple-OS checks in Github Actions for R CMD CHECK.
-- Put examples for `load_bls_dataset()` back in \dontrun because they require manual input during loading process to select from multiple data files (most BLS series appear to have at a minimum a "Current" and an "All" data file, even when the contents are the same).
+- Corrected errors in examples and successfully ran code through multiple-OS checks in Github Actions for R CMD CHECK (ubuntu, macos, windows).
+
+Full local test took 5 minutes due to the downloads in \donttest examples.

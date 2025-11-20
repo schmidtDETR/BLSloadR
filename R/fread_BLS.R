@@ -103,7 +103,9 @@ fread_bls <- function(url, verbose = FALSE){
     message("Applied selective tab cleaning to remove phantom columns\n")
   } 
   } else {
-    if(verbose){message("No phantom columns detected, using original data\n")}
+    if(verbose == TRUE){
+      message("No phantom columns detected, using original data\n")
+      }
   }
   
   
@@ -130,7 +132,9 @@ fread_bls <- function(url, verbose = FALSE){
                        skip = 1,
                        fill = TRUE)
   
-  if(verbose){message("Final data dimensions:", nrow(return_data), "x", ncol(return_data), " in ", url, "\n")}
+  if(verbose == TRUE){
+    message("Final data dimensions:", nrow(return_data), "x", ncol(return_data), " in ", url, "\n")
+    }
   
   # Handle column count mismatch
   n_header_cols <- length(header_names)
@@ -155,7 +159,9 @@ fread_bls <- function(url, verbose = FALSE){
   })
   
   if (any(empty_cols)) {
-    if(verbose){message("Removing", sum(empty_cols), "remaining empty columns\n")}
+    if(verbose == TRUE){
+      message("Removing", sum(empty_cols), "remaining empty columns\n")
+      }
     return_data <- return_data[, !empty_cols, with = FALSE]
     header_names <- header_names[!empty_cols[1:length(header_names)]]
   }
@@ -173,7 +179,9 @@ fread_bls <- function(url, verbose = FALSE){
   # Clean up temp file
   unlink(temp_file)
   
-  if(verbose){message("Final column names:", paste(names(return_data), collapse = ", "), "\n")}
+  if(verbose == TRUE){
+    message("Final column names:", paste(names(return_data), collapse = ", "), "\n")
+    }
   
   # Create diagnostic information
   diagnostics <- list(
