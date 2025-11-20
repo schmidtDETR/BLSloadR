@@ -12,7 +12,7 @@ get_ces(
   transform = TRUE,
   monthly_only = TRUE,
   simplify_table = TRUE,
-  suppress_warnings = FALSE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 ```
@@ -36,8 +36,10 @@ get_ces(
 
 - suppress_warnings:
 
-  Logical. If FALSE (default), prints warnings for any BLS download
-  issues. If TRUE, warnings are suppressed but still returned invisibly.
+  Logical. If TRUE (default), suppress individual download warnings and
+  diagnostic messages for cleaner output during batch processing. If
+  FALSE, returns the data and prints warnings and messages to the
+  console.
 
 - return_diagnostics:
 
@@ -53,17 +55,37 @@ comprehensive diagnostics.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Download CES data (streamlined approach)
 ces_data <- get_ces()
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 
 # Download with full diagnostics if needed
 ces_result <- get_ces(return_diagnostics = TRUE)
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 ces_data <- get_bls_data(ces_result)
 
 # Check for download issues
 if (has_bls_issues(ces_result)) {
   print_bls_warnings(ces_result)
 }
-} # }
+#> CESData Download Warnings:
+#> ============================
+#> Total files downloaded:7
+#> Files with issues:1
+#> Total warnings:2
+#> Final data dimensions:9354820 x 14
+#> 
+#> Summary of warnings:
+#>   1. Series Metadata : Phantom columns detected and cleaned: 1
+#>   2. Series Metadata : Empty columns removed: 1
+#> 
+#> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details
+# }
 ```

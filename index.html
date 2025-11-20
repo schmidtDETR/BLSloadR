@@ -11,18 +11,18 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Download Time Series Data from the U.S. Bureau of Labor Statistics">
-<meta name="description" content="These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics (BLS). Due to limitations with the BLS API the functions in this package utilize flat files from the BLS, which contain full series history. These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series. Individual functions are included for those programs which have data available at the state level. The core functions provide direct access to the Current Employment Statistics (CES), Local Area Unemployment Statistics (LAUS), Occupational Employment and Wage Statistics (OEWS) and Alternative Measures of Labor Underutilization (SALT) data produced by the BLS.">
-<meta property="og:description" content="These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics (BLS). Due to limitations with the BLS API the functions in this package utilize flat files from the BLS, which contain full series history. These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series. Individual functions are included for those programs which have data available at the state level. The core functions provide direct access to the Current Employment Statistics (CES), Local Area Unemployment Statistics (LAUS), Occupational Employment and Wage Statistics (OEWS) and Alternative Measures of Labor Underutilization (SALT) data produced by the BLS.">
+<meta name="description" content="These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics &lt;https://www.bls.gov&gt;. The functions in this package utilize flat files produced by the Bureau of Labor Statistics, which contain full series history. These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series. Individual functions are included for those programs which have data available at the state level. The core functions provide direct access to the Current Employment Statistics (CES) &lt;https://www.bls.gov/ces/&gt;, Local Area Unemployment Statistics (LAUS) &lt;https://www.bls.gov/lau/&gt;, Occupational Employment and Wage Statistics (OEWS) &lt;https://www.bls.gov/oes/&gt; and Alternative Measures of Labor Underutilization (SALT) &lt;https://www.bls.gov/lau/stalt.htm&gt; data produced by the Bureau of Labor Statistics.">
+<meta property="og:description" content="These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics &lt;https://www.bls.gov&gt;. The functions in this package utilize flat files produced by the Bureau of Labor Statistics, which contain full series history. These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series. Individual functions are included for those programs which have data available at the state level. The core functions provide direct access to the Current Employment Statistics (CES) &lt;https://www.bls.gov/ces/&gt;, Local Area Unemployment Statistics (LAUS) &lt;https://www.bls.gov/lau/&gt;, Occupational Employment and Wage Statistics (OEWS) &lt;https://www.bls.gov/oes/&gt; and Alternative Measures of Labor Underutilization (SALT) &lt;https://www.bls.gov/lau/stalt.htm&gt; data produced by the Bureau of Labor Statistics.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
+    <li><a class="dropdown-item" href="articles/using_get_laus.html">Working with LAUS Data</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -54,7 +55,12 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="blsloadr">BLSloadR<a class="anchor" aria-label="anchor" href="#blsloadr"></a>
 </h1></div>
-<p>Functions for downloading BLS flat files into R # Overview BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at <a href="https://download.bls.gov/pub/time.series/" class="external-link uri">https://download.bls.gov/pub/time.series/</a>. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the <code><a href="reference/load_bls_dataset.html">load_bls_dataset()</a></code> and <code><a href="reference/bls_overview.html">bls_overview()</a></code> functions to provide generalized access to the other databases at this website within an R environment.</p>
+<p>Functions for downloading BLS flat files into R</p>
+</div>
+<div class="section level1">
+<h1 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h1>
+<p>BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at <a href="https://download.bls.gov/pub/time.series/" class="external-link uri">https://download.bls.gov/pub/time.series/</a>. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the <code><a href="reference/load_bls_dataset.html">load_bls_dataset()</a></code> and <code><a href="reference/bls_overview.html">bls_overview()</a></code> functions to provide generalized access to the other databases at this website within an R environment.</p>
 </div>
 <div class="section level1">
 <h1 id="installing-the-package">Installing the Package<a class="anchor" aria-label="anchor" href="#installing-the-package"></a>
@@ -79,6 +85,8 @@
 <p>These optional helper functions can aid the user of this package by providing ways to summarize and explore all the time.series databases. These functions are a bit different than the specific functions above, as they implement a general way to merge and import BLS time.series databases, but do not manually specify the data, series, and lookup files to be joined. As such, they return a bls_data_collection object which includes the joined data as well as diagnostic results including dropped columns, unexpected join results, and other tools to help review the data before use. Further, when multiple data or series files are present, the user is prompted to choose one, so these tools are not suitable for a typical piped script.</p>
 <p><code><a href="reference/bls_overview.html">bls_overview()</a></code> - this function utilizes the standard structure of the time.series databases, which has a simple text file explaining the database structure that always follows the structure id.txt where id is the two-character database identification code.</p>
 <p><code><a href="reference/load_bls_dataset.html">load_bls_dataset()</a></code> - this function attempts to read and join all the relevant files in a BLS database, and will sometimes prompt the user for additional input. For example, many databases have multiple data files available (such as “AllItems” and “Current”) and may have old series files as well (to manage historical coding changes). Because these joins are performed automatically, the object returned by this function is a more robust diagnostic object included the joined data table as well as information about the joins. Use Caution! BLS data structures are not always consistent. There may be anomalies in the structure of individual databases, such as missing column headers, that will degrade the ability of this function to read the data.</p>
+<!-- badges: start -->
+
 </div>
 
   </main><aside class="col-md-3"><div class="license">
@@ -102,10 +110,16 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>David Schmidt <br><small class="roles"> Author, maintainer </small>   </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/schmidtDETR/BLSloadR/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/schmidtDETR/BLSloadR/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

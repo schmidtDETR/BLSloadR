@@ -1,6 +1,7 @@
 # Extract data from BLS data object
 
-Extract data from BLS data object
+This is a helper function to extract the data element of a
+'bls_data_collection' object.
 
 ## Usage
 
@@ -16,4 +17,4 @@ get_bls_data(bls_obj)
 
 ## Value
 
-The data component
+The data component of a 'bls_data_collection' object as a data frame.

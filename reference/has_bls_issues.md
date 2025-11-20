@@ -1,6 +1,6 @@
-# Check if BLS data object has issues
+# Check if BLS data object has potential issues with import.
 
-Check if BLS data object has issues
+Check if BLS data object has potential issues with import.
 
 ## Usage
 
@@ -16,4 +16,4 @@ has_bls_issues(bls_obj)
 
 ## Value
 
-Logical indicating if there were any issues
+Logical indicating if there were any import issues detected.

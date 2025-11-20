@@ -12,7 +12,7 @@ classifications, data types, and time period information.
 get_national_ces(
   monthly_only = TRUE,
   simplify_table = TRUE,
-  show_warnings = TRUE,
+  show_warnings = FALSE,
   return_diagnostics = FALSE
 )
 ```
@@ -35,8 +35,8 @@ get_national_ces(
 
 - show_warnings:
 
-  Logical. If TRUE (default), displays download warnings and
-  diagnostics. If FALSE, suppresses warning output.
+  Logical. If TRUE, displays download warnings and diagnostics. If FALSE
+  (default), suppresses warning output.
 
 - return_diagnostics:
 
@@ -85,22 +85,31 @@ for more information about CES data
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Get monthly CES data with simplified table structure
 ces_monthly <- get_national_ces()
+#> Downloading CES datasets...
+#> Joining CES datasets...
 
 # Get all data including annual averages with full metadata
 ces_full <- get_national_ces(monthly_only = FALSE, simplify_table = FALSE)
+#> Downloading CES datasets...
+#> Joining CES datasets...
 
 # Get monthly data but keep all metadata columns
 ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
+#> Downloading CES datasets...
+#> Joining CES datasets...
 
 # Access the data component
 ces_data <- get_bls_data(ces_monthly)
 
 # Get full diagnostic object if needed
 data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
+#> Downloading CES datasets...
+#> Joining CES datasets...
 print_bls_warnings(data_with_diagnostics)
-} # }
+#> No warnings forCESdata download
+# }
 
 ```

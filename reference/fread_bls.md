@@ -23,12 +23,23 @@ fread_bls(url, verbose = FALSE)
 
 ## Value
 
-A data.table containing the downloaded data
+A named list with two elements:
+
+- data:
+
+  A data.table with the results of passing the url contents to
+  'data.table::fread()' as a tab-delimited text file.
+
+- diagnostics:
+
+  A named list of diagnostics run when reading the file including column
+  names, empty columns, cleaning applied to the file, the url, the
+  column names and original and final dimensions of the data.
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
-} # }
+# }
 ```

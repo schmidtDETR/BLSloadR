@@ -16,11 +16,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
+    <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -116,17 +117,90 @@ through U6. This function also includes the optional geometry argument.
 If set to TRUE, this will use <code><a href="https://rdrr.io/pkg/tigris/man/states.html" class="external-link">tigris::states()</a></code> and
 <code><a href="https://rdrr.io/pkg/tigris/man/shift_geometry.html" class="external-link">tigris::shift_geometry()</a></code> to provide state polygons for
 convenient mapping of the output. For more information about the
-Alternative MEasures data, please visit <a href="https://www.bls.gov/lau/stalt.htm" class="external-link uri">https://www.bls.gov/lau/stalt.htm</a>.</p></li>
+Alternative Measures data, please visit <a href="https://www.bls.gov/lau/stalt.htm" class="external-link uri">https://www.bls.gov/lau/stalt.htm</a>.</p></li>
 </ul>
+<p>These functions download a series of files in the time.series
+database from BLS, join those files together, and then perform some
+simple filtering and streamlining to prepare the data for time series
+analysis. Generally speaking, these functions may be used with only the
+default parameters to get a table formatted and ready to be analyzed. To
+reduce the filtering and summaries performed by these functions, a
+series of arguments may beset to retain the data closer to its original
+format.</p>
+</div>
+<div class="section level2">
+<h2 id="common-function-arguments">Common Function Arguments<a class="anchor" aria-label="anchor" href="#common-function-arguments"></a>
+</h2>
+<p>Within the functions to retrieve specific data sets there are a few
+common arguments which exist to simplify the results and minimize
+subsequent filtering.</p>
+<ul>
+<li>
+<code>transform = TRUE</code> - This argument is used in
+<code><a href="../reference/get_ces.html">get_ces()</a></code> and <code><a href="../reference/get_laus.html">get_laus()</a></code>. It is used to
+convert the data as provided by BLS to numbers and ratios that are
+easier to work with and manipulate. In particular is converts any ratios
+and rates from a whole-number format to a decimal format. For example, a
+labor for participation rate of 65.3% is represented in the BLS data as
+65.3. Using <code>transform = TRUE</code> will convert this to 0.653 so
+that it may be used as a ratio, or displayed as a percent format in R.
+This argument will also convert numbers that are represented as “in
+thousands” into whole numbers. For example, in the CES data, employment
+of 1,234,500 is represented as 1234.5. While this conveys the
+appropriate significant figures for the estimate, it can be inconvenient
+to work with across programs. Using <code>transform = TRUE</code> will
+change this to 1,234,500 and remove “in Thousands” from the data
+description column.</li>
+<li>
+<code>monthly_only = TRUE</code> - This argument is used in
+<code><a href="../reference/get_ces.html">get_ces()</a></code>, <code><a href="../reference/get_national_ces.html">get_national_ces()</a></code>, and
+<code><a href="../reference/get_laus.html">get_laus()</a></code>. It removes annual data from the downloaded BLS
+data, typically represented as <code>period = "M13"</code> to make the
+data a more consistent time series.</li>
+<li>
+<code>simplify_table = TRUE</code> - This argument is used in
+<code><a href="../reference/get_ces.html">get_ces()</a></code> and <code><a href="../reference/get_national_ces.html">get_national_ces()</a></code>. It is used
+to remove some columns that are not commonly helpful in working with the
+BLS data. For <code><a href="../reference/get_ces.html">get_ces()</a></code> these columns are
+<code>benchmark_year</code>, <code>begin_year</code>,
+<code>begin_period</code>, <code>end_year</code>, and
+<code>end_period</code> which all describe the vintage of the data which
+was downloaded. For <code><a href="../reference/get_national_ces.html">get_national_ces()</a></code> the columns are
+<code>series_title</code>, <code>begin_year</code>,
+<code>begin_period</code>, <code>end_year</code>,
+<code>end_period</code>, <code>naics_code</code>,
+<code>publishing_status</code>, <code>display_level</code>,
+<code>selectable</code>, and <code>sort_sequence</code>. These columns
+either contain codes with no explanation, provide duplicated but
+inconsistently formatted information, or describe the vintage of the
+data. For both functions, this argument also takes the <code>year</code>
+and <code>period</code> columns, transforms them into a single date
+column, and removes these two columns.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="helper-functions-in-the-package">Helper Functions in the Package<a class="anchor" aria-label="anchor" href="#helper-functions-in-the-package"></a>
+</h2>
+<p>This package relies on a custom function, <code><a href="../reference/fread_bls.html">fread_bls()</a></code>
+which aids in downloading and reading text files from the BLS.
+Ordinarily, attempting to read files from the BLS directly from R will
+return a 403 error, even though these files may be accessed easily from
+a web browser. This package adds HTML headers to the GET requests to the
+BLS web page to enable file downloads, checks the format of the files,
+and reads in the contents. The functions above pull specific files from
+the associated databases. The functions below, in contrast, are designed
+to enable the user to</p>
 <p>These optional helper functions can aid the user of this package by
-providing ways to summarize and explore all the time.series
-databases.</p>
+providing ways to summarize and explore all the time.series databases.
+The full list of databases as of November 2025 is listed at the end of
+this document.</p>
 <ul>
 <li><p><code><a href="../reference/bls_overview.html">bls_overview()</a></code> - this function utilizes the standard
 structure of the time.series databases, which has a simple text file
 explaining the database structure that always follows the structure
 <em>id.txt</em> where <em>id</em> is the two-character database
-identification code.</p></li>
+identification code. This function will render this summary file as a
+simple HTML file.</p></li>
 <li><p><code><a href="../reference/load_bls_dataset.html">load_bls_dataset()</a></code> - this function attempts to read
 and join all the relevant files in a BLS database, and will sometimes
 prompt the user for additional input. For example, many databases have
@@ -158,6 +232,85 @@ should set <code>return_full = TRUE</code>.</p>
 Bureau of Labor Statistics. It exists to make accessing that data easier
 and more streamlined using websites that are already publicly
 available.</p>
+</div>
+<div class="section level2">
+<h2 id="list-of-databases">List of Databases<a class="anchor" aria-label="anchor" href="#list-of-databases"></a>
+</h2>
+<p>The current list of databases in the time.series folder as of
+November 2025 is listed below. Please note, not all series have current
+data available. Additional information about a series may be gained by
+running the <code><a href="../reference/bls_overview.html">bls_overview()</a></code> function for a selected series,
+such as <code>bls_overview("ap")</code>.</p>
+<ul>
+<li>ap - Average Price Data</li>
+<li>bd - Business Employment Dynamics</li>
+<li>bg - Collective Bargaining-State and Local Government</li>
+<li>bp - Collective Bargaining-Private Sector</li>
+<li>cc - Employer Costs for Employee Compensation (SIC 1986-2003)</li>
+<li>cd - Occupational Injuries and Illness - Characteristics Data
+(SIC)</li>
+<li>ce - Employment, Hours, and Earnings-National (NAICS)</li>
+<li>cf - Census of Fatal Occupational Injuries (1992-2002)</li>
+<li>ch - Nonfatal cases involving days away from work: selected
+charachteristics</li>
+<li>ci - Employment Cost Index (NAICS)</li>
+<li>cm - Employer Costs for Employee Compensation (NAICS)</li>
+<li>cs - Occupational Injuries and Illnesses - Characteristics Data</li>
+<li>cu - Consumer Price Index-All Urban Consumers (Current Series)</li>
+<li>cw - Consumer Price Index-Urban Wage Earners and Clerical
+Workers</li>
+<li>cx - Consumer Expenditure Survey</li>
+<li>eb - Employee Benefits Survey (1979 - 2006)</li>
+<li>ec - Employment Cost Index (SIC 1975 - 2005)</li>
+<li>ee - Employment, Hours, and Earnings-National (SIC)</li>
+<li>ei - International Price Index</li>
+<li>fi - Census of Fatal Occupational Injuries</li>
+<li>fm - Marital and Family Labor Force Statistics</li>
+<li>fw - Census of Fatal Occupational Injuries</li>
+<li>gg - Green Goods and Services</li>
+<li>gp - Geographic Profile</li>
+<li>hc - Occupational Injuries and Illness - Characteristics Data
+(NAICS)</li>
+<li>hs - Occupational Injury and Illness Rates (based on 1972 SIC
+codes)</li>
+<li>ii - Occupational Injuries and Illnesses Industry Data</li>
+<li>in - International Labor Statistics</li>
+<li>ip - Industry Productivity and Costs</li>
+<li>jl - Job Openings and Labor Turnover Survey (SIC)</li>
+<li>jt - Job Openings and Labor Turnover Survey (NAICS)</li>
+<li>la - Local Area Unemployment Statistics</li>
+<li>le - Weekly and Hourly Earnings Data from the Current
+Population</li>
+<li>li - Department Store Inventory Price Index</li>
+<li>ln - Labor Force Statistics from the Current Population Survey
+(NAICS)</li>
+<li>lu - Union Affiliation Data from the Current Population Survey</li>
+<li>ml - Mass Layoff Statistics</li>
+<li>mp - Major Sector Multifactor Productivity Index</li>
+<li>mu - Consumer Price Index-All Urban Consumers (Old Series)</li>
+<li>mw - Consumer Price Index-Urban Wage Earners and Clerical
+Workers</li>
+<li>nb - National Compensation Survey</li>
+<li>nc - National Compensation Survey (SIC 1997-2006)</li>
+<li>nd - Producer Price Index Revision-Discontinued Series (NAICS)</li>
+<li>nl - National Longitudinal Survey</li>
+<li>nw - National Compensation Survey (NAICS)</li>
+<li>oe - Occupation Employment Statistics</li>
+<li>or - Occupational Requirements Survey</li>
+<li>pc - Producer Price Index Revision-Current Series</li>
+<li>pd - Producer Price Index Revision-Discontinued Series (SIC)</li>
+<li>pr - Major Sector Productivity and Costs Index</li>
+<li>sa - State and Area Employment, Hours, and Earnings (SIC)</li>
+<li>sh - Occupational Injury and Illness Rates (based on 1987 SIC
+codes)</li>
+<li>si - Occupational Injury and Illness Rates (2002 data)</li>
+<li>sm - State and Area Employment, Hours, and Earnings (NAICS)</li>
+<li>su - Chained CPI-All Urban Consumers</li>
+<li>wd - Producer Price Index Commodity - Discontinued Series</li>
+<li>wm - Modeled Wage Estimates</li>
+<li>wp - Producer Price Index - Commodities</li>
+<li>ws - Work Stoppage Data</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -15,7 +15,7 @@ get_laus(
   geography = "state_adjusted",
   monthly_only = TRUE,
   transform = TRUE,
-  suppress_warnings = FALSE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 ```
@@ -82,8 +82,10 @@ get_laus(
 
 - suppress_warnings:
 
-  Logical. If TRUE, suppress individual download warnings for cleaner
-  output during batch processing.
+  Logical. If TRUE (default), suppress individual download warnings and
+  diagnostic messages for cleaner output during batch processing. If
+  FALSE, returns the data and prints warnings and messages to the
+  console.
 
 - return_diagnostics:
 
@@ -147,25 +149,40 @@ The function joins data from multiple BLS files:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Download state-level seasonally adjusted data (default operation)
 laus_states <- get_laus()
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
+
+# View unemployment rates by state for latest period
+unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 
 # Download unadjusted state data
-laus_states_raw <- get_laus("state_unadjusted")
+laus_states_unadjusted <- get_laus("state_unadjusted")
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 
 # Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
 laus_metro <- get_laus("metro", transform = FALSE)
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 
 # Get full diagnostic object if needed
 laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 print_bls_warnings(laus_with_diagnostics)
+#> No warnings forLAUSdata download
 
-# Warning: Large files - county and city data
-# laus_counties <- get_laus("county")
-# laus_cities <- get_laus("city")
 
-# View unemployment rates by state for latest period
-unemployment <- laus_states[grepl("rate", measure_text) & date == max(date)]
-} # }
+# }
 ```

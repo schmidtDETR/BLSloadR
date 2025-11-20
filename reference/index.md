@@ -6,6 +6,12 @@
   : Display BLS Dataset Overview
 - [`create_bls_object()`](https://schmidtdetr.github.io/BLSloadR/reference/create_bls_object.md)
   : Create a BLS data object with diagnostics
+- [`display_in_console()`](https://schmidtdetr.github.io/BLSloadR/reference/display_in_console.md)
+  : Display text content in console.
+- [`display_in_popup()`](https://schmidtdetr.github.io/BLSloadR/reference/display_in_popup.md)
+  : Display text content in popup window.
+- [`display_in_viewer()`](https://schmidtdetr.github.io/BLSloadR/reference/display_in_viewer.md)
+  : Display text content in Viewer window.
 - [`download_bls_files()`](https://schmidtdetr.github.io/BLSloadR/reference/download_bls_files.md)
   : Helper function for downloading and tracking BLS files
 - [`fread_bls()`](https://schmidtdetr.github.io/BLSloadR/reference/fread_bls.md)
@@ -29,10 +35,8 @@
 - [`get_salt()`](https://schmidtdetr.github.io/BLSloadR/reference/get_salt.md)
   : Download State Alternative Labor Market Measures (SALT) Data
 - [`has_bls_issues()`](https://schmidtdetr.github.io/BLSloadR/reference/has_bls_issues.md)
-  : Check if BLS data object has issues
+  : Check if BLS data object has potential issues with import.
 - [`load_bls_dataset()`](https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.md)
   : Generic BLS Dataset Download
-- [`print(`*`<bls_data_collection>`*`)`](https://schmidtdetr.github.io/BLSloadR/reference/print.bls_data_collection.md)
-  : Print method for bls_data_collection objects
 - [`print_bls_warnings()`](https://schmidtdetr.github.io/BLSloadR/reference/print_bls_warnings.md)
   : Print warnings for BLS data object

@@ -1,11 +1,12 @@
 # Helper function for downloading and tracking BLS files
 
-Helper function for downloading and tracking BLS files
+This function is used to pass multiple URLs at the Bureau of Labor
+Statistics into 'fread_bls()'
 
 ## Usage
 
 ``` r
-download_bls_files(urls, suppress_warnings = FALSE)
+download_bls_files(urls, suppress_warnings = TRUE)
 ```
 
 ## Arguments

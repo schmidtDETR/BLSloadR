@@ -1,6 +1,10 @@
 # Create a BLS data object with diagnostics
 
-Create a BLS data object with diagnostics
+This is a helper function to create a list with the additional class
+'bls_data_collection' containing data downloaded form the U.S. Bureau of
+Labor Statistics as well as diagnostic details about the download. It is
+used invisibly in the package to bundle information about file
+downloads.
 
 ## Usage
 

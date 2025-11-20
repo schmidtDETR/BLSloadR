@@ -64,17 +64,92 @@ listed below:
   [`tigris::states()`](https://rdrr.io/pkg/tigris/man/states.html) and
   [`tigris::shift_geometry()`](https://rdrr.io/pkg/tigris/man/shift_geometry.html)
   to provide state polygons for convenient mapping of the output. For
-  more information about the Alternative MEasures data, please visit
+  more information about the Alternative Measures data, please visit
   <https://www.bls.gov/lau/stalt.htm>.
+
+These functions download a series of files in the time.series database
+from BLS, join those files together, and then perform some simple
+filtering and streamlining to prepare the data for time series analysis.
+Generally speaking, these functions may be used with only the default
+parameters to get a table formatted and ready to be analyzed. To reduce
+the filtering and summaries performed by these functions, a series of
+arguments may beset to retain the data closer to its original format.
+
+## Common Function Arguments
+
+Within the functions to retrieve specific data sets there are a few
+common arguments which exist to simplify the results and minimize
+subsequent filtering.
+
+- `transform = TRUE` - This argument is used in
+  [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
+  and
+  [`get_laus()`](https://schmidtdetr.github.io/BLSloadR/reference/get_laus.md).
+  It is used to convert the data as provided by BLS to numbers and
+  ratios that are easier to work with and manipulate. In particular is
+  converts any ratios and rates from a whole-number format to a decimal
+  format. For example, a labor for participation rate of 65.3% is
+  represented in the BLS data as 65.3. Using `transform = TRUE` will
+  convert this to 0.653 so that it may be used as a ratio, or displayed
+  as a percent format in R. This argument will also convert numbers that
+  are represented as “in thousands” into whole numbers. For example, in
+  the CES data, employment of 1,234,500 is represented as 1234.5. While
+  this conveys the appropriate significant figures for the estimate, it
+  can be inconvenient to work with across programs. Using
+  `transform = TRUE` will change this to 1,234,500 and remove “in
+  Thousands” from the data description column.
+- `monthly_only = TRUE` - This argument is used in
+  [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md),
+  [`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md),
+  and
+  [`get_laus()`](https://schmidtdetr.github.io/BLSloadR/reference/get_laus.md).
+  It removes annual data from the downloaded BLS data, typically
+  represented as `period = "M13"` to make the data a more consistent
+  time series.
+- `simplify_table = TRUE` - This argument is used in
+  [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
+  and
+  [`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md).
+  It is used to remove some columns that are not commonly helpful in
+  working with the BLS data. For
+  [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
+  these columns are `benchmark_year`, `begin_year`, `begin_period`,
+  `end_year`, and `end_period` which all describe the vintage of the
+  data which was downloaded. For
+  [`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md)
+  the columns are `series_title`, `begin_year`, `begin_period`,
+  `end_year`, `end_period`, `naics_code`, `publishing_status`,
+  `display_level`, `selectable`, and `sort_sequence`. These columns
+  either contain codes with no explanation, provide duplicated but
+  inconsistently formatted information, or describe the vintage of the
+  data. For both functions, this argument also takes the `year` and
+  `period` columns, transforms them into a single date column, and
+  removes these two columns.
+
+## Helper Functions in the Package
+
+This package relies on a custom function,
+[`fread_bls()`](https://schmidtdetr.github.io/BLSloadR/reference/fread_bls.md)
+which aids in downloading and reading text files from the BLS.
+Ordinarily, attempting to read files from the BLS directly from R will
+return a 403 error, even though these files may be accessed easily from
+a web browser. This package adds HTML headers to the GET requests to the
+BLS web page to enable file downloads, checks the format of the files,
+and reads in the contents. The functions above pull specific files from
+the associated databases. The functions below, in contrast, are designed
+to enable the user to
 
 These optional helper functions can aid the user of this package by
 providing ways to summarize and explore all the time.series databases.
+The full list of databases as of November 2025 is listed at the end of
+this document.
 
 - [`bls_overview()`](https://schmidtdetr.github.io/BLSloadR/reference/bls_overview.md) -
   this function utilizes the standard structure of the time.series
   databases, which has a simple text file explaining the database
   structure that always follows the structure *id.txt* where *id* is the
-  two-character database identification code.
+  two-character database identification code. This function will render
+  this summary file as a simple HTML file.
 
 - [`load_bls_dataset()`](https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.md) -
   this function attempts to read and join all the relevant files in a
@@ -104,3 +179,73 @@ you should set `return_full = TRUE`.
 This package was not created,endorsed, or maintained by the U.S. Bureau
 of Labor Statistics. It exists to make accessing that data easier and
 more streamlined using websites that are already publicly available.
+
+## List of Databases
+
+The current list of databases in the time.series folder as of November
+2025 is listed below. Please note, not all series have current data
+available. Additional information about a series may be gained by
+running the
+[`bls_overview()`](https://schmidtdetr.github.io/BLSloadR/reference/bls_overview.md)
+function for a selected series, such as `bls_overview("ap")`.
+
+- ap - Average Price Data
+- bd - Business Employment Dynamics
+- bg - Collective Bargaining-State and Local Government
+- bp - Collective Bargaining-Private Sector
+- cc - Employer Costs for Employee Compensation (SIC 1986-2003)
+- cd - Occupational Injuries and Illness - Characteristics Data (SIC)
+- ce - Employment, Hours, and Earnings-National (NAICS)
+- cf - Census of Fatal Occupational Injuries (1992-2002)
+- ch - Nonfatal cases involving days away from work: selected
+  charachteristics
+- ci - Employment Cost Index (NAICS)
+- cm - Employer Costs for Employee Compensation (NAICS)
+- cs - Occupational Injuries and Illnesses - Characteristics Data
+- cu - Consumer Price Index-All Urban Consumers (Current Series)
+- cw - Consumer Price Index-Urban Wage Earners and Clerical Workers
+- cx - Consumer Expenditure Survey
+- eb - Employee Benefits Survey (1979 - 2006)
+- ec - Employment Cost Index (SIC 1975 - 2005)
+- ee - Employment, Hours, and Earnings-National (SIC)
+- ei - International Price Index
+- fi - Census of Fatal Occupational Injuries
+- fm - Marital and Family Labor Force Statistics
+- fw - Census of Fatal Occupational Injuries
+- gg - Green Goods and Services
+- gp - Geographic Profile
+- hc - Occupational Injuries and Illness - Characteristics Data (NAICS)
+- hs - Occupational Injury and Illness Rates (based on 1972 SIC codes)
+- ii - Occupational Injuries and Illnesses Industry Data
+- in - International Labor Statistics
+- ip - Industry Productivity and Costs
+- jl - Job Openings and Labor Turnover Survey (SIC)
+- jt - Job Openings and Labor Turnover Survey (NAICS)
+- la - Local Area Unemployment Statistics
+- le - Weekly and Hourly Earnings Data from the Current Population
+- li - Department Store Inventory Price Index
+- ln - Labor Force Statistics from the Current Population Survey (NAICS)
+- lu - Union Affiliation Data from the Current Population Survey
+- ml - Mass Layoff Statistics
+- mp - Major Sector Multifactor Productivity Index
+- mu - Consumer Price Index-All Urban Consumers (Old Series)
+- mw - Consumer Price Index-Urban Wage Earners and Clerical Workers
+- nb - National Compensation Survey
+- nc - National Compensation Survey (SIC 1997-2006)
+- nd - Producer Price Index Revision-Discontinued Series (NAICS)
+- nl - National Longitudinal Survey
+- nw - National Compensation Survey (NAICS)
+- oe - Occupation Employment Statistics
+- or - Occupational Requirements Survey
+- pc - Producer Price Index Revision-Current Series
+- pd - Producer Price Index Revision-Discontinued Series (SIC)
+- pr - Major Sector Productivity and Costs Index
+- sa - State and Area Employment, Hours, and Earnings (SIC)
+- sh - Occupational Injury and Illness Rates (based on 1987 SIC codes)
+- si - Occupational Injury and Illness Rates (2002 data)
+- sm - State and Area Employment, Hours, and Earnings (NAICS)
+- su - Chained CPI-All Urban Consumers
+- wd - Producer Price Index Commodity - Discontinued Series
+- wm - Modeled Wage Estimates
+- wp - Producer Price Index - Commodities
+- ws - Work Stoppage Data

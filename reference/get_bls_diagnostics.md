@@ -1,6 +1,7 @@
 # Get download diagnostics from BLS data object
 
-Get download diagnostics from BLS data object
+This is a helper function to extract the download diagnostics element of
+a 'bls_data_collection' object.
 
 ## Usage
 
@@ -16,4 +17,4 @@ get_bls_diagnostics(bls_obj)
 
 ## Value
 
-List of download diagnostics
+List of download diagnostics from a bls_data_collection object.

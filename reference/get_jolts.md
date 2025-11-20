@@ -13,7 +13,7 @@ get_jolts(
   monthly_only = TRUE,
   remove_regions = TRUE,
   remove_national = TRUE,
-  suppress_warnings = FALSE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 ```
@@ -38,8 +38,10 @@ get_jolts(
 
 - suppress_warnings:
 
-  Logical. If TRUE, suppress individual download warnings for cleaner
-  output during batch processing.
+  Logical. If TRUE (default), suppress individual download warnings and
+  diagnostic messages for cleaner output during batch processing. If
+  FALSE, returns the data and prints warnings and messages to the
+  console.
 
 - return_diagnostics:
 
@@ -116,7 +118,7 @@ The function performs several data transformations:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Download state-level JOLTS data (default - returns data directly)
 jolts_data <- get_jolts()
 
@@ -126,9 +128,21 @@ jolts_national <- get_jolts(remove_national = FALSE)
 # Get full diagnostic object if needed
 jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
 print_bls_warnings(jolts_with_diagnostics)
+#> JOLTSData Download Warnings:
+#> ==============================
+#> Total files downloaded:7
+#> Files with issues:1
+#> Total warnings:2
+#> Final data dimensions:317016 x 22
+#> 
+#> Summary of warnings:
+#>   1. series : Phantom columns detected and cleaned: 1
+#>   2. series : Empty columns removed: 1
+#> 
+#> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details
 
 # View job openings by state for latest period
 job_openings <- jolts_data[dataelement_text == "Job openings" & 
                           date == max(date)]
-} # }
+# }
 ```

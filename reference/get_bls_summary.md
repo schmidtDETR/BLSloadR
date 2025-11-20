@@ -1,6 +1,9 @@
 # Get summary information from BLS data object
 
-Get summary information from BLS data object
+This is a helper function to extract the summary element of a
+'bls_data_collection' object. This containes the number of files
+downloaded, the number of files with potential warnings, and the total
+number of warnings.
 
 ## Usage
 
