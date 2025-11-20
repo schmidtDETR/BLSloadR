@@ -43,7 +43,7 @@
 #' @importFrom utils head
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download Employer Cost Index Data
 #' cost_index <- load_bls_dataset("ci")
 #'

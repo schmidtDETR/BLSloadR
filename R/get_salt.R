@@ -31,6 +31,7 @@
 #' @importFrom dplyr lag
 #' @importFrom dplyr group_by
 #' @importFrom dplyr ungroup
+#' @importFrom dplyr arrange
 #' @importFrom sf st_as_sf
 #' @importFrom stringr str_remove
 #' @importFrom stringr str_length
@@ -49,18 +50,18 @@
 #' # Download state-level SALT data
 #' salt_data <- get_salt()
 #'
+#' # View top 10 highest U-6 rates by state in current data
+#' latest <- salt_data |> 
+#'   dplyr::filter(date == max(date)) |> 
+#'   dplyr::select(state, u6) |> 
+#'   dplyr::arrange(-u6)
+#' head(latest)
+#'
 #' # Include sub-state areas
 #' salt_all <- get_salt(only_states = FALSE)
-#'
-#' # View latest U-6 rates by state
-#' latest <- salt_df[date == max(date), .(state, u6)]
-#' latest[order(-u6)]
-#' 
-#' # Download and display ratio of job losers to not job losers by state
-#' get_salt(geometry = TRUE) |>
-#'  dplyr::filter(date == max(date)) |> # To use only most current date
-#'   ggplot2::ggplot() +
-#'    ggplot2::geom_sf(ggplot2::aes(fill = losers_notlosers_ratio))
+#'  
+#' # Download SALT with geometry included
+#' get_salt(geometry = TRUE)
 #' 
 #' # Get full diagnostic object if needed
 #' data_with_diagnostics <- get_salt(return_diagnostics = TRUE)

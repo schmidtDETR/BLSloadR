@@ -16,6 +16,7 @@ utils::globalVariables(c(
   "selectable",
   "sort_sequence",
   "naics_code",
+  "sector_code",
   
   # Time and date related variables
   "year",

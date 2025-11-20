@@ -2,7 +2,7 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* New package (3rd submission attempt)
 
 ## Acronyms Used in Package
 
@@ -19,7 +19,7 @@ This package is designed to access data for specific programs at the United Stat
 - NSA - Not Seasonally Adjusted
 - FIPS - Federal Information Processing Standards, used to refer to geographic codes for states and sub-state areas. (e.g. "The FIPS code for the state of Nevada is 32".)
 
-## Changes made since last submission
+## Changes made since last submission attempt
 
 - Added acronym definitions and broadly replaced BLS in DESCRIPTION with full agency title.
 - Added URLs in angle brackets for individual programs (CES, LAUS, OEWS, SALT).
@@ -30,4 +30,5 @@ This package is designed to access data for specific programs at the United Stat
 - Changed all print() or cat() calls to message() or warning().
 - Changed default behavior to not dump as many messages to the console.
 - Added Nevada Department of Employment, Training, and Rehabilitation to Authors in DESCRIPTION with role = 'cph'.  Package author (David Schmidt) developed code as an employee of the Department, so the Department properly owns the copyright.
-
+- Corrected errors in examples and successfully ran code through multiple-OS checks in Github Actions for R CMD CHECK.
+- Put examples for `load_bls_dataset()` back in \dontrun because they require manual input during loading process to select from multiple data files (most BLS series appear to have at a minimum a "Current" and an "All" data file, even when the contents are the same).
