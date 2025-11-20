@@ -33,8 +33,10 @@ Imports:
     rstudioapi
 RoxygenNote: 7.3.3
 Suggests: 
+    ggplot2,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tidyr
 VignetteBuilder: knitr
 URL: https://schmidtdetr.github.io/BLSloadR/
 Config/Needs/website: rmarkdown
