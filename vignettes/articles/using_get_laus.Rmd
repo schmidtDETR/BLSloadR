@@ -1,5 +1,10 @@
 ---
 title: "Working with LAUS Data"
+vignette: >
+  %\VignetteIndexEntry{My Article}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{tidyverse}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -7,6 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+if (!requireNamespace("tidyverse", quietly = TRUE)) knitr::knit_exit()
 ```
 
 ```{r setup}
