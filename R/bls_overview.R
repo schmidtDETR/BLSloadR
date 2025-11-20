@@ -1,22 +1,23 @@
 #' Display BLS Dataset Overview
 #'
-#' Fetches and displays the overview text file for a BLS dataset using proper
-#' headers to avoid 403 errors from the BLS server.
+#' Fetches and displays the overview text file for a BLS dataset. This provides a convenient reference within the R environment without needing to manually find and review the text file on the BLS website.
 #'
 #' @param series_id Character string. The BLS series identifier (e.g., "ln", "cu", "ap")
 #' @param display_method Character string. How to display the overview: 
-#'   "viewer" (default), "console", "help", or "popup"
+#'   "viewer" (default), "console", or "popup"
 #' @param base_url Character string. Base URL for BLS data (default uses official BLS site)
 #'
-#' @return Invisibly returns the text content
+#' @return Invisibly returns the text content. Function is called to use the viewer, console, or as a popup, depending on the 'display_method' argument.
+#' 
 #' @export
+#' 
 #' @importFrom httr GET add_headers stop_for_status content
 #' @importFrom htmltools HTML
 #' @importFrom htmltools htmlEscape
 #' @importFrom rstudioapi isAvailable
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Display labor force statistics overview
 #' bls_overview("ln")
 #' 
@@ -35,7 +36,7 @@ bls_overview <- function(series_id,
     stop("series_id must be a single character string")
   }
   
-  display_method <- match.arg(display_method, c("viewer", "console", "help", "popup"))
+  display_method <- match.arg(display_method, c("viewer", "console", "popup"))
   
   # Construct URL
   url <- file.path(base_url, series_id, paste0(series_id, ".txt"))
@@ -69,7 +70,6 @@ bls_overview <- function(series_id,
     switch(display_method,
            "viewer" = display_in_viewer(content_text, series_id),
            "console" = display_in_console(content_text, series_id),
-           "help" = display_as_help(content_text, series_id),
            "popup" = display_in_popup(content_text, series_id)
     )
     
@@ -81,7 +81,14 @@ bls_overview <- function(series_id,
   })
 }
 
-# Helper function to display in RStudio viewer
+#' Display text content in Viewer window.
+#'
+#' Helper function used to display content from 'bls_overview' in the HTML viewer.
+#' 
+#' @param content Character. Text content to display
+#' @param series_id Two-letter series ID for a BLS time series to render in the display.
+#'
+#' @return No object returned, called to render content in HTML viewer.
 display_in_viewer <- function(content, series_id) {
   if (!requireNamespace("htmltools", quietly = TRUE)) {
     stop("Package 'htmltools' is required for viewer display. Install with: install.packages('htmltools')")
@@ -137,7 +144,17 @@ display_in_viewer <- function(content, series_id) {
   }
 }
 
-# Helper function to display in console
+
+
+
+#' Display text content in console.
+#'
+#' Helper function used to display content from 'bls_overview' in the console..
+#' 
+#' @param content Character. Text content to display
+#' @param series_id Two-letter series ID for a BLS time series to render in the display.
+#'
+#' @return No object returned, called to render content in console only..
 display_in_console <- function(content, series_id) {
   cat(sprintf("\n=== BLS Dataset Overview: %s ===\n", toupper(series_id)))
   cat(sprintf("Source: https://download.bls.gov/pub/time.series/%s/%s.txt\n", series_id, series_id))
@@ -145,58 +162,15 @@ display_in_console <- function(content, series_id) {
   cat(content, "\n\n")
 }
 
-# Helper function to display as help-style page
-display_as_help <- function(content, series_id) {
-  if (!requireNamespace("htmltools", quietly = TRUE)) {
-    message("htmltools not available, displaying in console instead")
-    display_in_console(content, series_id)
-    return()
-  }
-  
-  # Create help-style HTML
-  help_html <- htmltools::HTML(sprintf("
-    <html>
-    <head>
-      <title>BLS Overview: %s</title>
-      <style>
-        body { 
-          font-family: Arial, sans-serif; 
-          margin: 40px; 
-          line-height: 1.6;
-          max-width: 800px;
-        }
-        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .source { color: #7f8c8d; font-style: italic; margin-bottom: 20px; }
-        .content { 
-          font-family: 'Courier New', monospace; 
-          white-space: pre-wrap; 
-          background-color: #f8f9fa;
-          padding: 20px;
-          border-left: 4px solid #3498db;
-          margin: 20px 0;
-        }
-      </style>
-    </head>
-    <body>
-      <h1>BLS Dataset: %s</h1>
-      <div class='source'>Source: https://download.bls.gov/pub/time.series/%s/%s.txt</div>
-      <div class='content'>%s</div>
-    </body>
-    </html>
-  ", toupper(series_id), toupper(series_id), series_id, series_id, 
-                                       htmltools::htmlEscape(content)))
-  
-  temp_file <- tempfile(fileext = ".html")
-  writeLines(as.character(help_html), temp_file)
-  
-  if (rstudioapi::isAvailable()) {
-    rstudioapi::viewer(temp_file)
-  } else {
-    utils::browseURL(temp_file)
-  }
-}
 
-# Helper function to display in popup dialog (if available)
+#' Display text content in popup window.
+#'
+#' Helper function used to display content from 'bls_overview' in a popup window.
+#' 
+#' @param content Character. Text content to display
+#' @param series_id Two-letter series ID for a BLS time series to render in the display.
+#'
+#' @return No object returned, called to render content in popup.
 display_in_popup <- function(content, series_id) {
   if (rstudioapi::isAvailable() && rstudioapi::hasFun("showDialog")) {
     # Truncate content if too long for dialog

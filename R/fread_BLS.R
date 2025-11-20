@@ -6,7 +6,11 @@
 #'
 #' @param url Character string. URL to the BLS flat file
 #' @param verbose Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.
-#' @return A data.table containing the downloaded data
+#' @return A named list with two elements:
+#'    \describe{
+#'     \item{data}{A data.table with the results of passing the url contents to 'data.table::fread()' as a tab-delimited text file.}
+#'     \item{diagnostics}{A named list of diagnostics run when reading the file including column names, empty columns, cleaning applied to the file, the url, the column names and original and final dimensions of the data.}
+#'   }
 #' @export
 #' @importFrom httr GET
 #' @importFrom httr stop_for_status
@@ -14,7 +18,7 @@
 #' @importFrom httr add_headers
 #' @importFrom data.table fread
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
 #' }
 
@@ -63,10 +67,10 @@ fread_bls <- function(url, verbose = FALSE){
   })
   
   if(verbose == TRUE) {
-  cat("Initial data dimensions:", nrow(initial_data), "x", ncol(initial_data), "\n")
-  cat("Phantom columns detected:", sum(phantom_cols), "\n")
+  message("Initial data dimensions:", nrow(initial_data), "x", ncol(initial_data), "\n")
+  message("Phantom columns detected:", sum(phantom_cols), "\n")
   if (sum(phantom_cols) > 0) {
-    cat("Phantom column names:", paste(names(initial_data)[phantom_cols], collapse = ", "), "\n")
+    message("Phantom column names:", paste(names(initial_data)[phantom_cols], collapse = ", "), "\n")
   }
   }
   
@@ -96,10 +100,10 @@ fread_bls <- function(url, verbose = FALSE){
     writeLines(cleaned_data, temp_file, sep = "")
     
     if(verbose == TRUE){
-    cat("Applied selective tab cleaning to remove phantom columns\n")
+    message("Applied selective tab cleaning to remove phantom columns\n")
+  } 
   } else {
-    cat("No phantom columns detected, using original data\n")
-  }
+    if(verbose){message("No phantom columns detected, using original data\n")}
   }
   
   
@@ -112,10 +116,10 @@ fread_bls <- function(url, verbose = FALSE){
   
   if(verbose == TRUE){
   # Print diagnostic info
-  cat("Header parsing debug:\n")
-  cat("Raw header line length:", nchar(header_line), "\n")
-  cat("Number of tab-separated fields:", length(header_names), "\n")
-  cat("Header names:", paste(sprintf("'%s'", header_names), collapse = ", "), "\n")
+  message("Header parsing debug:\n")
+  message("Raw header line length:", nchar(header_line), "\n")
+  message("Number of tab-separated fields:", length(header_names), "\n")
+  message("Header names:", paste(sprintf("'%s'", header_names), collapse = ", "), "\n")
   }
   
   # Read the final data without headers using fread
@@ -126,14 +130,14 @@ fread_bls <- function(url, verbose = FALSE){
                        skip = 1,
                        fill = TRUE)
   
-  cat("Final data dimensions:", nrow(return_data), "x", ncol(return_data), " in ", url, "\n")
+  if(verbose){message("Final data dimensions:", nrow(return_data), "x", ncol(return_data), " in ", url, "\n")}
   
   # Handle column count mismatch
   n_header_cols <- length(header_names)
   n_data_cols <- ncol(return_data)
   
   if (n_header_cols != n_data_cols) {
-    cat("Column count mismatch! Headers:", n_header_cols, "Data:", n_data_cols, "\n")
+    warning("Column count mismatch! Headers:", n_header_cols, "Data:", n_data_cols, "\n")
     
     if (n_data_cols > n_header_cols) {
       # Add extra column names
@@ -151,7 +155,7 @@ fread_bls <- function(url, verbose = FALSE){
   })
   
   if (any(empty_cols)) {
-    cat("Removing", sum(empty_cols), "remaining empty columns\n")
+    if(verbose){message("Removing", sum(empty_cols), "remaining empty columns\n")}
     return_data <- return_data[, !empty_cols, with = FALSE]
     header_names <- header_names[!empty_cols[1:length(header_names)]]
   }
@@ -169,7 +173,7 @@ fread_bls <- function(url, verbose = FALSE){
   # Clean up temp file
   unlink(temp_file)
   
-  cat("Final column names:", paste(names(return_data), collapse = ", "), "\n")
+  if(verbose){message("Final column names:", paste(names(return_data), collapse = ", "), "\n")}
   
   # Create diagnostic information
   diagnostics <- list(

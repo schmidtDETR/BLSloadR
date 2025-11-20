@@ -8,7 +8,7 @@ get_jolts(
   monthly_only = TRUE,
   remove_regions = TRUE,
   remove_national = TRUE,
-  suppress_warnings = FALSE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 }
@@ -23,8 +23,8 @@ and includes only monthly observations.}
 (state code 00). Set to FALSE to include national data with industry and
 size class breakdowns.}
 
-\item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings
-for cleaner output during batch processing.}
+\item{suppress_warnings}{Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.}
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
@@ -63,7 +63,7 @@ The function performs several data transformations:
   }
 }
 \examples{
-\dontrun{
+\donttest{
 # Download state-level JOLTS data (default - returns data directly)
 jolts_data <- get_jolts()
 

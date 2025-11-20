@@ -7,7 +7,7 @@
 get_national_ces(
   monthly_only = TRUE,
   simplify_table = TRUE,
-  show_warnings = TRUE,
+  show_warnings = FALSE,
   return_diagnostics = FALSE
 )
 }
@@ -22,8 +22,8 @@ naics_code, publishing_status, display_level, selectable, sort_sequence)
 and adds a formatted date column. If FALSE, returns the full dataset 
 with all available columns.}
 
-\item{show_warnings}{Logical. If TRUE (default), displays download warnings 
-and diagnostics. If FALSE, suppresses warning output.}
+\item{show_warnings}{Logical. If TRUE, displays download warnings 
+and diagnostics. If FALSE (default), suppresses warning output.}
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
@@ -60,7 +60,7 @@ lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()`
 and `create_bls_object()` helper functions must be available in your environment.
 }
 \examples{
-\dontrun{
+\donttest{
 # Get monthly CES data with simplified table structure
 ces_monthly <- get_national_ces()
 

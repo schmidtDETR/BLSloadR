@@ -14,19 +14,18 @@ bls_overview(
 \item{series_id}{Character string. The BLS series identifier (e.g., "ln", "cu", "ap")}
 
 \item{display_method}{Character string. How to display the overview: 
-"viewer" (default), "console", "help", or "popup"}
+"viewer" (default), "console", or "popup"}
 
 \item{base_url}{Character string. Base URL for BLS data (default uses official BLS site)}
 }
 \value{
-Invisibly returns the text content
+Invisibly returns the text content. Function is called to use the viewer, console, or as a popup, depending on the 'display_method' argument.
 }
 \description{
-Fetches and displays the overview text file for a BLS dataset using proper
-headers to avoid 403 errors from the BLS server.
+Fetches and displays the overview text file for a BLS dataset. This provides a convenient reference within the R environment without needing to manually find and review the text file on the BLS website.
 }
 \examples{
-\dontrun{
+\donttest{
 # Display labor force statistics overview
 bls_overview("ln")
 

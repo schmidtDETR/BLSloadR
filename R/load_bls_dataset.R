@@ -43,7 +43,7 @@
 #' @importFrom utils head
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Download Employer Cost Index Data
 #' cost_index <- load_bls_dataset("ci")
 #'
@@ -145,9 +145,9 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   
   # Handle multiple series files (prompt user to choose)
   if (length(series_file) > 1) {
-    cat("Multiple series files found. Please select a file to load:\n")
+    message("Multiple series files found. Please select a file to load:\n")
     for (i in seq_along(series_file)) {
-      cat(i, ": ", series_file[i], "\n")
+      message(i, ": ", series_file[i], "\n")
     }
     
     # Get user input for series file selection
@@ -160,18 +160,18 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
     
     # Get the selected series file name
     series_file <- series_file[selected_series_index]
-    cat("Loading series file:", series_file, "\n")
+    message("Loading series file:", series_file, "\n")
     
   } else if (length(series_file) == 1) {
-    cat("Loading series file:", series_file, "\n")
+    message("Loading series file:", series_file, "\n")
   }
   
   # --- Logic for data file selection ---
   if (length(data_files) > 1) {
     # If there are multiple data files, prompt the user to choose
-    cat("Multiple data files found. Please select a file to load:\n")
+    message("Multiple data files found. Please select a file to load:\n")
     for (i in seq_along(data_files)) {
-      cat(i, ": ", data_files[i], "\n")
+      message(i, ": ", data_files[i], "\n")
     }
     
     # Get user input for file selection
@@ -184,12 +184,12 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
     
     # Get the selected file name
     selected_data_file <- data_files[selected_index]
-    cat("Loading:", selected_data_file, "\n")
+    message("Loading:", selected_data_file, "\n")
     
   } else if (length(data_files) == 1) {
     # If there is only one data file, use it directly
     selected_data_file <- data_files[1]
-    cat("Loading:", selected_data_file, "\n")
+    message("Loading:", selected_data_file, "\n")
   } else {
     stop("No data files found in the BLS database directory.")
   }
@@ -197,9 +197,9 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   # --- Logic for aspect file selection ---
   selected_aspect_file <- NULL
   if (length(aspect_files) > 1) {
-    cat("Multiple aspect files found. Please select a file to load:\n")
+    message("Multiple aspect files found. Please select a file to load:\n")
     for (i in seq_along(aspect_files)) {
-      cat(i, ": ", aspect_files[i], "\n")
+      message(i, ": ", aspect_files[i], "\n")
     }
     
     # Get user input for aspect file selection
@@ -212,12 +212,12 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
     
     # Get the selected aspect file name
     selected_aspect_file <- aspect_files[selected_aspect_index]
-    cat("Loading aspect file:", selected_aspect_file, "\n")
+    message("Loading aspect file:", selected_aspect_file, "\n")
     
   } else if (length(aspect_files) == 1) {
     # If there is only one aspect file, use it directly
     selected_aspect_file <- aspect_files[1]
-    cat("Loading aspect file:", selected_aspect_file, "\n")
+    message("Loading aspect file:", selected_aspect_file, "\n")
   } else if (length(aspect_files) == 0) {
     if (!suppress_warnings) message("No aspect files found in the BLS database directory.")
   }
@@ -365,11 +365,11 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   # Print summary unless suppressed
   if (!suppress_warnings) {
     if (has_bls_issues(bls_collection)) {
-      cat("\n")
+      message("\n")
       print_bls_warnings(bls_collection, detailed = FALSE)
-      cat("\nUse print_bls_warnings(result, detailed = TRUE) for detailed diagnostics\n")
+      message("\nUse print_bls_warnings(result, detailed = TRUE) for detailed diagnostics\n")
     } else {
-      cat("\nDownload completed successfully with no issues detected.\n")
+      message("\nDownload completed successfully with no issues detected.\n")
     }
   }
   

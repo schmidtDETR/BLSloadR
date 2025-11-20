@@ -8,7 +8,7 @@ get_ces(
   transform = TRUE,
   monthly_only = TRUE,
   simplify_table = TRUE,
-  suppress_warnings = FALSE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 }
@@ -22,8 +22,8 @@ and removes ", In Thousands" from data type labels.}
 \item{simplify_table}{Logical. If TRUE (default), removes excess columns and creates 
 a date column from Year and Period in the original data.}
 
-\item{suppress_warnings}{Logical. If FALSE (default), prints warnings for any BLS 
-download issues. If TRUE, warnings are suppressed but still returned invisibly.}
+\item{suppress_warnings}{Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.}
 
 \item{return_diagnostics}{Logical. If FALSE (default), returns only the data. If TRUE,
 returns the full bls_data_collection object with diagnostics.}
@@ -38,7 +38,7 @@ The data includes national, regional, state, and substate employment statistics.
 By default, all available areas, data types, and periods are included.
 }
 \examples{
-\dontrun{
+\donttest{
 # Download CES data (streamlined approach)
 ces_data <- get_ces()
 

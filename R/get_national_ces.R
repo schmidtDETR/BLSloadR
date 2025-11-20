@@ -13,8 +13,8 @@
 #'   naics_code, publishing_status, display_level, selectable, sort_sequence) 
 #'   and adds a formatted date column. If FALSE, returns the full dataset 
 #'   with all available columns.
-#' @param show_warnings Logical. If TRUE (default), displays download warnings 
-#'   and diagnostics. If FALSE, suppresses warning output.
+#' @param show_warnings Logical. If TRUE, displays download warnings 
+#'   and diagnostics. If FALSE (default), suppresses warning output.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
@@ -43,7 +43,7 @@
 #' and `create_bls_object()` helper functions must be available in your environment.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Get monthly CES data with simplified table structure
 #' ces_monthly <- get_national_ces()
 #' 
@@ -72,7 +72,7 @@
 #' @importFrom dplyr select
 #' @importFrom lubridate ym
 get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE, 
-                             show_warnings = TRUE, return_diagnostics = FALSE) {
+                             show_warnings = FALSE, return_diagnostics = FALSE) {
   
   # Define URLs for all CES datasets
   ces_urls <- c(
@@ -85,7 +85,7 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE,
   )
   
   # Download all files
-  cat("Downloading CES datasets...\n")
+  message("Downloading CES datasets...\n")
   downloads <- download_bls_files(ces_urls, suppress_warnings = !show_warnings)
   
   # Extract data from each download
@@ -100,7 +100,7 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE,
   processing_steps <- character(0)
   
   # Join all datasets together
-  cat("Joining CES datasets...\n")
+  message("Joining CES datasets...\n")
   ces_full <- ces_data |>
     dplyr::select(-footnote_codes) |>
     dplyr::left_join(ces_series, by = "series_id") |>
@@ -148,8 +148,8 @@ get_national_ces <- function(monthly_only = TRUE, simplify_table = TRUE,
     return(ces_full)
   }
   
-  cat("CES data download and processing complete.\n")
-  cat("Final dimensions:", paste(dim(ces_full), collapse = " x "), "\n")
+  message("CES data download and processing complete.\n")
+  message("Final dimensions:", paste(dim(ces_full), collapse = " x "), "\n")
   
   return(result)
 }

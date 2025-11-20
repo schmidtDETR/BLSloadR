@@ -46,7 +46,7 @@ function. When multiple potential data files exist (common in large data sets), 
 will prompt for an input of which file to use.
 }
 \examples{
-\dontrun{
+\donttest{
 # Download Employer Cost Index Data
 cost_index <- load_bls_dataset("ci")
 

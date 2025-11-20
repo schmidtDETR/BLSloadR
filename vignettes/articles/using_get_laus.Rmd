@@ -1,0 +1,167 @@
+---
+title: "Working with LAUS Data"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tidyverse)
+library(BLSloadR)
+```
+
+## General Concepts
+
+`BLSloadR` streamlines access to data from the U.S. Bureau of Labor Statistics. Its primary benefit is in providing data in a handy form so that it can be manipulated and used to compare data across areas, periods, and data types. One simple example includes using the data across areas to calculate percentiles for a particular data element to compare a single state to the range of experiences across other states.
+
+### Step 1: Accessing the Data
+
+Accessing data from the BLS is simple. Here, we can use `get_laus()` to pull up the Local Area Unemployment Statistics (LAUS) data. By default, this will pull seasonally-adjusted data at the statewide level.
+
+```{r get-data}
+# Get the LAUS data using BLSloadR
+bls_import <- get_laus()
+
+head(bls_import,10)
+
+```
+
+Here we can see that while we have a series of data, it has a number of columns that do not do us much good. In order to pivot and compare the data easily, we need to drop items like the series_id to ensure that we do not have too many identifiers in the series.
+
+### Step 2: Renaming, Filtering, and Narrowing the Table
+
+Next, we will rename some columns, select only those that clarify the values we need, and assign R-friendly column names to the data to make it easier to work with. This will allow us to pivot the data, allowing for easier manipulation of the columns.
+
+```{r organize-table}
+
+bls_state_table <- bls_import |>
+  rename("state" = "area_text",
+         "measure" = "measure_text") |>
+  filter(state != "Puerto Rico") |>
+  select(date, state, measure, value) |>
+  pivot_wider(names_from = measure, values_from = value) |>
+  rename("ur" = "unemployment rate",
+         "unemployment" = "unemployment",
+         "employment" = "employment",
+         "labor_force" = "labor force",
+         "epr" = "employment-population ratio",
+         "lfpr" = "labor force participation rate")
+
+head(bls_state_table,10)
+```
+
+### Step 3: Calculating Summary Statistics
+
+Because we have access to the full time series for all states, we can move away from comparing a single state to only the national trend. Instead, we can compare state-to-state, which allows for more nuanced context showing how common or uncommon a single state's experience is across the nation. Here, we calculate the 20th, 50th (median), and 80th percentiles.
+
+```{r calculate-statistics}
+
+bls_state_table <- bls_state_table |>
+  pivot_longer(3:8, names_to = "measure", values_to = "value") |>
+  group_by(date, measure) |>
+  mutate(
+    pct_20 = quantile(value, 0.2, na.rm = TRUE),
+    pct_80 = quantile(value, 0.8, na.rm = TRUE),
+    median = median(value, na.rm = TRUE)
+  ) |> 
+  ungroup()
+
+head(bls_state_table,10)
+```
+
+### Step 4: Narrowing the Data for Display
+
+Since we now have comparative measures across the states, we can start looking at what we want to compare. Here, we will look at four options: a national ranking of the current Unemployment Rate and the current Labor Force Participation Rate, and a comparison of the trend for a single state to the range of experiences for other states over time for each of those measures. We will also add a column to highlight Nevada, the state we are interested in highlighting.
+
+```{r chart-data}
+
+selected_state <- "Nevada"
+
+bls_current <- bls_state_table |> 
+  filter(date == max(date)) |> 
+  mutate(is_st = if_else(state == selected_state, TRUE, FALSE))
+
+bls_ts <- bls_state_table |> 
+  filter(state == selected_state)
+```
+
+#### Unemployment Rate Chart
+
+```{r ur-ranking}
+bls_current |> 
+  filter(measure == "ur") |> 
+  ggplot() +
+  geom_col(aes(x = value, y = reorder(state, value), fill = is_st)) +
+  scale_fill_manual(values = c("navy","red")) +
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "Unemployment Rate", y = "", title = "Unemployment Rate Ranking by State") +
+  theme_bw() +
+  theme(legend.position = "none")
+
+```
+
+
+#### Labor Force Participation Rate Chart
+
+```{r lfpr-ranking}
+bls_current |> 
+  filter(measure == "lfpr") |> 
+  ggplot() +
+  geom_col(aes(x = value, y = reorder(state, value), fill = is_st)) +
+  scale_fill_manual(values = c("navy","red")) +
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "Labor Force Participation Rate", y = "", title = "Labor Force Participation Ranking by State") +
+  theme_bw() +
+  theme(legend.position = "none")
+
+```
+
+#### Unemployment Rate Over Time
+
+```{r ur-ribbon}
+
+bls_ts |>
+  filter(measure == "ur") |> 
+  ggplot(aes(x = date)) +
+  geom_ribbon(aes(ymin = pct_20, ymax = pct_80), fill = "lightgrey") +
+  geom_line(aes(y = median), color = "black", linetype = "dashed", linewidth = 0.8) +
+  geom_line(aes(y = value), color = "navy", linewidth = 1) +
+  labs(title = "Unemployment Rate for Nevada and Other States",
+       subtitle = "Grey area represents 20th to 80th percentile for all states",
+       y = "", x = "") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 13),
+    plot.title = element_text(size = 17),
+    plot.subtitle = element_text(size = 15)
+  )
+
+```
+
+#### Labor Force Participation Rate Over Time
+
+```{r lfpr-ribbon}
+
+bls_ts |>
+  filter(measure == "lfpr") |> 
+  ggplot(aes(x = date)) +
+  geom_ribbon(aes(ymin = pct_20, ymax = pct_80), fill = "lightgrey") +
+  geom_line(aes(y = median), color = "black", linetype = "dashed", linewidth = 0.8) +
+  geom_line(aes(y = value), color = "navy", linewidth = 1) +
+  labs(title = "Labor Force Participation Rate for Nevada and Other States",
+       subtitle = "Grey area represents 20th to 80th percentile for all states",
+       y = "", x = "") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 13),
+    plot.title = element_text(size = 17),
+    plot.subtitle = element_text(size = 15)
+  )
+
+```

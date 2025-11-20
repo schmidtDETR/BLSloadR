@@ -8,8 +8,8 @@
 #'   If FALSE, includes sub-state areas like New York City where available.
 #' @param geometry Logical. If TRUE, uses tigris::states() to download shapefiles for the states 
 #'   to include in the data. If FALSE (default), only returns data table.
-#' @param show_warnings Logical. If TRUE (default), displays download warnings 
-#'   and diagnostics. If FALSE, suppresses warning output.
+#' @param suppress_warnings Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+#'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #'
@@ -45,7 +45,7 @@
 #' @importFrom zoo as.yearqtr
 #' @importFrom readxl read_excel
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Download state-level SALT data
 #' salt_data <- get_salt()
 #'
@@ -68,7 +68,7 @@
 #' }
 #' 
 
-get_salt <- function(only_states = TRUE, geometry = FALSE, show_warnings = TRUE, return_diagnostics = FALSE) {
+get_salt <- function(only_states = TRUE, geometry = FALSE, suppress_warnings = TRUE, return_diagnostics = FALSE) {
   
   salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
   
@@ -91,7 +91,7 @@ get_salt <- function(only_states = TRUE, geometry = FALSE, show_warnings = TRUE,
   )
   
   # Download Excel file
-  cat("Downloading SALT data from BLS...\n")
+  message("Downloading SALT data from BLS...\n")
   response <- httr::GET(salt_url, 
                         httr::write_disk(tf <- tempfile(fileext = ".xlsx")), 
                         httr::add_headers(.headers = headers))
@@ -103,7 +103,7 @@ get_salt <- function(only_states = TRUE, geometry = FALSE, show_warnings = TRUE,
   processing_steps <- character(0)
   
   # Read and process Excel file
-  cat("Processing SALT Excel file...\n")
+  message("Processing SALT Excel file...\n")
   salt_data <- readxl::read_excel(tf, skip = 1) |>
     dplyr::rename_with(.fn = stringr::str_to_lower) |>
     dplyr::mutate(date = lubridate::yq(paste0(`end year`, `end quarter`))) |>
@@ -220,7 +220,7 @@ get_salt <- function(only_states = TRUE, geometry = FALSE, show_warnings = TRUE,
   )
   
     # Display warnings if requested
-  if (show_warnings) {
+  if (!suppress_warnings) {
     print_bls_warnings(bls_collection, detailed = FALSE)
   }
   
@@ -231,8 +231,11 @@ get_salt <- function(only_states = TRUE, geometry = FALSE, show_warnings = TRUE,
     return(salt_data)
   }
   
-  cat("SALT data download and processing complete.\n")
-  cat("Final dimensions:", paste(dim(salt_data), collapse = " x "), "\n")
+  # Print download complete, if warnings not disabled.
+  if (!suppress_warnings) {
+  message("SALT data download and processing complete.\n")
+  message("Final dimensions:", paste(dim(salt_data), collapse = " x "), "\n")
+  }
   
   return(result)
 }

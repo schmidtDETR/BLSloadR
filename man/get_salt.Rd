@@ -7,7 +7,7 @@
 get_salt(
   only_states = TRUE,
   geometry = FALSE,
-  show_warnings = TRUE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 }
@@ -18,8 +18,8 @@ If FALSE, includes sub-state areas like New York City where available.}
 \item{geometry}{Logical. If TRUE, uses tigris::states() to download shapefiles for the states 
 to include in the data. If FALSE (default), only returns data table.}
 
-\item{show_warnings}{Logical. If TRUE (default), displays download warnings 
-and diagnostics. If FALSE, suppresses warning output.}
+\item{suppress_warnings}{Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
+for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.}
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
@@ -35,7 +35,7 @@ including U-1 through U-6 measures. The data provides a more comprehensive view
 of labor market conditions beyond the standard unemployment rate (U-3).
 }
 \examples{
-\dontrun{
+\donttest{
 # Download state-level SALT data
 salt_data <- get_salt()
 

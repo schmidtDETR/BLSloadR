@@ -1,5 +1,6 @@
 # BLSloadR
 Functions for downloading BLS flat files into R
+
 # Overview
 BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at https://download.bls.gov/pub/time.series/. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the `load_bls_dataset()` and `bls_overview()` functions to provide generalized access to the other databases at this website within an R environment.
 
@@ -29,3 +30,7 @@ These optional helper functions can aid the user of this package by providing wa
 `bls_overview()` - this function utilizes the standard structure of the time.series databases, which has a simple text file explaining the database structure that always follows the structure id.txt where id is the two-character database identification code.
 
 `load_bls_dataset()` - this function attempts to read and join all the relevant files in a BLS database, and will sometimes prompt the user for additional input. For example, many databases have multiple data files available (such as “AllItems” and “Current”) and may have old series files as well (to manage historical coding changes). Because these joins are performed automatically, the object returned by this function is a more robust diagnostic object included the joined data table as well as information about the joins. Use Caution! BLS data structures are not always consistent. There may be anomalies in the structure of individual databases, such as missing column headers, that will degrade the ability of this function to read the data.
+
+<!-- badges: start -->
+  [![R-CMD-check](https://github.com/schmidtDETR/BLSloadR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/schmidtDETR/BLSloadR/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->

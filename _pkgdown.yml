@@ -1,4 +1,5 @@
 url: https://schmidtdetr.github.io/BLSloadR/
 template:
   bootstrap: 5
+  bootswatch: zephyr
 
