@@ -101,8 +101,6 @@ laus_metro <- get_laus("metro", transform = FALSE)
 laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
 print_bls_warnings(laus_with_diagnostics)
 
-# Download larger city/county files
-laus_counties <- get_laus("county")
-laus_cities <- get_laus("city")
+
 }
 }
