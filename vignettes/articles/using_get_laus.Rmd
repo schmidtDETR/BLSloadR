@@ -1,23 +1,23 @@
 ---
 title: "Working with LAUS Data"
-vignette: >
-  %\VignetteIndexEntry{My Article}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{tidyverse}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message = FALSE,    # Hide download messages
+  warning = FALSE,    # Hide coercion warnings
+  fig.width = 9,
+  fig.height = 6
 )
 
-if (!requireNamespace("tidyverse", quietly = TRUE)) knitr::knit_exit()
 ```
 
 ```{r setup}
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(BLSloadR)
 ```
 
@@ -29,12 +29,11 @@ library(BLSloadR)
 
 Accessing data from the BLS is simple. Here, we can use `get_laus()` to pull up the Local Area Unemployment Statistics (LAUS) data. By default, this will pull seasonally-adjusted data at the statewide level.
 
-```{r get-data}
+```{r get-data, message=FALSE, warning=FALSE}
 # Get the LAUS data using BLSloadR
 bls_import <- get_laus()
 
 head(bls_import,10)
-
 ```
 
 Here we can see that while we have a series of data, it has a number of columns that do not do us much good. In order to pivot and compare the data easily, we need to drop items like the series_id to ensure that we do not have too many identifiers in the series.
@@ -44,7 +43,6 @@ Here we can see that while we have a series of data, it has a number of columns 
 Next, we will rename some columns, select only those that clarify the values we need, and assign R-friendly column names to the data to make it easier to work with. This will allow us to pivot the data, allowing for easier manipulation of the columns.
 
 ```{r organize-table}
-
 bls_state_table <- bls_import |>
   rename("state" = "area_text",
          "measure" = "measure_text") |>
@@ -66,7 +64,6 @@ head(bls_state_table,10)
 Because we have access to the full time series for all states, we can move away from comparing a single state to only the national trend. Instead, we can compare state-to-state, which allows for more nuanced context showing how common or uncommon a single state's experience is across the nation. Here, we calculate the 20th, 50th (median), and 80th percentiles.
 
 ```{r calculate-statistics}
-
 bls_state_table <- bls_state_table |>
   pivot_longer(3:8, names_to = "measure", values_to = "value") |>
   group_by(date, measure) |>
@@ -85,7 +82,6 @@ head(bls_state_table,10)
 Since we now have comparative measures across the states, we can start looking at what we want to compare. Here, we will look at four options: a national ranking of the current Unemployment Rate and the current Labor Force Participation Rate, and a comparison of the trend for a single state to the range of experiences for other states over time for each of those measures. We will also add a column to highlight Nevada, the state we are interested in highlighting.
 
 ```{r chart-data}
-
 selected_state <- "Nevada"
 
 bls_current <- bls_state_table |> 
@@ -108,7 +104,6 @@ bls_current |>
   labs(x = "Unemployment Rate", y = "", title = "Unemployment Rate Ranking by State") +
   theme_bw() +
   theme(legend.position = "none")
-
 ```
 
 
@@ -124,13 +119,11 @@ bls_current |>
   labs(x = "Labor Force Participation Rate", y = "", title = "Labor Force Participation Ranking by State") +
   theme_bw() +
   theme(legend.position = "none")
-
 ```
 
 #### Unemployment Rate Over Time
 
 ```{r ur-ribbon}
-
 bls_ts |>
   filter(measure == "ur") |> 
   ggplot(aes(x = date)) +
@@ -147,13 +140,11 @@ bls_ts |>
     plot.title = element_text(size = 17),
     plot.subtitle = element_text(size = 15)
   )
-
 ```
 
 #### Labor Force Participation Rate Over Time
 
 ```{r lfpr-ribbon}
-
 bls_ts |>
   filter(measure == "lfpr") |> 
   ggplot(aes(x = date)) +
@@ -170,5 +161,4 @@ bls_ts |>
     plot.title = element_text(size = 17),
     plot.subtitle = element_text(size = 15)
   )
-
 ```
