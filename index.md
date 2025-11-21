@@ -15,14 +15,6 @@ and
 functions to provide generalized access to the other databases at this
 website within an R environment.
 
-# Installing the Package
-
-BLSloadR can be installed from Github with the following R commands:
-
-\-`install.packages("remotes")`
-
-\-`remotes::install_github("schmidtDETR/BLSloadR")`
-
 # Basic Usage
 
 The primary functions in this package all begin with get\_ and are

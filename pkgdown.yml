@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   BLSloadR-intro: BLSloadR-intro.html
   articles/using_get_laus: using_get_laus.html
-last_built: 2025-11-20T21:51Z
+last_built: 2025-11-21T00:02Z
 urls:
   reference: https://schmidtdetr.github.io/BLSloadR/reference
   article: https://schmidtdetr.github.io/BLSloadR/articles
