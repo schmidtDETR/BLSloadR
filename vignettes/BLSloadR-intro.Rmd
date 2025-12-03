@@ -27,9 +27,9 @@ library(BLSloadR)
 
 The primary functions in this package all begin with get\_ and are listed below:
 
--   `get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the "SM" database. For more information about Current Employment Statistics, please visit <https://www.bls.gov/ces/>.
+-   `get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the "SM" database. **Enhanced with filtering options** for specific states, industries, or current year data to significantly improve download performance. For more information about Current Employment Statistics, please visit <https://www.bls.gov/ces/>.
 
--   `get_national_ces()` - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the "CE" database.
+-   `get_national_ces()` - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the "CE" database. **Enhanced with specialized dataset options** including seasonally adjusted series, real earnings data, and complete historical data for optimal performance.
 
 -   `get_laus()` - This accesses data from the Local Area Unemployment Statistics (LAUS) program at a regional, state, and several sub-state levels. This is a localized version of the Current Population Survey (CPS) which is used to drive household-based estiamtes of employment and unemployment. This is the "LA" database. Note that because of the volume of data here, there are several different geographies that may be specified to pull the appropriate data file from BLS. For more information about Local Area Unemployment Statistics, please visit <https://www.bls.gov/lau/>.
 
@@ -46,6 +46,54 @@ Within the functions to retrieve specific data sets there are a few common argum
 -   `transform = TRUE` - This argument is used in `get_ces()` and `get_laus()`. It is used to convert the data as provided by BLS to numbers and ratios that are easier to work with and manipulate. In particular is converts any ratios and rates from a whole-number format to a decimal format. For example, a labor for participation rate of 65.3% is represented in the BLS data as 65.3. Using `transform = TRUE` will convert this to 0.653 so that it may be used as a ratio, or displayed as a percent format in R. This argument will also convert numbers that are represented as "in thousands" into whole numbers. For example, in the CES data, employment of 1,234,500 is represented as 1234.5. While this conveys the appropriate significant figures for the estimate, it can be inconvenient to work with across programs. Using `transform = TRUE` will change this to 1,234,500 and remove "in Thousands" from the data description column.
 -   `monthly_only = TRUE` - This argument is used in `get_ces()`, `get_national_ces()`, and `get_laus()`. It removes annual data from the downloaded BLS data, typically represented as `period = "M13"` to make the data a more consistent time series.
 -   `simplify_table = TRUE` - This argument is used in `get_ces()` and `get_national_ces()`. It is used to remove some columns that are not commonly helpful in working with the BLS data. For `get_ces()` these columns are `benchmark_year`, `begin_year`, `begin_period`, `end_year`, and `end_period` which all describe the vintage of the data which was downloaded. For `get_national_ces()` the columns are `series_title`, `begin_year`, `begin_period`, `end_year`, `end_period`, `naics_code`, `publishing_status`, `display_level`, `selectable`, and `sort_sequence`. These columns either contain codes with no explanation, provide duplicated but inconsistently formatted information, or describe the vintage of the data. For both functions, this argument also takes the `year` and `period` columns, transforms them into a single date column, and removes these two columns.
+-   `suppress_warnings = TRUE` - This argument is used in most functions to control the display of download warnings and diagnostic information. Setting to `FALSE` provides detailed feedback about the download process.
+
+## Enhanced Filtering Arguments (CES Functions)
+
+The CES functions include several powerful filtering options for improved performance:
+
+### `get_ces()` Filtering Options  
+-   `states` - Vector of state abbreviations (e.g., `c("MA", "CT", "RI")`) to download only specific states
+-   `industry_filter` - Single industry filter option (e.g., `"retail_trade"`, `"manufacturing"`) to focus on specific sectors  
+-   `current_year_only = FALSE` - Set to `TRUE` to download only recent data (2006-present) instead of complete history
+
+### `get_national_ces()` Dataset Options
+-   `dataset_filter` - Choose specialized national datasets:
+    -   `"all_data"` (default) - Complete dataset with all series
+    -   `"current_seasonally_adjusted"` - Only seasonally adjusted series (faster)
+    -   `"real_earnings_all_employees"` - Real earnings data for all employees  
+    -   `"real_earnings_production"` - Real earnings data for production employees
+
+**Note**: These filtering options are mutually exclusive within each function - you cannot combine multiple filter types in a single function call.
+
+## Helper Functions for Enhanced CES Access
+
+The package includes several helper functions to assist with the enhanced CES filtering capabilities:
+
+### CES Helper Functions
+-   `list_ces_states()` - Lists all available states and territories for state-level CES data filtering
+-   `list_ces_industries()` - Lists available industry filtering options with optional descriptions  
+-   `show_ces_options()` - Provides a comprehensive overview of all CES filtering options with usage examples
+
+### National CES Helper Functions
+-   `list_national_ces_options()` - Lists available dataset filtering options for national CES data
+-   `show_national_ces_options()` - Shows detailed information about national CES dataset options with performance notes
+
+These helper functions make it easy to discover what filtering options are available before downloading data, helping you choose the most efficient approach for your analysis.
+
+## Performance Improvements
+
+The enhanced CES functions provide significant performance improvements:
+
+- **State filtering**: Download only specific states instead of all 50+ states (up to 90% faster)
+- **Industry filtering**: Focus on specific industries like retail, manufacturing, or construction
+- **Current year option**: Get only recent data (2006-present) instead of complete historical series
+- **National datasets**: Choose specialized national datasets (seasonally adjusted, real earnings) for faster downloads
+
+For example:
+- Complete CES download: 60+ seconds for ~5.6M rows
+- Single state (MA): ~3.5 seconds for ~210K rows  
+- Seasonally adjusted national: ~3.7 seconds for ~392K rows
 
 ## Helper Functions in the Package
 

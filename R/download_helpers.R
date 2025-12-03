@@ -214,7 +214,7 @@ download_bls_files <- function(urls, suppress_warnings = TRUE) {
   for (name in names(urls)) {
     if (!suppress_warnings) message("Downloading", name, "...\n")
     
-    result <- fread_bls(urls[name])
+    result <- fread_bls(urls[[name]])  # Use [[]] instead of []
     
     # Check for issues
     if (has_bls_issues(result)) {
