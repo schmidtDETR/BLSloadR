@@ -5,6 +5,8 @@ Functions for downloading BLS flat files into R
 BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at https://download.bls.gov/pub/time.series/. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the `load_bls_dataset()` and `bls_overview()` functions to provide generalized access to the other databases at this website within an R environment.
 
 # Basic Usage
+BLSloadR can be installed from CRAN by running `install.packages("BLSloadR")`.
+
 The primary functions in this package all begin with get_ and are listed below:
 
 -`get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the “SM” database.
