@@ -228,3 +228,4 @@ download_bls_files <- function(urls, suppress_warnings = TRUE) {
   
   return(results)
 }
+

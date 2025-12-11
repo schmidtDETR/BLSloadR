@@ -37,6 +37,7 @@
 #' @importFrom stringr str_length
 #' @importFrom stringr str_to_lower
 #' @importFrom stringr str_replace_all
+#' @importFrom stringr str_pad
 #' @importFrom lubridate yq
 #' @importFrom tidyselect matches
 #' @importFrom tidyselect starts_with
