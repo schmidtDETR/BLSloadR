@@ -25,19 +25,23 @@ listed below:
   This accesses data from the Current Employment Statistics (CES)
   program at the state and metropolitan area levels. This provides
   employer-based estimates of employment, wages, and hours worked. This
-  is the “SM” database. For more information about Current Employment
+  is the “SM” database. **Enhanced with filtering options** for specific
+  states, industries, or current year data to significantly improve
+  download performance. For more information about Current Employment
   Statistics, please visit <https://www.bls.gov/ces/>.
 
 - [`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md) -
   This accesses national data from the CES program at the national
   level, which does not include state-level breakouts. This is the “CE”
-  database.
+  database. **Enhanced with specialized dataset options** including
+  seasonally adjusted series, real earnings data, and complete
+  historical data for optimal performance.
 
 - [`get_laus()`](https://schmidtdetr.github.io/BLSloadR/reference/get_laus.md) -
   This accesses data from the Local Area Unemployment Statistics (LAUS)
   program at a regional, state, and several sub-state levels. This is a
   localized version of the Current Population Survey (CPS) which is used
-  to drive household-based estiamtes of employment and unemployment.
+  to drive household-based estimates of employment and unemployment.
   This is the “LA” database. Note that because of the volume of data
   here, there are several different geographies that may be specified to
   pull the appropriate data file from BLS. For more information about
@@ -46,15 +50,15 @@ listed below:
 
 - [`get_oews()`](https://schmidtdetr.github.io/BLSloadR/reference/get_oews.md) -
   This access the Occupational Employment and Wage Statistics (OEWS)
-  data. This data provides survey-based estimates of employmen and wages
-  by occupation at state and sub-state levels. This is the “OE”
+  data. This data provides survey-based estimates of employment and
+  wages by occupation at state and sub-state levels. This is the “OE”
   database. Note that only current-year data is available for OEWS in
   this database, as it is not built as a time series. For more
   information about Occupational Employment and Wage Statistics, please
   visit <https://www.bls.gov/oes/>.
 
 - [`get_salt()`](https://schmidtdetr.github.io/BLSloadR/reference/get_salt.md) -
-  This data is not actually loated within the time.series folder, but
+  This data is not actually loaded within the time.series folder, but
   instead is sourced from <https://www.bls.gov/lau/stalt.htm>. These
   *Alternative Measures of Labor Underutilization for States* are
   12-month averages built from CPS data which provide more expansive or
@@ -125,6 +129,84 @@ subsequent filtering.
   data. For both functions, this argument also takes the `year` and
   `period` columns, transforms them into a single date column, and
   removes these two columns.
+- `suppress_warnings = TRUE` - This argument is used in most functions
+  to control the display of download warnings and diagnostic
+  information. Setting to `FALSE` provides detailed feedback about the
+  download process.
+
+## Enhanced Filtering Arguments (CES Functions)
+
+The CES functions include several powerful filtering options for
+improved performance:
+
+### `get_ces()` Filtering Options
+
+- `states` - Vector of state abbreviations (e.g., `c("MA", "CT", "RI")`)
+  to download only specific states
+- `industry_filter` - Single industry filter option (e.g.,
+  `"retail_trade"`, `"manufacturing"`) to focus on specific sectors
+- `current_year_only = FALSE` - Set to `TRUE` to download only recent
+  data (2006-present) instead of complete history
+
+### `get_national_ces()` Dataset Options
+
+- `dataset_filter` - Choose specialized national datasets:
+  - `"all_data"` (default) - Complete dataset with all series
+  - `"current_seasonally_adjusted"` - Only seasonally adjusted series
+    (faster)
+  - `"real_earnings_all_employees"` - Real earnings data for all
+    employees
+  - `"real_earnings_production"` - Real earnings data for production
+    employees
+
+**Note**: These filtering options are mutually exclusive within each
+function - you cannot combine multiple filter types in a single function
+call.
+
+## Helper Functions for Enhanced CES Access
+
+The package includes several helper functions to assist with the
+enhanced CES filtering capabilities:
+
+### CES Helper Functions
+
+- [`list_ces_states()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_states.md) -
+  Lists all available states and territories for state-level CES data
+  filtering
+- [`list_ces_industries()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_industries.md) -
+  Lists available industry filtering options with optional descriptions
+- [`show_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_ces_options.md) -
+  Provides a comprehensive overview of all CES filtering options with
+  usage examples
+
+### National CES Helper Functions
+
+- [`list_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/list_national_ces_options.md) -
+  Lists available dataset filtering options for national CES data
+- [`show_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.md) -
+  Shows detailed information about national CES dataset options with
+  performance notes
+
+These helper functions make it easy to discover what filtering options
+are available before downloading data, helping you choose the most
+efficient approach for your analysis.
+
+## Performance Improvements
+
+The enhanced CES functions provide significant performance improvements:
+
+- **State filtering**: Download only specific states instead of all 50+
+  states (up to 90% faster)
+- **Industry filtering**: Focus on specific industries like retail,
+  manufacturing, or construction
+- **Current year option**: Get only recent data (2006-present) instead
+  of complete historical series
+- **National datasets**: Choose specialized national datasets
+  (seasonally adjusted, real earnings) for faster downloads
+
+For example: - Complete CES download: 60+ seconds for ~5.6M rows -
+Single state (MA): ~3.5 seconds for ~210K rows - Seasonally adjusted
+national: ~3.7 seconds for ~392K rows
 
 ## Helper Functions in the Package
 

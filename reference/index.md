@@ -36,7 +36,17 @@
   : Download State Alternative Labor Market Measures (SALT) Data
 - [`has_bls_issues()`](https://schmidtdetr.github.io/BLSloadR/reference/has_bls_issues.md)
   : Check if BLS data object has potential issues with import.
+- [`list_ces_industries()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_industries.md)
+  : List Available Industry Filters for CES Data
+- [`list_ces_states()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_states.md)
+  : List Available States for CES Data
+- [`list_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/list_national_ces_options.md)
+  : List Available National CES Dataset Options
 - [`load_bls_dataset()`](https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.md)
   : Generic BLS Dataset Download
 - [`print_bls_warnings()`](https://schmidtdetr.github.io/BLSloadR/reference/print_bls_warnings.md)
   : Print warnings for BLS data object
+- [`show_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_ces_options.md)
+  : Show CES Data Filtering Options
+- [`show_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.md)
+  : Show National CES Dataset Options and Usage Examples

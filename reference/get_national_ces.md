@@ -10,14 +10,30 @@ classifications, data types, and time period information.
 
 ``` r
 get_national_ces(
+  dataset_filter = "all_data",
   monthly_only = TRUE,
   simplify_table = TRUE,
-  show_warnings = FALSE,
+  suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
 ```
 
 ## Arguments
+
+- dataset_filter:
+
+  Character string specifying which dataset to download. Options
+  include:
+
+  - "all_data" (default) - Complete dataset with all series
+
+  - "current_seasonally_adjusted" - Only seasonally adjusted
+    all-employee series
+
+  - "real_earnings_all_employees" - Real earnings data for all employees
+
+  - "real_earnings_production" - Real earnings data for production
+    employees
 
 - monthly_only:
 
@@ -33,10 +49,11 @@ get_national_ces(
   sort_sequence) and adds a formatted date column. If FALSE, returns the
   full dataset with all available columns.
 
-- show_warnings:
+- suppress_warnings:
 
-  Logical. If TRUE, displays download warnings and diagnostics. If FALSE
-  (default), suppresses warning output.
+  Logical. If TRUE (default), suppresses download warnings and
+  diagnostics. If FALSE, displays warning output and diagnostic
+  information.
 
 - return_diagnostics:
 
@@ -51,9 +68,23 @@ comprehensive diagnostics.
 
 ## Details
 
-The function downloads the following BLS CES datasets:
+The function can download one of four specialized national CES datasets
+based on the dataset_filter parameter:
 
-- ce.data.0.AllCESSeries - Main employment data
+- all_data: Complete dataset (ce.data.0.AllCESSeries) - contains entire
+  history of all series currently published by the CES program
+
+- current_seasonally_adjusted: (ce.data.01a.CurrentSeasAE) - contains
+  every seasonally adjusted all employee series and complete history
+
+- real_earnings_all_employees: (ce.data.02b.AllRealEarningsAE) -
+  contains real earnings data (1982-84 dollars) for all employees
+
+- real_earnings_production: (ce.data.03c.AllRealEarningsPE) - contains
+  real earnings data (1982-84 dollars) for production/nonsupervisory
+  employees
+
+Additional metadata files are always downloaded and joined:
 
 - ce.series - Series metadata
 
@@ -66,9 +97,13 @@ The function downloads the following BLS CES datasets:
 - ce.supersector - Supersector classifications
 
 These datasets are joined together to provide context and labels for the
-employment statistics. The function uses the \`fread_bls()\` helper
-function to download and read the BLS data files with robust error
-handling and diagnostic reporting.
+employment statistics. The function uses the enhanced
+\`download_bls_files()\` helper function for robust downloads with
+diagnostic reporting.
+
+Performance Note: Using specialized datasets (other than "all_data") can
+significantly reduce download time and file size while still providing
+comprehensive employment statistics.
 
 ## Note
 
@@ -86,30 +121,63 @@ for more information about CES data
 
 ``` r
 # \donttest{
-# Get monthly CES data with simplified table structure
+# Get complete monthly CES data with simplified table structure (default)
 ces_monthly <- get_national_ces()
-#> Downloading CES datasets...
+#> Downloading national CES datasets (Complete national CES dataset)...
 #> Joining CES datasets...
+#> National CES data download complete!
+#> Dataset: Complete national CES dataset
+#> Final dataset dimensions: 7793626 x 14
+
+# Get only seasonally adjusted data (faster download)
+ces_seasonal <- get_national_ces(dataset_filter = "current_seasonally_adjusted")
+#> Downloading national CES datasets (Seasonally adjusted all-employee series)...
+#> Joining CES datasets...
+#> National CES data download complete!
+#> Dataset: Seasonally adjusted all-employee series
+#> Final dataset dimensions: 392253 x 14
+
+# Get real earnings data for all employees
+ces_real_earnings <- get_national_ces(dataset_filter = "real_earnings_all_employees")
+#> Downloading national CES datasets (Real earnings for all employees)...
+#> Joining CES datasets...
+#> National CES data download complete!
+#> Dataset: Real earnings for all employees
+#> Final dataset dimensions: 514016 x 14
 
 # Get all data including annual averages with full metadata
-ces_full <- get_national_ces(monthly_only = FALSE, simplify_table = FALSE)
-#> Downloading CES datasets...
+ces_full <- get_national_ces(dataset_filter = "all_data", 
+                             monthly_only = FALSE, simplify_table = FALSE)
+#> Downloading national CES datasets (Complete national CES dataset)...
 #> Joining CES datasets...
+#> National CES data download complete!
+#> Dataset: Complete national CES dataset
+#> Final dataset dimensions: 8106467 x 23
 
-# Get monthly data but keep all metadata columns
-ces_detailed <- get_national_ces(monthly_only = TRUE, simplify_table = FALSE)
-#> Downloading CES datasets...
+# Get data with warnings and diagnostic information displayed
+ces_with_warnings <- get_national_ces(suppress_warnings = FALSE)
+#> Downloading national CES datasets (Complete national CES dataset)...
+#> Downloadingdata...
+#> Downloadingseries...
+#> Downloadingindustry...
+#> Downloadingperiod...
+#> Downloadingdatatype...
+#> Downloadingsupersector...
 #> Joining CES datasets...
-
-# Access the data component
-ces_data <- get_bls_data(ces_monthly)
+#> No warnings forNational CES: Complete national CES datasetdata download
+#> National CES data download complete!
+#> Dataset: Complete national CES dataset
+#> Final dataset dimensions: 7793626 x 14
 
 # Get full diagnostic object if needed
 data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
-#> Downloading CES datasets...
+#> Downloading national CES datasets (Complete national CES dataset)...
 #> Joining CES datasets...
+#> National CES data download complete!
+#> Dataset: Complete national CES dataset
+#> Final dataset dimensions: 7793626 x 14
 print_bls_warnings(data_with_diagnostics)
-#> No warnings forCESdata download
+#> No warnings forNational CES: Complete national CES datasetdata download
 # }
 
 ```

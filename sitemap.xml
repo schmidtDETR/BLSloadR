@@ -4,6 +4,7 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/BLSloadR-intro.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/index.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_get_laus.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/articles/working_with_ces_data.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/authors.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/index.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/news/index.html</loc></url>
@@ -25,8 +26,13 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_salt.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/has_bls_issues.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/index.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/list_ces_industries.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/list_ces_states.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/list_national_ces_options.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/print_bls_warnings.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/read_bls_text.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/show_ces_options.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.html</loc></url>
 </urlset>
 

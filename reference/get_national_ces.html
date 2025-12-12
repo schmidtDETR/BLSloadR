@@ -26,6 +26,7 @@ dataset with industry classifications, data types, and time period information."
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
+    <li><a class="dropdown-item" href="../articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -53,9 +54,10 @@ dataset with industry classifications, data types, and time period information.<
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_national_ces</span><span class="op">(</span></span>
+<span>  dataset_filter <span class="op">=</span> <span class="st">"all_data"</span>,</span>
 <span>  monthly_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  show_warnings <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  suppress_warnings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -64,7 +66,16 @@ dataset with industry classifications, data types, and time period information.<
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-monthly-only">monthly_only<a class="anchor" aria-label="anchor" href="#arg-monthly-only"></a></dt>
+<dl><dt id="arg-dataset-filter">dataset_filter<a class="anchor" aria-label="anchor" href="#arg-dataset-filter"></a></dt>
+<dd><p>Character string specifying which dataset to download.
+Options include:</p><ul><li><p>"all_data" (default) - Complete dataset with all series</p></li>
+<li><p>"current_seasonally_adjusted" - Only seasonally adjusted all-employee series</p></li>
+<li><p>"real_earnings_all_employees" - Real earnings data for all employees</p></li>
+<li><p>"real_earnings_production" - Real earnings data for production employees</p></li>
+</ul></dd>
+
+
+<dt id="arg-monthly-only">monthly_only<a class="anchor" aria-label="anchor" href="#arg-monthly-only"></a></dt>
 <dd><p>Logical. If TRUE (default), excludes annual averages
 (period "M13") and returns only monthly data. If FALSE, includes all
 periods including annual averages.</p></dd>
@@ -78,9 +89,9 @@ and adds a formatted date column. If FALSE, returns the full dataset
 with all available columns.</p></dd>
 
 
-<dt id="arg-show-warnings">show_warnings<a class="anchor" aria-label="anchor" href="#arg-show-warnings"></a></dt>
-<dd><p>Logical. If TRUE, displays download warnings
-and diagnostics. If FALSE (default), suppresses warning output.</p></dd>
+<dt id="arg-suppress-warnings">suppress_warnings<a class="anchor" aria-label="anchor" href="#arg-suppress-warnings"></a></dt>
+<dd><p>Logical. If TRUE (default), suppresses download warnings
+and diagnostics. If FALSE, displays warning output and diagnostic information.</p></dd>
 
 
 <dt id="arg-return-diagnostics">return_diagnostics<a class="anchor" aria-label="anchor" href="#arg-return-diagnostics"></a></dt>
@@ -95,16 +106,26 @@ with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function downloads the following BLS CES datasets:</p><ul><li><p>ce.data.0.AllCESSeries - Main employment data</p></li>
-<li><p>ce.series - Series metadata</p></li>
+    <p>The function can download one of four specialized national CES datasets based on
+the dataset_filter parameter:</p><ul><li><p>all_data: Complete dataset (ce.data.0.AllCESSeries) - contains entire
+    history of all series currently published by the CES program</p></li>
+<li><p>current_seasonally_adjusted: (ce.data.01a.CurrentSeasAE) - contains
+    every seasonally adjusted all employee series and complete history</p></li>
+<li><p>real_earnings_all_employees: (ce.data.02b.AllRealEarningsAE) - contains
+    real earnings data (1982-84 dollars) for all employees</p></li>
+<li><p>real_earnings_production: (ce.data.03c.AllRealEarningsPE) - contains
+    real earnings data (1982-84 dollars) for production/nonsupervisory employees</p></li>
+</ul><p>Additional metadata files are always downloaded and joined:</p><ul><li><p>ce.series - Series metadata</p></li>
 <li><p>ce.industry - Industry classifications</p></li>
 <li><p>ce.datatype - Data type definitions</p></li>
 <li><p>ce.period - Time period definitions</p></li>
 <li><p>ce.supersector - Supersector classifications</p></li>
 </ul><p>These datasets are joined together to provide context and labels for the
-employment statistics. The function uses the `fread_bls()` helper function
-to download and read the BLS data files with robust error handling and
-diagnostic reporting.</p>
+employment statistics. The function uses the enhanced `download_bls_files()`
+helper function for robust downloads with diagnostic reporting.</p>
+<p>Performance Note: Using specialized datasets (other than "all_data") can
+significantly reduce download time and file size while still providing
+comprehensive employment statistics.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -120,30 +141,63 @@ and `create_bls_object()` helper functions must be available in your environment
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co"># Get monthly CES data with simplified table structure</span></span></span>
+<span class="r-in"><span><span class="co"># Get complete monthly CES data with simplified table structure (default)</span></span></span>
 <span class="r-in"><span><span class="va">ces_monthly</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7793626 x 14</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get only seasonally adjusted data (faster download)</span></span></span>
+<span class="r-in"><span><span class="va">ces_seasonal</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"current_seasonally_adjusted"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Seasonally adjusted all-employee series)...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Seasonally adjusted all-employee series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 392253 x 14</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get real earnings data for all employees</span></span></span>
+<span class="r-in"><span><span class="va">ces_real_earnings</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"real_earnings_all_employees"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Real earnings for all employees)...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Real earnings for all employees</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 514016 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get all data including annual averages with full metadata</span></span></span>
-<span class="r-in"><span><span class="va">ces_full</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>monthly_only <span class="op">=</span> <span class="cn">FALSE</span>, simplify_table <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading CES datasets...</span>
+<span class="r-in"><span><span class="va">ces_full</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"all_data"</span>, </span></span>
+<span class="r-in"><span>                             monthly_only <span class="op">=</span> <span class="cn">FALSE</span>, simplify_table <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 8106467 x 23</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Get monthly data but keep all metadata columns</span></span></span>
-<span class="r-in"><span><span class="va">ces_detailed</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>monthly_only <span class="op">=</span> <span class="cn">TRUE</span>, simplify_table <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading CES datasets...</span>
+<span class="r-in"><span><span class="co"># Get data with warnings and diagnostic information displayed</span></span></span>
+<span class="r-in"><span><span class="va">ces_with_warnings</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingdata...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingseries...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingindustry...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingperiod...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingdatatype...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingsupersector...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Access the data component</span></span></span>
-<span class="r-in"><span><span class="va">ces_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_bls_data.html">get_bls_data</a></span><span class="op">(</span><span class="va">ces_monthly</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forNational CES: Complete national CES datasetdata download</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7793626 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get full diagnostic object if needed</span></span></span>
 <span class="r-in"><span><span class="va">data_with_diagnostics</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>return_diagnostics <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7793626 x 14</span>
 <span class="r-in"><span><span class="fu"><a href="print_bls_warnings.html">print_bls_warnings</a></span><span class="op">(</span><span class="va">data_with_diagnostics</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forCESdata download</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forNational CES: Complete national CES datasetdata download</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

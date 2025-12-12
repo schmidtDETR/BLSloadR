@@ -124,6 +124,10 @@ jolts_data <- get_jolts()
 
 # Include national data with industry breakdowns
 jolts_national <- get_jolts(remove_national = FALSE)
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 
 # Get full diagnostic object if needed
 jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
@@ -133,7 +137,7 @@ print_bls_warnings(jolts_with_diagnostics)
 #> Total files downloaded:7
 #> Files with issues:1
 #> Total warnings:2
-#> Final data dimensions:317016 x 22
+#> Final data dimensions:318087 x 22
 #> 
 #> Summary of warnings:
 #>   1. series : Phantom columns detected and cleaned: 1

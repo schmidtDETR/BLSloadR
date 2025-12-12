@@ -20,6 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
+    <li><a class="dropdown-item" href="../articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -37,10 +38,75 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="blsloadr-030">BLSloadR 0.3.0<a class="anchor" aria-label="anchor" href="#blsloadr-030"></a></h2>
+<div class="section level3">
+<h3 id="major-enhancements-0-3-0">Major Enhancements<a class="anchor" aria-label="anchor" href="#major-enhancements-0-3-0"></a></h3>
+<div class="section level4">
+<h4 id="enhanced-ces-functions-with-performance-filtering-0-3-0">Enhanced CES Functions with Performance Filtering<a class="anchor" aria-label="anchor" href="#enhanced-ces-functions-with-performance-filtering-0-3-0"></a></h4>
+<ul><li>
+<strong><code><a href="../reference/get_ces.html">get_ces()</a></code></strong> - Major performance improvements with new filtering options:
+<ul><li>
+<code>states</code> parameter: Download data for specific states only (90%+ faster than full download)</li>
+<li>
+<code>industry_filter</code> parameter: Focus on specific industries (retail_trade, manufacturing, etc.)</li>
+<li>
+<code>current_year_only</code> parameter: Get only recent data (2006-present) instead of complete history</li>
+<li>Mutually exclusive filtering prevents conflicting options</li>
+</ul></li>
+<li>
+<strong><code><a href="../reference/get_national_ces.html">get_national_ces()</a></code></strong> - New specialized dataset options for optimal performance:
+<ul><li>
+<code>dataset_filter</code> parameter with 4 options: all_data, current_seasonally_adjusted, real_earnings_all_employees, real_earnings_production</li>
+<li>Up to 95% faster downloads with specialized datasets</li>
+<li>Enhanced documentation with performance notes</li>
+</ul></li>
+</ul></div>
+<div class="section level4">
+<h4 id="new-helper-functions-0-3-0">New Helper Functions<a class="anchor" aria-label="anchor" href="#new-helper-functions-0-3-0"></a></h4>
+<ul><li>
+<strong>CES Discovery Functions</strong>:
+<ul><li>
+<code><a href="../reference/list_ces_states.html">list_ces_states()</a></code> - List available states for filtering</li>
+<li>
+<code><a href="../reference/list_ces_industries.html">list_ces_industries()</a></code> - List available industry filters with descriptions</li>
+<li>
+<code><a href="../reference/show_ces_options.html">show_ces_options()</a></code> - Comprehensive usage guide for CES options</li>
+</ul></li>
+<li>
+<strong>National CES Discovery Functions</strong>:
+<ul><li>
+<code><a href="../reference/list_national_ces_options.html">list_national_ces_options()</a></code> - List national dataset filter options</li>
+<li>
+<code><a href="../reference/show_national_ces_options.html">show_national_ces_options()</a></code> - Usage guide for national CES datasets</li>
+</ul></li>
+</ul></div>
+<div class="section level4">
+<h4 id="infrastructure-improvements-0-3-0">Infrastructure Improvements<a class="anchor" aria-label="anchor" href="#infrastructure-improvements-0-3-0"></a></h4>
+<ul><li>Fixed URL parameter passing in <code><a href="../reference/download_bls_files.html">download_bls_files()</a></code> (downloads[[‘key’]] vs downloads$key)</li>
+<li>Consistent parameter naming across functions (<code>suppress_warnings</code> instead of mixed naming)</li>
+<li>Enhanced error handling and validation throughout</li>
+<li>Improved diagnostic messaging and user feedback</li>
+</ul></div>
+<div class="section level4">
+<h4 id="documentation-and-vignettes-0-3-0">Documentation and Vignettes<a class="anchor" aria-label="anchor" href="#documentation-and-vignettes-0-3-0"></a></h4>
+<ul><li>New comprehensive vignette: “Working with CES Data: Enhanced Features and Performance”</li>
+<li>Updated main package vignette with enhanced CES capabilities</li>
+<li>Complete function documentation regeneration</li>
+<li>Performance comparison tables and best practices</li>
+</ul></div>
+</div>
+<div class="section level3">
+<h3 id="breaking-changes-0-3-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-3-0"></a></h3>
+<ul><li>Parameter <code>show_warnings</code> changed to <code>suppress_warnings</code> in <code><a href="../reference/get_national_ces.html">get_national_ces()</a></code> for consistency</li>
+<li>Enhanced parameter validation may catch previously ignored invalid inputs</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.5" id="blsloadr-015">BLSloadR 0.1.5<a class="anchor" aria-label="anchor" href="#blsloadr-015"></a></h2>
 <ul><li>Initial CRAN submission.</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
