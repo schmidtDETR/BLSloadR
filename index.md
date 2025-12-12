@@ -17,6 +17,9 @@ website within an R environment.
 
 # Basic Usage
 
+BLSloadR can be installed from CRAN by running
+`install.packages("BLSloadR")`.
+
 The primary functions in this package all begin with get\_ and are
 listed below:
 

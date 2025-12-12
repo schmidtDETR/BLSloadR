@@ -161,14 +161,7 @@ laus_states <- get_laus()
 unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 
 # Download unadjusted state data
-laus_states_unadjusted <- get_laus("state_unadjusted")
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
-
-# Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
-laus_metro <- get_laus("metro", transform = FALSE)
+laus_states_unadjusted <- get_laus(geography = "state_unadjusted")
 #> Warning: There was 1 warning in `dplyr::mutate()`.
 #> ℹ In argument: `value = as.numeric(value)`.
 #> Caused by warning:

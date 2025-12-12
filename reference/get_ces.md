@@ -126,7 +126,7 @@ for a comprehensive overview of filtering options.
 # Fast download: Massachusetts and Connecticut data only (all industries)
 ces_states <- get_ces(states = c("MA", "CT"))
 
-# Fast download: Manufacturing data for all states  
+# Fast download: Manufacturing data for all states
 ces_manufacturing <- get_ces(industry_filter = "manufacturing")
 
 # Fast download: Current year data for all states and industries

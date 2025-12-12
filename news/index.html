@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
+    <li><a class="dropdown-item" href="../articles/using_get_oews.html">Working with OEWS Data</a></li>
     <li><a class="dropdown-item" href="../articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -60,6 +61,13 @@
 <li>Up to 95% faster downloads with specialized datasets</li>
 <li>Enhanced documentation with performance notes</li>
 </ul></li>
+<li>
+<strong><code><a href="../reference/get_qcew.html">get_qcew()</a></code></strong> - New function designed to access the Quarterly Census of Employment and Wages(QCEW):
+<ul><li>Get quarterly or annual data for one year or multiple years.</li>
+<li>Append area and industry definitions to the data.</li>
+<li>QCEW represents highly detailed data across counties, combined areas, states and national regions.</li>
+<li>Includes detailed employment and wage data.</li>
+</ul></li>
 </ul></div>
 <div class="section level4">
 <h4 id="new-helper-functions-0-3-0">New Helper Functions<a class="anchor" aria-label="anchor" href="#new-helper-functions-0-3-0"></a></h4>
@@ -79,6 +87,13 @@
 <li>
 <code><a href="../reference/show_national_ces_options.html">show_national_ces_options()</a></code> - Usage guide for national CES datasets</li>
 </ul></li>
+<li>
+<strong>QCEW Lookup Tables included</strong>:
+<ul><li>
+<code>area_lookup</code> data table has details on QCEW area codes to pre-filter data requests.</li>
+<li>
+<code>ind_lookup</code> data table has details on NAICS codes used in QCEW files.</li>
+</ul></li>
 </ul></div>
 <div class="section level4">
 <h4 id="infrastructure-improvements-0-3-0">Infrastructure Improvements<a class="anchor" aria-label="anchor" href="#infrastructure-improvements-0-3-0"></a></h4>
@@ -90,6 +105,7 @@
 <div class="section level4">
 <h4 id="documentation-and-vignettes-0-3-0">Documentation and Vignettes<a class="anchor" aria-label="anchor" href="#documentation-and-vignettes-0-3-0"></a></h4>
 <ul><li>New comprehensive vignette: “Working with CES Data: Enhanced Features and Performance”</li>
+<li>New article on working with OEWS data.</li>
 <li>Updated main package vignette with enhanced CES capabilities</li>
 <li>Complete function documentation regeneration</li>
 <li>Performance comparison tables and best practices</li>
@@ -102,15 +118,15 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.5" id="blsloadr-015">BLSloadR 0.1.5<a class="anchor" aria-label="anchor" href="#blsloadr-015"></a></h2>
-<ul><li>Initial CRAN submission.</li>
+<h2 class="pkg-version" data-toc-text="0.2" id="blsloadr-02">BLSloadR 0.2<a class="anchor" aria-label="anchor" href="#blsloadr-02"></a></h2><p class="text-muted">CRAN release: 2025-11-25</p>
+<ul><li>Initial CRAN release.</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Schmidt.</p>
+  <p>Developed by David Schmidt, Mark Rembert.</p>
 </div>
 
 <div class="pkgdown-footer-right">

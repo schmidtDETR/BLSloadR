@@ -167,7 +167,8 @@ bls_current |>
   theme(legend.position = "none")
 ```
 
-![](using_get_laus_files/figure-html/ur-ranking-1.png)
+![A bar chart showing the ranking of unemployment rates by
+state.](using_get_laus_files/figure-html/ur-ranking-1.png)
 
 #### Labor Force Participation Rate Chart
 
@@ -183,7 +184,8 @@ bls_current |>
   theme(legend.position = "none")
 ```
 
-![](using_get_laus_files/figure-html/lfpr-ranking-1.png)
+![A bar chart showing the ranking of labor force participation rates by
+state.](using_get_laus_files/figure-html/lfpr-ranking-1.png)
 
 #### Unemployment Rate Over Time
 
@@ -206,7 +208,9 @@ bls_ts |>
   )
 ```
 
-![](using_get_laus_files/figure-html/ur-ribbon-1.png)
+![A ribbon and line chart showing Nevada's unemployment rate compared to
+the central range of other
+states.](using_get_laus_files/figure-html/ur-ribbon-1.png)
 
 #### Labor Force Participation Rate Over Time
 
@@ -229,4 +233,6 @@ bls_ts |>
   )
 ```
 
-![](using_get_laus_files/figure-html/lfpr-ribbon-1.png)
+![A ribbon and line chart showing Nevada's labor force participation
+rate compared to the central range of other
+states.](using_get_laus_files/figure-html/lfpr-ribbon-1.png)

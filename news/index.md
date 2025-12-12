@@ -22,6 +22,14 @@
     real_earnings_production
   - Up to 95% faster downloads with specialized datasets
   - Enhanced documentation with performance notes
+- **[`get_qcew()`](https://schmidtdetr.github.io/BLSloadR/reference/get_qcew.md)** -
+  New function designed to access the Quarterly Census of Employment and
+  Wages(QCEW):
+  - Get quarterly or annual data for one year or multiple years.
+  - Append area and industry definitions to the data.
+  - QCEW represents highly detailed data across counties, combined
+    areas, states and national regions.
+  - Includes detailed employment and wage data.
 
 #### New Helper Functions
 
@@ -37,6 +45,11 @@
     List national dataset filter options
   - [`show_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.md) -
     Usage guide for national CES datasets
+- **QCEW Lookup Tables included**:
+  - `area_lookup` data table has details on QCEW area codes to
+    pre-filter data requests.
+  - `ind_lookup` data table has details on NAICS codes used in QCEW
+    files.
 
 #### Infrastructure Improvements
 
@@ -52,6 +65,7 @@
 
 - New comprehensive vignette: “Working with CES Data: Enhanced Features
   and Performance”
+- New article on working with OEWS data.
 - Updated main package vignette with enhanced CES capabilities
 - Complete function documentation regeneration
 - Performance comparison tables and best practices
@@ -64,6 +78,8 @@
 - Enhanced parameter validation may catch previously ignored invalid
   inputs
 
-## BLSloadR 0.1.5
+## BLSloadR 0.2
 
-- Initial CRAN submission.
+CRAN release: 2025-11-25
+
+- Initial CRAN release.

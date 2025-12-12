@@ -146,7 +146,7 @@ ces_real_earnings <- get_national_ces(dataset_filter = "real_earnings_all_employ
 #> Final dataset dimensions: 514016 x 14
 
 # Get all data including annual averages with full metadata
-ces_full <- get_national_ces(dataset_filter = "all_data", 
+ces_full <- get_national_ces(dataset_filter = "all_data",
                              monthly_only = FALSE, simplify_table = FALSE)
 #> Downloading national CES datasets (Complete national CES dataset)...
 #> Joining CES datasets...

@@ -2,6 +2,8 @@
 
 ## All functions
 
+- [`area_lookup`](https://schmidtdetr.github.io/BLSloadR/reference/area_lookup.md)
+  : Area Lookup Tables (QCEW)
 - [`bls_overview()`](https://schmidtdetr.github.io/BLSloadR/reference/bls_overview.md)
   : Display BLS Dataset Overview
 - [`create_bls_object()`](https://schmidtdetr.github.io/BLSloadR/reference/create_bls_object.md)
@@ -32,10 +34,16 @@
   : Get National Current Employment Statistics (CES) Data from BLS
 - [`get_oews()`](https://schmidtdetr.github.io/BLSloadR/reference/get_oews.md)
   : Download Occupational Employment and Wage Statistics (OEWS) Data
+- [`get_oews_areas()`](https://schmidtdetr.github.io/BLSloadR/reference/get_oews_areas.md)
+  : Download OEWS Area Definitions
+- [`get_qcew()`](https://schmidtdetr.github.io/BLSloadR/reference/get_qcew.md)
+  : Get QCEW Data Slices
 - [`get_salt()`](https://schmidtdetr.github.io/BLSloadR/reference/get_salt.md)
   : Download State Alternative Labor Market Measures (SALT) Data
 - [`has_bls_issues()`](https://schmidtdetr.github.io/BLSloadR/reference/has_bls_issues.md)
   : Check if BLS data object has potential issues with import.
+- [`ind_lookup`](https://schmidtdetr.github.io/BLSloadR/reference/ind_lookup.md)
+  : NAICS Industry Titles Lookup Table (QCEW)
 - [`list_ces_industries()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_industries.md)
   : List Available Industry Filters for CES Data
 - [`list_ces_states()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_states.md)

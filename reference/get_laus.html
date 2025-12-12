@@ -17,7 +17,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,6 +30,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
+    <li><a class="dropdown-item" href="../articles/using_get_oews.html">Working with OEWS Data</a></li>
     <li><a class="dropdown-item" href="../articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -172,14 +173,7 @@ with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
 <span class="r-in"><span><span class="va">unemployment</span> <span class="op">&lt;-</span> <span class="va">laus_states</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"unemployment rate"</span>, <span class="va">measure_text</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">date</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Download unadjusted state data</span></span></span>
-<span class="r-in"><span><span class="va">laus_states_unadjusted</span> <span class="op">&lt;-</span> <span class="fu">get_laus</span><span class="op">(</span><span class="st">"state_unadjusted"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::mutate()`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `value = as.numeric(value)`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Download metro area data with rates as whole number percentages (64.3 instead of 0.643)</span></span></span>
-<span class="r-in"><span><span class="va">laus_metro</span> <span class="op">&lt;-</span> <span class="fu">get_laus</span><span class="op">(</span><span class="st">"metro"</span>, transform <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">laus_states_unadjusted</span> <span class="op">&lt;-</span> <span class="fu">get_laus</span><span class="op">(</span>geography <span class="op">=</span> <span class="st">"state_unadjusted"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There was 1 warning in `dplyr::mutate()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `value = as.numeric(value)`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
@@ -203,7 +197,7 @@ with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Schmidt.</p>
+  <p>Developed by David Schmidt, Mark Rembert.</p>
 </div>
 
 <div class="pkgdown-footer-right">

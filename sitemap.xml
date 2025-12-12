@@ -4,10 +4,12 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/BLSloadR-intro.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/index.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_get_laus.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_get_oews.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/working_with_ces_data.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/authors.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/index.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/news/index.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/area_lookup.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/bls_overview.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/create_bls_object.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/display_in_console.html</loc></url>
@@ -23,8 +25,11 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_laus.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_oews.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_oews_areas.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_qcew.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_salt.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/has_bls_issues.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/ind_lookup.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/index.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/list_ces_industries.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/list_ces_states.html</loc></url>

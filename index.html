@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="articles/using_get_laus.html">Working with LAUS Data</a></li>
+    <li><a class="dropdown-item" href="articles/using_get_oews.html">Working with OEWS Data</a></li>
     <li><a class="dropdown-item" href="articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul>
 </li>
@@ -66,6 +67,7 @@
 <div class="section level1">
 <h1 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h1>
+<p>BLSloadR can be installed from CRAN by running <code>install.packages("BLSloadR")</code>.</p>
 <p>The primary functions in this package all begin with get_ and are listed below:</p>
 <p>-<code><a href="reference/get_ces.html">get_ces()</a></code> - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the “SM” database.</p>
 <p>-<code><a href="reference/get_national_ces.html">get_national_ces()</a></code> - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the “CE” database.</p>
@@ -111,6 +113,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>David Schmidt <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Mark Rembert <br><small class="roles"> Author </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -127,7 +130,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Schmidt.</p>
+  <p>Developed by David Schmidt, Mark Rembert.</p>
 </div>
 
 <div class="pkgdown-footer-right">

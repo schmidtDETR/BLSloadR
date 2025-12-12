@@ -11,7 +11,7 @@ and wage estimates by occupation and geographic area. Note that OEWS is a large 
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,7 @@ and wage estimates by occupation and geographic area. Note that OEWS is a large 
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
+    <li><a class="dropdown-item" href="../articles/using_get_oews.html">Working with OEWS Data</a></li>
     <li><a class="dropdown-item" href="../articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -53,7 +54,8 @@ and wage estimates by occupation and geographic area. Note that OEWS is a large 
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_oews</span><span class="op">(</span></span>
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  suppress_warnings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fast_read <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -73,6 +75,10 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 <dt id="arg-return-diagnostics">return_diagnostics<a class="anchor" aria-label="anchor" href="#arg-return-diagnostics"></a></dt>
 <dd><p>Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
+
+
+<dt id="arg-fast-read">fast_read<a class="anchor" aria-label="anchor" href="#arg-fast-read"></a></dt>
+<dd><p>Logical.  If TRUE (default), derives lookup values directly from series_id to avoid reading the series file, to speed download process. With fast_read, the data can download in 17 seconds (depending on bandwidth).  Without fast_read, the same download takes 57 seconds.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -1232,7 +1238,7 @@ with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Schmidt.</p>
+  <p>Developed by David Schmidt, Mark Rembert.</p>
 </div>
 
 <div class="pkgdown-footer-right">
