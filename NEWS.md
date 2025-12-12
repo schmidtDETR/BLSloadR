@@ -6,7 +6,7 @@
 
 * **`get_ces()`** - Major performance improvements with new filtering options:
   - `states` parameter: Download data for specific states only (90%+ faster than full download)
-  - `industry_filter` parameter: Focus on specific industries (retail_trade, manufacturing, etc.)  
+  - `industry_filter` parameter: Focus on specific industries (retail_trade, manufacturing, etc.)
   - `current_year_only` parameter: Get only recent data (2006-present) instead of complete history
   - Mutually exclusive filtering prevents conflicting options
 
@@ -22,11 +22,11 @@
   - `list_ces_industries()` - List available industry filters with descriptions
   - `show_ces_options()` - Comprehensive usage guide for CES options
 
-* **National CES Discovery Functions**:  
+* **National CES Discovery Functions**:
   - `list_national_ces_options()` - List national dataset filter options
   - `show_national_ces_options()` - Usage guide for national CES datasets
 
-### Infrastructure Improvements  
+### Infrastructure Improvements
 
 * Fixed URL parameter passing in `download_bls_files()` (downloads[['key']] vs downloads$key)
 * Consistent parameter naming across functions (`suppress_warnings` instead of mixed naming)
@@ -35,7 +35,7 @@
 
 ### Documentation and Vignettes
 
-* New comprehensive vignette: "Working with CES Data: Enhanced Features and Performance" 
+* New comprehensive vignette: "Working with CES Data: Enhanced Features and Performance"
 * Updated main package vignette with enhanced CES capabilities
 * Complete function documentation regeneration
 * Performance comparison tables and best practices

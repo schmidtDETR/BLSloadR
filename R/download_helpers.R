@@ -1,5 +1,5 @@
 #' Create a BLS data object with diagnostics
-#' 
+#'
 #' This is a helper function to create a list with the additional class 'bls_data_collection' containing data downloaded form the U.S. Bureau of Labor Statistics as well as diagnostic details about the download. It is used invisibly in the package to bundle information about file downloads.
 #'
 #' @param data The processed data (data.table/data.frame)
@@ -9,7 +9,7 @@
 #' @return A bls_data_collection object
 #' @export
 create_bls_object <- function(data, downloads, data_type = "BLS", processing_steps = character(0)) {
-  
+
   # Extract diagnostics from downloads
   download_diagnostics <- lapply(downloads, function(x) {
     if (inherits(x, "bls_data")) {
@@ -18,7 +18,7 @@ create_bls_object <- function(data, downloads, data_type = "BLS", processing_ste
       return(NULL)
     }
   })
-  
+
   # Collect all warnings
   all_warnings <- character(0)
   for (name in names(download_diagnostics)) {
@@ -28,7 +28,7 @@ create_bls_object <- function(data, downloads, data_type = "BLS", processing_ste
       all_warnings <- c(all_warnings, prefixed_warnings)
     }
   }
-  
+
   # Create summary
   summary_info <- list(
     data_type = data_type,
@@ -39,7 +39,7 @@ create_bls_object <- function(data, downloads, data_type = "BLS", processing_ste
     final_dimensions = dim(data),
     download_timestamp = Sys.time()
   )
-  
+
   # Create result object
   result <- list(
     data = data,
@@ -47,14 +47,14 @@ create_bls_object <- function(data, downloads, data_type = "BLS", processing_ste
     warnings = all_warnings,
     summary = summary_info
   )
-  
+
   class(result) <- c("bls_data_collection", "list")
-  
+
   return(result)
 }
 
 #' Extract data from BLS data object
-#' 
+#'
 #' This is a helper function to extract the data element of a 'bls_data_collection' object.
 #'
 #' @param bls_obj A bls_data_collection object or raw data
@@ -73,7 +73,7 @@ get_bls_data <- function(bls_obj) {
 }
 
 #' Get download diagnostics from BLS data object
-#' 
+#'
 #' This is a helper function to extract the download diagnostics element of a 'bls_data_collection' object.
 #'
 #' @param bls_obj A bls_data_collection object
@@ -90,7 +90,7 @@ get_bls_diagnostics <- function(bls_obj) {
 }
 
 #' Get summary information from BLS data object
-#' 
+#'
 #' This is a helper function to extract the summary element of a 'bls_data_collection' object. This containes the number of files downloaded, the number of files with potential warnings, and the total number of warnings.
 #'
 #' @param bls_obj A bls_data_collection object
@@ -109,12 +109,12 @@ get_bls_summary <- function(bls_obj) {
 #' @param bls_obj A bls_data_collection object
 #' @param detailed Logical. If TRUE, shows detailed diagnostics for each file
 #' @param silent Logical. If TRUE, suppress console output
-#' 
+#'
 #' @return Character vector of warnings (invisibly)
-#' 
+#'
 #' @export
 print_bls_warnings <- function(bls_obj, detailed = FALSE, silent = FALSE) {
-  
+
   # Handle different object types
   if (inherits(bls_obj, "bls_data_collection")) {
     warnings <- bls_obj$warnings
@@ -123,20 +123,20 @@ print_bls_warnings <- function(bls_obj, detailed = FALSE, silent = FALSE) {
   } else if (inherits(bls_obj, "bls_data")) {
     diag <- bls_obj$diagnostics
     warnings <- if (!is.null(diag)) diag$warnings else character(0)
-    summary <- list(data_type = "Single File", files_downloaded = 1, 
-                    files_with_issues = length(warnings) > 0, 
+    summary <- list(data_type = "Single File", files_downloaded = 1,
+                    files_with_issues = length(warnings) > 0,
                     total_warnings = length(warnings))
     diagnostics <- list("Single File" = diag)
   } else {
     if (!silent) message("No diagnostic information available\n")
     return(invisible(character(0)))
   }
-  
+
   if (length(warnings) == 0) {
     if (!silent) message("No warnings for", summary$data_type, "data download\n")
     return(invisible(character(0)))
   }
-  
+
   if (!silent) {
     message(summary$data_type, "Data Download Warnings:\n")
     message(paste(rep("=", nchar(summary$data_type) + 25), collapse = ""), "\n")
@@ -147,7 +147,7 @@ print_bls_warnings <- function(bls_obj, detailed = FALSE, silent = FALSE) {
       message("Final data dimensions:", paste(summary$final_dimensions, collapse = " x "), "\n")
     }
     message("\n")
-    
+
     if (detailed && length(diagnostics) > 0) {
       message("Detailed Diagnostics:\n")
       for (file_name in names(diagnostics)) {
@@ -169,21 +169,21 @@ print_bls_warnings <- function(bls_obj, detailed = FALSE, silent = FALSE) {
         message("  ", i, ". ", warnings[i], "\n")
       }
     }
-    
+
     if (!detailed && length(diagnostics) > 1) {
       message("\nRun with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details\n")
     }
   }
-  
+
   return(invisible(warnings))
 }
 
 #' Check if BLS data object has potential issues with import.
 #'
 #' @param bls_obj A BLS data object
-#' 
+#'
 #' @return Logical indicating if there were any import issues detected.
-#' 
+#'
 #' @export
 has_bls_issues <- function(bls_obj) {
   if (inherits(bls_obj, "bls_data_collection")) {
@@ -198,33 +198,33 @@ has_bls_issues <- function(bls_obj) {
 
 
 #' Helper function for downloading and tracking BLS files
-#' 
+#'
 #' This function is used to pass multiple URLs at the Bureau of Labor Statistics into 'fread_bls()'
 #'
 #' @param urls Named character vector of URLs to download
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
-#' 
+#'
 #' @return Named list of bls_data objects
-#' 
+#'
 #' @export
 download_bls_files <- function(urls, suppress_warnings = TRUE) {
-  
+
   results <- list()
-  
+
   for (name in names(urls)) {
     if (!suppress_warnings) message("Downloading", name, "...\n")
-    
+
     result <- fread_bls(urls[[name]])  # Use [[]] instead of []
-    
+
     # Check for issues
     if (has_bls_issues(result)) {
       if (!suppress_warnings) {
         print_bls_warnings(result, silent = FALSE)
       }
     }
-    
+
     results[[name]] <- result
   }
-  
+
   return(results)
 }

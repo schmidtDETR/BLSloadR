@@ -39,7 +39,7 @@ show_ces_options()
 ```
 
 ```{r helper-national}
-# Explore national CES options  
+# Explore national CES options
 show_national_ces_options()
 ```
 
@@ -133,7 +133,7 @@ Let's create a simple analysis using the national data:
 recent_employment <- ces_seasonal |>
   filter(
     data_type_text == "All employees, thousands, seasonally adjusted",
-    supersector_name %in% c("Total nonfarm", "Manufacturing", "Construction", 
+    supersector_name %in% c("Total nonfarm", "Manufacturing", "Construction",
                            "Professional and business services", "Government"),
     date >= as.Date("2020-01-01")
   ) |>
@@ -172,13 +172,13 @@ performance_data <- data.frame(
     "Multiple states (6 states)",
     "Single industry (Retail)",
     "Current year only",
-    "National - Complete dataset", 
+    "National - Complete dataset",
     "National - Seasonally adjusted",
     "National - Real earnings"
   ),
   "Typical Size" = c(
     "~5.6M rows",
-    "~210K rows", 
+    "~210K rows",
     "~608K rows",
     "~317K rows",
     "~5.6M rows",
@@ -189,7 +189,7 @@ performance_data <- data.frame(
   "Download Time" = c(
     "60+ seconds",
     "3.5 seconds",
-    "9.8 seconds", 
+    "9.8 seconds",
     "5.2 seconds",
     "64+ seconds",
     "60+ seconds",
@@ -249,7 +249,7 @@ Select the most appropriate dataset for your needs:
 quick_national <- get_national_ces(dataset_filter = "current_seasonally_adjusted")
 
 # For wage analysis
-wage_data <- get_national_ces(dataset_filter = "real_earnings_all_employees") 
+wage_data <- get_national_ces(dataset_filter = "real_earnings_all_employees")
 
 # For state comparisons
 state_data <- get_ces(states = c("CA", "TX", "NY", "FL"))
@@ -309,7 +309,7 @@ raw_data <- get_ces(
 The enhanced `get_ces()` and `get_national_ces()` functions provide:
 
 - **90%+ reduction** in download times through smart filtering
-- **Flexible options** for states, industries, and time periods  
+- **Flexible options** for states, industries, and time periods
 - **Consistent API** design across both functions
 - **Helper functions** for easy discovery of available options
 - **Comprehensive documentation** and examples

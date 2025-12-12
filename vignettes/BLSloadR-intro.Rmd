@@ -52,16 +52,16 @@ Within the functions to retrieve specific data sets there are a few common argum
 
 The CES functions include several powerful filtering options for improved performance:
 
-### `get_ces()` Filtering Options  
+### `get_ces()` Filtering Options
 -   `states` - Vector of state abbreviations (e.g., `c("MA", "CT", "RI")`) to download only specific states
--   `industry_filter` - Single industry filter option (e.g., `"retail_trade"`, `"manufacturing"`) to focus on specific sectors  
+-   `industry_filter` - Single industry filter option (e.g., `"retail_trade"`, `"manufacturing"`) to focus on specific sectors
 -   `current_year_only = FALSE` - Set to `TRUE` to download only recent data (2006-present) instead of complete history
 
 ### `get_national_ces()` Dataset Options
 -   `dataset_filter` - Choose specialized national datasets:
     -   `"all_data"` (default) - Complete dataset with all series
     -   `"current_seasonally_adjusted"` - Only seasonally adjusted series (faster)
-    -   `"real_earnings_all_employees"` - Real earnings data for all employees  
+    -   `"real_earnings_all_employees"` - Real earnings data for all employees
     -   `"real_earnings_production"` - Real earnings data for production employees
 
 **Note**: These filtering options are mutually exclusive within each function - you cannot combine multiple filter types in a single function call.
@@ -72,7 +72,7 @@ The package includes several helper functions to assist with the enhanced CES fi
 
 ### CES Helper Functions
 -   `list_ces_states()` - Lists all available states and territories for state-level CES data filtering
--   `list_ces_industries()` - Lists available industry filtering options with optional descriptions  
+-   `list_ces_industries()` - Lists available industry filtering options with optional descriptions
 -   `show_ces_options()` - Provides a comprehensive overview of all CES filtering options with usage examples
 
 ### National CES Helper Functions
@@ -92,7 +92,7 @@ The enhanced CES functions provide significant performance improvements:
 
 For example:
 - Complete CES download: 60+ seconds for ~5.6M rows
-- Single state (MA): ~3.5 seconds for ~210K rows  
+- Single state (MA): ~3.5 seconds for ~210K rows
 - Seasonally adjusted national: ~3.7 seconds for ~392K rows
 
 ## Helper Functions in the Package
