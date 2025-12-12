@@ -10,7 +10,7 @@ list_ces_states()
 A character vector of available state/territory abbreviations
 }
 \description{
-Lists all available U.S. states and territories that can be used with the 
+Lists all available U.S. states and territories that can be used with the
 `states` parameter in `get_ces()` function.
 }
 \examples{

@@ -7,7 +7,7 @@
 show_ces_options()
 }
 \description{
-Displays a comprehensive overview of all filtering options available 
+Displays a comprehensive overview of all filtering options available
 for the `get_ces()` function, including states, industries, and usage examples.
 }
 \examples{
