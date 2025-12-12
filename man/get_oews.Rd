@@ -7,7 +7,8 @@
 get_oews(
   simplify_table = TRUE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  fast_read = TRUE
 )
 }
 \arguments{
@@ -18,6 +19,8 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
+
+\item{fast_read}{Logical.  If TRUE (default), derives lookup values directly from series_id to avoid reading the series file, to speed download process. With fast_read, the data can download in 17 seconds (depending on bandwidth).  Without fast_read, the same download takes 57 seconds.}
 }
 \value{
 By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,

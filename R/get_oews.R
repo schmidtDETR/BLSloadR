@@ -9,6 +9,7 @@
 #'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
+#' @param fast_read Logical.  If TRUE (default), derives lookup values directly from series_id to avoid reading the series file, to speed download process. With fast_read, the data can download in 17 seconds (depending on bandwidth).  Without fast_read, the same download takes 57 seconds.
 #'
 #' @return By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics. The columns in the returned data frame when `simplify_table = TRUE` are listed below.  Unless otherwise specified, all data is returned as a character string to preserve the value of leading and trailing zeroes.
@@ -31,8 +32,7 @@
 #'     
 #'   }
 #' @export
-#'   
-#' @export
+#'
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr left_join
@@ -54,7 +54,17 @@
 #'}
 #'
 
-get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_diagnostics = FALSE) {
+get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_diagnostics = FALSE, fast_read = TRUE) {
+  
+  if(fast_read){
+    download_urls <- c(
+      "data" = "https://download.bls.gov/pub/time.series/oe/oe.data.0.Current",
+      "occupation" = "https://download.bls.gov/pub/time.series/oe/oe.occupation",
+      "area" = "https://download.bls.gov/pub/time.series/oe/oe.area",
+      "datatype" = "https://download.bls.gov/pub/time.series/oe/oe.datatype"
+    )
+    
+  } else {
   
   # Define all URLs we need to download
   download_urls <- c(
@@ -64,18 +74,40 @@ get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_dia
     "area" = "https://download.bls.gov/pub/time.series/oe/oe.area",
     "datatype" = "https://download.bls.gov/pub/time.series/oe/oe.datatype"
   )
+  }
   
   # Download all files
   downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings)
   
   # Extract data from downloads
   oews_current <- get_bls_data(downloads$data)
-  oews_series <- get_bls_data(downloads$series)
+  if(!fast_read){
+    oews_series <- get_bls_data(downloads$series)
+  }
   oews_occupation <- get_bls_data(downloads$occupation)
   oews_area <- get_bls_data(downloads$area)
   oews_datatype <- get_bls_data(downloads$datatype)
   
-  # Join all the data together
+  if(fast_read){
+    oews <- oews_current |> 
+      dplyr::select(-footnote_codes) |>
+      dplyr::mutate(
+        seasonal = substr(series_id,3,3),
+        areatype_code = substr(series_id,4,4),
+        area_code = substr(series_id,5,11),
+        industry_dcode = substr(series_id,12,17),
+        occupation_code = substr(series_id,18,23),
+        datatype_code = substr(series_id,24,25)
+      ) |> 
+      dplyr::left_join(oews_occupation, by = "occupation_code") |>
+      dplyr::left_join(oews_area, by = c("areatype_code", "area_code")) |>
+      dplyr::left_join(oews_datatype, by = "datatype_code") |>
+      dplyr::mutate(value = as.numeric(value))
+
+      } else {
+  
+  
+  # Join all the data together -- No fast_read
   oews <- oews_current |> 
     dplyr::select(-footnote_codes) |>
     dplyr::left_join(oews_series, by = "series_id") |>
@@ -84,17 +116,36 @@ get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_dia
     dplyr::left_join(oews_datatype, by = "datatype_code") |>
     dplyr::mutate(value = as.numeric(value))
   
+  }
+  
   # Track processing steps
-  processing_steps <- c(
+  if(fast_read){
+    processing_steps <- c(
+      "Derived join columns from series_id.",
+      "Joined occupation, area, and datatype metadata",
+      "Converted values to numeric"
+    )
+    } else {
+      processing_steps <- c(
     "Joined series, occupation, area, and datatype metadata",
     "Converted values to numeric"
   )
+    }
   
   if(simplify_table){
-    oews <- oews |> 
-      dplyr::select(-c(period, sector_code, footnote_codes, begin_year, begin_period, end_year, end_period, selectable, sort_sequence, display_level))
+    
+    if(fast_read){
+      oews <- oews |> 
+        dplyr::select(-c(period, selectable, sort_sequence, display_level))
+      
+      processing_steps <- c(processing_steps, "Removed columns per simplify_table.")
+      
+    } else {
+      oews <- oews |> 
+        dplyr::select(-c(period, sector_code, footnote_codes, begin_year, begin_period, end_year, end_period, selectable, sort_sequence, display_level))
     
     processing_steps <- c(processing_steps, "Removed columns per simplify_table.")
+    }
   }
   
   # Create the BLS data collection object
