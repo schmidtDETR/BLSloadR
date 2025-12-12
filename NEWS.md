@@ -1,3 +1,4 @@
+
 # BLSloadR 0.3.0
 
 ## Major Enhancements
@@ -15,6 +16,12 @@
   - Up to 95% faster downloads with specialized datasets
   - Enhanced documentation with performance notes
 
+* **`get_qcew()`** - New function designed to access the Quarterly Census of Employment and Wages(QCEW):
+  - Get quarterly or annual data for one year or multiple years.
+  - Append area and industry definitions to the data.
+  - QCEW represents highly detailed data across counties, combined areas, states and national regions.
+  - Includes detailed employment and wage data.
+
 ### New Helper Functions
 
 * **CES Discovery Functions**:
@@ -26,6 +33,10 @@
   - `list_national_ces_options()` - List national dataset filter options
   - `show_national_ces_options()` - Usage guide for national CES datasets
 
+* **QCEW Lookup Tables included**:
+  - `area_lookup` data table has details on QCEW area codes to pre-filter data requests.
+  - `ind_lookup` data table has details on NAICS codes used in QCEW files.
+
 ### Infrastructure Improvements
 
 * Fixed URL parameter passing in `download_bls_files()` (downloads[['key']] vs downloads$key)
@@ -36,6 +47,7 @@
 ### Documentation and Vignettes
 
 * New comprehensive vignette: "Working with CES Data: Enhanced Features and Performance"
+* New article on working with OEWS data.
 * Updated main package vignette with enhanced CES capabilities
 * Complete function documentation regeneration
 * Performance comparison tables and best practices
@@ -45,6 +57,6 @@
 * Parameter `show_warnings` changed to `suppress_warnings` in `get_national_ces()` for consistency
 * Enhanced parameter validation may catch previously ignored invalid inputs
 
-# BLSloadR 0.1.5
+# BLSloadR 0.2
 
-* Initial CRAN submission.
+* Initial CRAN release.
