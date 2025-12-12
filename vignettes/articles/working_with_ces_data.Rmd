@@ -86,7 +86,7 @@ print(head(unique(ces_retail$industry_text), 10))
 For the most recent data only:
 
 ```{r ces-current, eval=TRUE}
-# Get only current year data (2006 to present)
+# Get recent data (2006 to present)
 ces_current <- get_ces(
   current_year_only = TRUE,
   suppress_warnings = FALSE
