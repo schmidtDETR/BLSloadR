@@ -76,7 +76,7 @@ nrow(western_states)
 
 ```
 
-Even narrowing to just state-level data in the Western United States, we sill have over 100,000 rows of data, because OEWS represents several different data types as individual rows. We can pivot this data to better reflect each discrete occupation/area combination as a single row, with columns providing descriptions of that data. To do this, we need to drop the series_id and series_title, as these uniquely identify the area, occupation, and data type and so interfere with pivoting the data. While we're at it, we'll remove some columns which do not have unique values at the state and substate levels. Let's clean this up!
+Even narrowing to just state-level data in the Western United States, we sill have over 100,000 rows of data, because OEWS represents several different data types as individual rows. We can pivot this data to better reflect each discrete occupation/area combination as a single row, with columns providing descriptions of that data. To do this, we need to drop the series_id, as this uniquely identifies the area, occupation, and data type and so interfere with pivoting the data. While we're at it, we'll remove some columns which do not have unique values at the state and substate levels. Let's clean this up!
 
 ```{r organize-statewide-data}
 
@@ -86,7 +86,7 @@ unique(western_states$areatype_code)
 unique(western_states$state_code)
 
 western_states <- western_states |> 
-  select(-series_id, -series_title, -seasonal, -industry_code, -areatype_code, -area_code, -datatype_code) |> 
+  select(-series_id, -seasonal, -industry_code, -areatype_code, -area_code, -datatype_code) |> 
   pivot_wider(names_from = datatype_name, values_from = value)
 
 head(western_states)
