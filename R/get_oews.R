@@ -95,7 +95,7 @@ get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_dia
         seasonal = substr(series_id,3,3),
         areatype_code = substr(series_id,4,4),
         area_code = substr(series_id,5,11),
-        industry_dcode = substr(series_id,12,17),
+        industry_code = substr(series_id,12,17),
         occupation_code = substr(series_id,18,23),
         datatype_code = substr(series_id,24,25)
       ) |> 
