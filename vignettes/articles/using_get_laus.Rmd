@@ -94,7 +94,7 @@ bls_ts <- bls_state_table |>
 
 #### Unemployment Rate Chart
 
-```{r ur-ranking}
+```{r ur-ranking fig.alt="A bar chart showing the ranking of unemployment rates by state."}
 bls_current |> 
   filter(measure == "ur") |> 
   ggplot() +
@@ -109,7 +109,7 @@ bls_current |>
 
 #### Labor Force Participation Rate Chart
 
-```{r lfpr-ranking}
+```{r lfpr-ranking fig.alt="A bar chart showing the ranking of labor force participation rates by state."}
 bls_current |> 
   filter(measure == "lfpr") |> 
   ggplot() +
@@ -123,7 +123,7 @@ bls_current |>
 
 #### Unemployment Rate Over Time
 
-```{r ur-ribbon}
+```{r ur-ribbon fig.alt="A ribbon and line chart showing Nevada's unemployment rate compared to the central range of other states."}
 bls_ts |>
   filter(measure == "ur") |> 
   ggplot(aes(x = date)) +
@@ -144,7 +144,7 @@ bls_ts |>
 
 #### Labor Force Participation Rate Over Time
 
-```{r lfpr-ribbon}
+```{r lfpr-ribbon fig.alt="A ribbon and line chart showing Nevada's labor force participation rate compared to the central range of other states."}
 bls_ts |>
   filter(measure == "lfpr") |> 
   ggplot(aes(x = date)) +

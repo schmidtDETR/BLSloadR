@@ -26,7 +26,7 @@ If specified, downloads this industry for all states (2007-present).
 Cannot be combined with states or current_year_only.
 Use `list_ces_industries()` to see all available industry filters.}
 
-\item{current_year_only}{Logical. If TRUE, downloads the current year file 
+\item{current_year_only}{Logical. If TRUE, downloads the current year file
 which contains all states and industries for recent years (2006-present).
 Cannot be combined with states or industry_filter. If FALSE (default), uses other parameters.}
 
@@ -36,7 +36,7 @@ and removes ", In Thousands" from data type labels.}
 
 \item{monthly_only}{Logical. If TRUE (default), filters out annual data (period M13).}
 
-\item{simplify_table}{Logical. If TRUE (default), removes excess columns and creates 
+\item{simplify_table}{Logical. If TRUE (default), removes excess columns and creates
 a date column from Year and Period in the original data.}
 
 \item{suppress_warnings}{Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
@@ -70,7 +70,7 @@ Puerto Rico = "PR", Virgin Islands = "VI", District of Columbia = "DC".
 \itemize{
   \item "total_nonfarm" - Total non-farm employment summary
   \item "total_private" - Private sector totals (2007-present)
-  \item "manufacturing" - Manufacturing sector (2007-present)  
+  \item "manufacturing" - Manufacturing sector (2007-present)
   \item "construction" - Construction sector (2007-present)
   \item "retail_trade" - Retail trade sector (2007-present)
   \item "government" - Government sector (2007-present)
@@ -82,7 +82,7 @@ Puerto Rico = "PR", Virgin Islands = "VI", District of Columbia = "DC".
 # Fast download: Massachusetts and Connecticut data only (all industries)
 ces_states <- get_ces(states = c("MA", "CT"))
 
-# Fast download: Manufacturing data for all states  
+# Fast download: Manufacturing data for all states
 ces_manufacturing <- get_ces(industry_filter = "manufacturing")
 
 # Fast download: Current year data for all states and industries

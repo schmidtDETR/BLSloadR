@@ -7,15 +7,15 @@
 list_ces_industries(show_descriptions = FALSE)
 }
 \arguments{
-\item{show_descriptions}{Logical. If TRUE, returns a data frame with 
+\item{show_descriptions}{Logical. If TRUE, returns a data frame with
 filter names and descriptions. If FALSE, returns just the filter names.}
 }
 \value{
-A character vector of industry filter names, or a data frame 
+A character vector of industry filter names, or a data frame
   with names and descriptions if show_descriptions = TRUE
 }
 \description{
-Lists all available industry categories that can be used with the 
+Lists all available industry categories that can be used with the
 `industry_filter` parameter in `get_ces()` function. These filters allow
 you to download specific industry data instead of the complete dataset.
 }
