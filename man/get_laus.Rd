@@ -92,10 +92,7 @@ laus_states <- get_laus()
 unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 
 # Download unadjusted state data
-laus_states_unadjusted <- get_laus("state_unadjusted")
-
-# Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
-laus_metro <- get_laus("metro", transform = FALSE)
+laus_states_unadjusted <- get_laus(geography = "state_unadjusted")
 
 # Get full diagnostic object if needed
 laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
