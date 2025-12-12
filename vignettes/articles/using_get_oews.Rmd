@@ -159,7 +159,7 @@ western_states |>
 
 Seeing that different states have different wage levels and employment concentrations for Fast Food Cooks, let's explore this data a little more. First, lets take a quick look at wage levels. In order to use the wage levels in my ggplot as an aesthetic, I'll pivot the data longer again.
 
-```{r fast-food-wage-chart fig.alt = "A group of column charts comparing wage levels from fast food cooks across western states."}
+```{r fast-food-wage-chart, fig.alt = "A group of column charts comparing wage levels from fast food cooks across western states."}
 western_states |> 
   filter(occupation_name == "Cooks, Fast Food") |> 
   select(area_name, `Hourly 10th percentile wage`, `Hourly 25th percentile wage`, `Hourly median wage`, `Hourly 75th percentile wage`, `Hourly 90th percentile wage`) |> 
@@ -175,7 +175,7 @@ western_states |>
   theme(axis.text.x = element_text(angle = 90),
         legend.position = "none")
 ```
-```{r fast-food-wage-map fig.alt = "A map comparing median wages for fast food cooks in local areas across the Estern United States."}
+```{r fast-food-wage-map, fig.alt = "A map comparing median wages for fast food cooks in local areas across the Estern United States."}
 western_metros |> 
   filter(occupation_name == "Cooks, Fast Food",
          datatype_name == "Hourly median wage") |> 
