@@ -1,7 +1,7 @@
 Package: BLSloadR
 Type: Package
 Title: Download Time Series Data from the U.S. Bureau of Labor Statistics
-Version: 0.3
+Version: 0.3.1
 Authors@R: c(
     person(
     given = "Nevada Department of Employment, Training, and Rehabilitation",
