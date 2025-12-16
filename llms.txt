@@ -50,7 +50,7 @@ Note that only current-year data is available for OEWS in this database,
 as it is not built as a time series.
 
 \-[`get_salt()`](https://schmidtdetr.github.io/BLSloadR/reference/get_salt.md) -
-This data is not actually loated within the time.series folder, but
+This data is not actually located within the time.series folder, but
 instead is sourced from <https://www.bls.gov/lau/stalt.htm>. These
 Alternative Measures of Labor Underutilization for States are 12-month
 averages built from CPS data which provide more expansive or restrictive

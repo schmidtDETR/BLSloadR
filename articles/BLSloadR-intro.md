@@ -58,7 +58,7 @@ listed below:
   visit <https://www.bls.gov/oes/>.
 
 - [`get_salt()`](https://schmidtdetr.github.io/BLSloadR/reference/get_salt.md) -
-  This data is not actually loaded within the time.series folder, but
+  This data is not actually located within the time.series folder, but
   instead is sourced from <https://www.bls.gov/lau/stalt.htm>. These
   *Alternative Measures of Labor Underutilization for States* are
   12-month averages built from CPS data which provide more expansive or

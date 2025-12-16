@@ -1,5 +1,20 @@
 # Changelog
 
+## BLSloadR 0.3.1 patch notes
+
+### Function Enhancements
+
+- [`load_bls_dataset()`](https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.md):
+  - Added the `which_data` argument to this function, which allows use
+    of this function in a pipeline without needing manual entry in the
+    console for any BLS datasets which have exactly 1 series file and at
+    most 1 aspect file.
+
+### Documentation Enhancements
+
+- Corrected typos for
+  [`get_salt()`](https://schmidtdetr.github.io/BLSloadR/reference/get_salt.md)
+
 ## BLSloadR 0.3.0
 
 ### Major Enhancements

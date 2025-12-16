@@ -127,7 +127,7 @@ ces_monthly <- get_national_ces()
 #> Joining CES datasets...
 #> National CES data download complete!
 #> Dataset: Complete national CES dataset
-#> Final dataset dimensions: 7793626 x 14
+#> Final dataset dimensions: 7837406 x 14
 
 # Get only seasonally adjusted data (faster download)
 ces_seasonal <- get_national_ces(dataset_filter = "current_seasonally_adjusted")
@@ -135,7 +135,7 @@ ces_seasonal <- get_national_ces(dataset_filter = "current_seasonally_adjusted")
 #> Joining CES datasets...
 #> National CES data download complete!
 #> Dataset: Seasonally adjusted all-employee series
-#> Final dataset dimensions: 392253 x 14
+#> Final dataset dimensions: 393937 x 14
 
 # Get real earnings data for all employees
 ces_real_earnings <- get_national_ces(dataset_filter = "real_earnings_all_employees")
@@ -143,7 +143,7 @@ ces_real_earnings <- get_national_ces(dataset_filter = "real_earnings_all_employ
 #> Joining CES datasets...
 #> National CES data download complete!
 #> Dataset: Real earnings for all employees
-#> Final dataset dimensions: 514016 x 14
+#> Final dataset dimensions: 518256 x 14
 
 # Get all data including annual averages with full metadata
 ces_full <- get_national_ces(dataset_filter = "all_data",
@@ -152,7 +152,7 @@ ces_full <- get_national_ces(dataset_filter = "all_data",
 #> Joining CES datasets...
 #> National CES data download complete!
 #> Dataset: Complete national CES dataset
-#> Final dataset dimensions: 8106467 x 23
+#> Final dataset dimensions: 8150247 x 23
 
 # Get data with warnings and diagnostic information displayed
 ces_with_warnings <- get_national_ces(suppress_warnings = FALSE)
@@ -167,7 +167,7 @@ ces_with_warnings <- get_national_ces(suppress_warnings = FALSE)
 #> No warnings forNational CES: Complete national CES datasetdata download
 #> National CES data download complete!
 #> Dataset: Complete national CES dataset
-#> Final dataset dimensions: 7793626 x 14
+#> Final dataset dimensions: 7837406 x 14
 
 # Get full diagnostic object if needed
 data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
@@ -175,7 +175,7 @@ data_with_diagnostics <- get_national_ces(return_diagnostics = TRUE)
 #> Joining CES datasets...
 #> National CES data download complete!
 #> Dataset: Complete national CES dataset
-#> Final dataset dimensions: 7793626 x 14
+#> Final dataset dimensions: 7837406 x 14
 print_bls_warnings(data_with_diagnostics)
 #> No warnings forNational CES: Complete national CES datasetdata download
 # }

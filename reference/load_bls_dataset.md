@@ -15,7 +15,8 @@ load_bls_dataset(
   database_code,
   return_full = FALSE,
   simplify_table = TRUE,
-  suppress_warnings = FALSE
+  suppress_warnings = FALSE,
+  which_data = NULL
 )
 ```
 
@@ -56,6 +57,22 @@ load_bls_dataset(
   Logical. If TRUE, suppress individual download warnings during
   processing.
 
+- which_data:
+
+  Character string or NULL. Defaults to NULL.
+
+  - "all" - Automatically selects the data file containing ".1.All"
+    (e.g., "bd.data.1.AllItems" or "le.data.1.AllData").
+
+  - "current" - Automatically selects the data file containing "Current"
+    (e.g., "ce.data.0.Current").
+
+  - NULL - Default behavior. Prompts the user to select a file if
+    multiple exist, or selects the single available file.
+
+  If the requested pattern is not found, the function falls back to the
+  default behavior.
+
 ## Value
 
 This function will return either a bls_data_collection object (if
@@ -65,7 +82,123 @@ data including the bls_data_collection object.
 ## Examples
 
 ``` r
+# \donttest{
+# Import All Data
+fm_import <- load_bls_dataset("fm", which_data = "all")
+#> Loading series file:fm.series
+#> Auto-selected 'all' file: fm.data.1.AllData
+#> No aspect files found in the BLS database directory.
+#> Downloadingfm.data.1.AllData...
+#> Downloadingfm.series...
+#> Single FileData Download Warnings:
+#> ====================================
+#> Total files downloaded:1
+#> Files with issues:TRUE
+#> Total warnings:2
+#> 
+#> Summary of warnings:
+#>   1. Phantom columns detected and cleaned: 1
+#>   2. Empty columns removed: 1
+#> Downloadingfm.chld...
+#> Downloadingfm.fchld...
+#> Downloadingfm.fdat...
+#> Downloadingfm.fhlf...
+#> Downloadingfm.fnmatwk...
+#> Downloadingfm.fnme...
+#> Downloadingfm.fnmlf...
+#> Downloadingfm.fnmu...
+#> Downloadingfm.fnmws...
+#> Downloadingfm.forig...
+#> Downloadingfm.frace...
+#> Downloadingfm.ftpt...
+#> Downloadingfm.ftyp...
+#> Downloadingfm.hhlf...
+#> Downloadingfm.lfst...
+#> Downloadingfm.mari...
+#> Downloadingfm.misclf...
+#> Downloadingfm.mwlf...
+#> Downloadingfm.orig...
+#> Downloadingfm.prlf...
+#> Downloadingfm.race...
+#> Downloadingfm.seasonal...
+#> Downloadingfm.sexs...
+#> Downloadingfm.tdat...
+#> Downloadingfm.wkst...
+#> Joining data to series file...
+#> Joining mapping file fm.chld on column: chld_code
+#> Joining mapping file fm.fchld on column: fchld_code
+#> Joining mapping file fm.fdat on column: fdat_code
+#> Joining mapping file fm.fhlf on column: fhlf_code
+#> Joining mapping file fm.fnmatwk on column: fnmatwk_code
+#> Joining mapping file fm.fnme on column: fnme_code
+#> Joining mapping file fm.fnmlf on column: fnmlf_code
+#> Joining mapping file fm.fnmu on column: fnmu_code
+#> Joining mapping file fm.fnmws on column: fnmws_code
+#> Joining mapping file fm.forig on column: forig_code
+#> Joining mapping file fm.frace on column: frace_code
+#> Joining mapping file fm.ftpt on column: ftpt_code
+#> Joining mapping file fm.ftyp on column: ftyp_code
+#> Joining mapping file fm.hhlf on column: hhlf_code
+#> Joining mapping file fm.lfst on column: lfst_code
+#> Joining mapping file fm.mari on column: mari_code
+#> Joining mapping file fm.misclf on column: misclf_code
+#> Joining mapping file fm.mwlf on column: mwlf_code
+#> Joining mapping file fm.orig on column: orig_code
+#> Joining mapping file fm.prlf on column: prlf_code
+#> Joining mapping file fm.race on column: race_code
+#> Skipping mapping file fm.seasonal - join column 'seasonal_code' not found in data
+#> Joining mapping file fm.sexs on column: sexs_code
+#> Joining mapping file fm.tdat on column: tdat_code
+#> Joining mapping file fm.wkst on column: wkst_code
+#> Simplifying table structure...
+#> 
+#> BLS-FMData Download Warnings:
+#> ===============================
+#> Total files downloaded:27
+#> Files with issues:1
+#> Total warnings:2
+#> Final data dimensions:35306 x 35
+#> 
+#> Summary of warnings:
+#>   1. fm.series : Phantom columns detected and cleaned: 1
+#>   2. fm.series : Empty columns removed: 1
+#> 
+#> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details
+#> 
+#> Use print_bls_warnings(result, detailed = TRUE) for detailed diagnostics
+
+# Get $data element
+fm_data <- fm_import$data
+
+# Filter to a Series
+# Families with Children Under 6 and No Employed Parent
+
+u6_no_emp <- fm_data |> 
+  dplyr::filter(series_title == "Total families with children under 6 - with no parent employed") |> 
+  dplyr:: select(year, value, fchld_text, fhlf_text, tdat_text)
+
+
+head(u6_no_emp)
+#>      year value                fchld_text          fhlf_text
+#>    <char> <num>                    <char>             <char>
+#> 1:   2009  2007 With own children under 6 Unemployed or NILF
+#> 2:   2010  2103 With own children under 6 Unemployed or NILF
+#> 3:   2011  2105 With own children under 6 Unemployed or NILF
+#> 4:   2012  1992 With own children under 6 Unemployed or NILF
+#> 5:   2013  1880 With own children under 6 Unemployed or NILF
+#> 6:   2014  1807 With own children under 6 Unemployed or NILF
+#>               tdat_text
+#>                  <char>
+#> 1: Numbers in thousands
+#> 2: Numbers in thousands
+#> 3: Numbers in thousands
+#> 4: Numbers in thousands
+#> 5: Numbers in thousands
+#> 6: Numbers in thousands
+# }
+
 if (FALSE) { # \dontrun{
+# Examples requiring manual intervention in the console
 # Download Employer Cost Index Data
 cost_index <- load_bls_dataset("ci")
 
@@ -79,5 +212,6 @@ productivity <- load_bls_dataset("mp", simplify_table = FALSE)
 if (has_bls_issues(cost_index)) {
   print_bls_warnings(cost_index, detailed = TRUE)
 }
+
 } # }
 ```

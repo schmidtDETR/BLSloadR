@@ -15,7 +15,7 @@ will prompt for an input of which file to use."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,8 @@ will prompt for an input of which file to use.</p>
 <span>  <span class="va">database_code</span>,</span>
 <span>  return_full <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  which_data <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,6 +97,13 @@ and generates a date column from the year and period columns in the data.</p></d
 <dt id="arg-suppress-warnings">suppress_warnings<a class="anchor" aria-label="anchor" href="#arg-suppress-warnings"></a></dt>
 <dd><p>Logical. If TRUE, suppress individual download warnings during processing.</p></dd>
 
+
+<dt id="arg-which-data">which_data<a class="anchor" aria-label="anchor" href="#arg-which-data"></a></dt>
+<dd><p>Character string or NULL. Defaults to NULL.</p><ul><li><p>"all" - Automatically selects the data file containing ".1.All" (e.g., "bd.data.1.AllItems" or "le.data.1.AllData").</p></li>
+<li><p>"current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").</p></li>
+<li><p>NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.</p></li>
+</ul><p>If the requested pattern is not found, the function falls back to the default behavior.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -105,7 +113,123 @@ and generates a date column from the year and period columns in the data.</p></d
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Import All Data</span></span></span>
+<span class="r-in"><span><span class="va">fm_import</span> <span class="op">&lt;-</span> <span class="fu">load_bls_dataset</span><span class="op">(</span><span class="st">"fm"</span>, which_data <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading series file:fm.series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Auto-selected 'all' file: fm.data.1.AllData</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No aspect files found in the BLS database directory.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.data.1.AllData...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.series...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Single FileData Download Warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ====================================</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. Phantom columns detected and cleaned: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. Empty columns removed: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.chld...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fchld...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fdat...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fhlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmatwk...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnme...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmu...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmws...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.forig...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.frace...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.ftpt...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.ftyp...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.hhlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.lfst...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.mari...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.misclf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.mwlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.orig...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.prlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.race...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.seasonal...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.sexs...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.tdat...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.wkst...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining data to series file...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.chld on column: chld_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fchld on column: fchld_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fdat on column: fdat_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fhlf on column: fhlf_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fnmatwk on column: fnmatwk_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fnme on column: fnme_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fnmlf on column: fnmlf_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fnmu on column: fnmu_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fnmws on column: fnmws_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.forig on column: forig_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.frace on column: frace_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.ftpt on column: ftpt_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.ftyp on column: ftyp_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.hhlf on column: hhlf_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.lfst on column: lfst_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.mari on column: mari_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.misclf on column: misclf_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.mwlf on column: mwlf_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.orig on column: orig_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.prlf on column: prlf_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.race on column: race_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping mapping file fm.seasonal - join column 'seasonal_code' not found in data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.sexs on column: sexs_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.tdat on column: tdat_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.wkst on column: wkst_code</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Simplifying table structure...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> BLS-FMData Download Warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ===============================</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:35306 x 35</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. fm.series : Phantom columns detected and cleaned: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. fm.series : Empty columns removed: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Use print_bls_warnings(result, detailed = TRUE) for detailed diagnostics</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get $data element</span></span></span>
+<span class="r-in"><span><span class="va">fm_data</span> <span class="op">&lt;-</span> <span class="va">fm_import</span><span class="op">$</span><span class="va">data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Filter to a Series</span></span></span>
+<span class="r-in"><span><span class="co"># Families with Children Under 6 and No Employed Parent</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">u6_no_emp</span> <span class="op">&lt;-</span> <span class="va">fm_data</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">series_title</span> <span class="op">==</span> <span class="st">"Total families with children under 6 - with no parent employed"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">value</span>, <span class="va">fchld_text</span>, <span class="va">fhlf_text</span>, <span class="va">tdat_text</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">u6_no_emp</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      year value                fchld_text          fhlf_text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;num&gt;                    &lt;char&gt;             &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   2009  2007 With own children under 6 Unemployed or NILF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   2010  2103 With own children under 6 Unemployed or NILF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   2011  2105 With own children under 6 Unemployed or NILF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   2012  1992 With own children under 6 Unemployed or NILF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   2013  1880 With own children under 6 Unemployed or NILF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:   2014  1807 With own children under 6 Unemployed or NILF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               tdat_text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: Numbers in thousands</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: Numbers in thousands</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: Numbers in thousands</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4: Numbers in thousands</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: Numbers in thousands</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: Numbers in thousands</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># Examples requiring manual intervention in the console</span></span></span>
 <span class="r-in"><span><span class="co"># Download Employer Cost Index Data</span></span></span>
 <span class="r-in"><span><span class="va">cost_index</span> <span class="op">&lt;-</span> <span class="fu">load_bls_dataset</span><span class="op">(</span><span class="st">"ci"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -119,6 +243,7 @@ and generates a date column from the year and period columns in the data.</p></d
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="has_bls_issues.html">has_bls_issues</a></span><span class="op">(</span><span class="va">cost_index</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="print_bls_warnings.html">print_bls_warnings</a></span><span class="op">(</span><span class="va">cost_index</span>, detailed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
