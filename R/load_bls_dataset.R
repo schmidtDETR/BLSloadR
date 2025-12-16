@@ -30,7 +30,7 @@
 #' 
 #' @param which_data Character string or NULL. Defaults to NULL.
 #'   \itemize{
-#'     \item "all" - Automatically selects the data file containing "AllData" (e.g., "ce.data.0.AllCESSeries").
+#'     \item "all" - Automatically selects the data file containing ".1.All" (e.g., "bd.data.1.AllItems" or "le.data.1.AllData").
 #'     \item "current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").
 #'     \item NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.
 #'   }
@@ -51,7 +51,26 @@
 #' @importFrom utils head
 #' 
 #' @examples
+#' \donttest{
+#' # Import All Data
+#' fm_import <- load_bls_dataset("fm", which_data = "all")
+#' 
+#' # Get $data element
+#' fm_data <- fm_import$data
+#' 
+#' # Filter to a Series
+#' # Families with Children Under 6 and No Employed Parent
+#' 
+#' u6_no_emp <- fm_data |> 
+#'   dplyr::filter(series_title == "Total families with children under 6 - with no parent employed") |> 
+#'   dplyr:: select(year, value, fchld_text, fhlf_text, tdat_text)
+#' 
+#' 
+#' head(u6_no_emp)
+#' }
+#' 
 #' \dontrun{
+#' # Examples requiring manual intervention in the console
 #' # Download Employer Cost Index Data
 #' cost_index <- load_bls_dataset("ci")
 #'
@@ -66,11 +85,6 @@
 #'   print_bls_warnings(cost_index, detailed = TRUE)
 #' }
 #' 
-#' # Automated pipeline example (uses "AllData" file)
-#' auto_data_all <- load_bls_dataset("le", which_data = "all")
-#' 
-#' # Automated pipeline example (uses "Current" file)
-#' auto_data_curr <- load_bls_dataset("le", which_data = "current")
 #' }
 
 load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE, suppress_warnings = FALSE, which_data = NULL) {
@@ -192,7 +206,7 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   if (!is.null(which_data)) {
     pattern <- NULL
     if (which_data == "all") {
-      pattern <- "AllData"
+      pattern <- ".1.All"
     } else if (which_data == "current") {
       pattern <- "Current"
     }
