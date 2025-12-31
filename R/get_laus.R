@@ -40,6 +40,7 @@
 #'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
+#' @param cache Logical.  If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'
 #' @return By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing LAUS data with the following key columns:
@@ -91,7 +92,7 @@
 #' }
 
 get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE, 
-                     suppress_warnings = TRUE, return_diagnostics = FALSE) {
+                     suppress_warnings = TRUE, return_diagnostics = FALSE, cache = FALSE) {
   
   # Define the URL mapping
   laus_urls <- list(
@@ -188,7 +189,7 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
   )
   
   # Download all files
-  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings)
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
   
   # Extract data from downloads
   laus_import <- get_bls_data(downloads$data)

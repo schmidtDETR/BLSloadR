@@ -4,27 +4,20 @@
 \alias{fread_bls}
 \title{Download BLS Time Series Data}
 \usage{
-fread_bls(url, verbose = FALSE)
+fread_bls(url, verbose = FALSE, cache = FALSE)
 }
 \arguments{
 \item{url}{Character string. URL to the BLS flat file}
 
-\item{verbose}{Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.}
+\item{verbose}{Logical. If TRUE, prints additional messages during file read and processing.}
+
+\item{cache}{Logical. If TRUE, uses local persistent caching.}
 }
 \value{
-A named list with two elements:
-   \describe{
-    \item{data}{A data.table with the results of passing the url contents to 'data.table::fread()' as a tab-delimited text file.}
-    \item{diagnostics}{A named list of diagnostics run when reading the file including column names, empty columns, cleaning applied to the file, the url, the column names and original and final dimensions of the data.}
-  }
+A named list with the data and diagnostics.
 }
 \description{
 This function downloads a tab-delimited BLS flat file, incorporating 
 diagnostic information about the file and returning an object with the
 bls_data class that can be used in the BLSloadR package.
-}
-\examples{
-\donttest{
-data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
-}
 }

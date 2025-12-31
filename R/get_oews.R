@@ -10,6 +10,7 @@
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #' @param fast_read Logical.  If TRUE (default), derives lookup values directly from series_id to avoid reading the series file, to speed download process. With fast_read, the data can download in 17 seconds (depending on bandwidth).  Without fast_read, the same download takes 57 seconds.
+#' @param cache Logical.  If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'
 #' @return By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics. The columns in the returned data frame when `simplify_table = TRUE` are listed below.  Unless otherwise specified, all data is returned as a character string to preserve the value of leading and trailing zeroes.
@@ -54,7 +55,7 @@
 #'}
 #'
 
-get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_diagnostics = FALSE, fast_read = TRUE) {
+get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_diagnostics = FALSE, fast_read = TRUE, cache = FALSE) {
   
   if(fast_read){
     download_urls <- c(
@@ -77,7 +78,7 @@ get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_dia
   }
   
   # Download all files
-  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings)
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
   
   # Extract data from downloads
   oews_current <- get_bls_data(downloads$data)
