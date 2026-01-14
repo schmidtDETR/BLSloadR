@@ -9,7 +9,7 @@ get_oews(
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
   fast_read = TRUE,
-  cache = FALSE
+  cache = check_bls_cache_env()
 )
 }
 \arguments{
