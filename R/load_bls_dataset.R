@@ -34,7 +34,9 @@
 #'     \item "current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").
 #'     \item NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.
 #'   }
-#'   If the requested pattern is not found, the function falls back to the default behavior.
+#'   If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.
+#'   
+#' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'  
 #' @returns This function will return either a bls_data_collection object (if return_full is FALSE or not provided)
 #'  or a named list of the returned data including the bls_data_collection object.
@@ -87,7 +89,7 @@
 #' 
 #' }
 
-load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE, suppress_warnings = FALSE, which_data = NULL) {
+load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE, suppress_warnings = FALSE, which_data = NULL, cache = check_bls_cache_env()) {
   
   # Validate inputs
   if (!is.character(database_code) || length(database_code) != 1) {
@@ -303,7 +305,7 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   }
   
   # Download all files using the new system
-  downloads <- download_bls_files(urls, suppress_warnings = suppress_warnings)
+  downloads <- download_bls_files(urls, suppress_warnings = suppress_warnings, cache = cache)
   
   # Extract data from downloads
   data_dt <- get_bls_data(downloads[[selected_data_file]])
