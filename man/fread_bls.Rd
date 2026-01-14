@@ -4,7 +4,7 @@
 \alias{fread_bls}
 \title{Download BLS Time Series Data}
 \usage{
-fread_bls(url, verbose = FALSE, cache = FALSE)
+fread_bls(url, verbose = FALSE, cache = check_bls_cache_env())
 }
 \arguments{
 \item{url}{Character string. URL to the BLS flat file}

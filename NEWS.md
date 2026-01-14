@@ -14,7 +14,9 @@ Because some BLS series update only infrequently, using a local file cache reduc
 
 ### Performance Improvements
 
-In addition to implementing a local file cache, some improvements have been made to the operation of `fread_bls()` behind the scenes to more efficiently check BLS files for issues like phantom columns. It is becoming evident that with the implementation of a local cache for files this is now the slowest part of the process, so future enhancements may include options to skip some of this processing for files where the BLS file structure is already known.
+In addition to implementing a local file cache, some improvements have been made to the operation of `fread_bls()` behind the scenes to more efficiently check BLS files for issues like phantom columns. It is becoming evident that with the implementation of a local cache for files this is now the slowest part of the process, so future enhancements may include options to skip some of this processing for files where the BLS file structure is already known and verified.
+
+### Documentation Updates
 
 # BLSloadR 0.3.1 patch notes
 

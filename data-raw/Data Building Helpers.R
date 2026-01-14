@@ -9,6 +9,7 @@ library(usethis)
 ind_lookup <- read_excel("data-raw/industry-titles.xlsx") |> 
   mutate(
     ind_level = case_when(
+      str_detect(industry_code, "-") ~ "NAICS 2-digit",
       !(substr(industry_code,1,2) == "10") ~ paste0("NAICS ",str_length(industry_code),"-digit"),
       industry_code == "10" ~ "Total",
       industry_code %in% c("101","102") ~ "Cluster",

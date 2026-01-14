@@ -379,3 +379,11 @@ bls_get_cache_dir <- function() {
   # Fallback to the same logic used in smart_bls_download
   return(normalizePath(tools::R_user_dir("BLSloadR", which = "cache"), mustWork = FALSE))
 }
+#' Check if Global Caching is Enabled via Environment Variable
+#' @keywords internal
+#' @return Logical value indicating if the environment variable USE_BLS_CACHE is one of TRUE, YES, or 1
+check_bls_cache_env <- function() {
+  val <- Sys.getenv("USE_BLS_CACHE", unset = "FALSE")
+  # Returns TRUE if user set it to "TRUE", "true", "1", or "yes"
+  return(toupper(val) %in% c("TRUE", "1", "YES"))
+}

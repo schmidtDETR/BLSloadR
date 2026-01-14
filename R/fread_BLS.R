@@ -11,7 +11,7 @@
 #' @export
 #' @importFrom httr GET stop_for_status content add_headers
 #' @importFrom data.table fread
-fread_bls <- function(url, verbose = FALSE, cache = FALSE) {
+fread_bls <- function(url, verbose = FALSE, cache = check_bls_cache_env()) {
   
   # --- 1. DATA ACQUISITION ---
   if (cache) {

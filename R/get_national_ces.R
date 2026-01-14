@@ -25,7 +25,7 @@
 #'   and diagnostics. If FALSE, displays warning output and diagnostic information.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
-#' @param cache Logical.  If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
+#' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'
 #' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics.
@@ -101,7 +101,7 @@
 #' @importFrom lubridate ym
 get_national_ces <- function(dataset_filter = "all_data", monthly_only = TRUE,
                              simplify_table = TRUE, suppress_warnings = TRUE,
-                             return_diagnostics = FALSE, cache = FALSE) {
+                             return_diagnostics = FALSE, cache = check_bls_cache_env()) {
 
   # Validate dataset_filter parameter
   valid_filters <- c("all_data", "current_seasonally_adjusted",

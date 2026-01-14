@@ -10,7 +10,7 @@ get_national_ces(
   simplify_table = TRUE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
-  cache = FALSE
+  cache = check_bls_cache_env()
 )
 }
 \arguments{

@@ -25,7 +25,7 @@
 #'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If FALSE (default), returns only the data. If TRUE,
 #'   returns the full bls_data_collection object with diagnostics.
-#' @param cache Logical. Defaults to FALSE.  If TRUE, attempts to download and use a local cache of the BLS files. New files are ownloaded when the server file is newer or different in size than the cached version.
+#' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'
 #' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics.
@@ -91,7 +91,7 @@
 #' }
 get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = FALSE,
                     transform = TRUE, monthly_only = TRUE, simplify_table = TRUE,
-                    suppress_warnings = TRUE, return_diagnostics = FALSE, cache = FALSE) {
+                    suppress_warnings = TRUE, return_diagnostics = FALSE, cache = check_bls_cache_env()) {
 
 
   # Define state-specific URLs mapping

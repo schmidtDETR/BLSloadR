@@ -5,7 +5,7 @@ Functions for downloading BLS flat files into R
 BLSloadR is a packages designed to streamline access to the time series database downloads from the U.S. Bureau of Labor Statistics, made available at https://download.bls.gov/pub/time.series/. It is focused on accessing series that are frequently used by states to get state-level estimates, but includes the `load_bls_dataset()` and `bls_overview()` functions to provide generalized access to the other databases at this website within an R environment.
 
 # Basic Usage
-BLSloadR can be installed from CRAN by running `install.packages("BLSloadR")`.
+BLSloadR can be installed from CRAN by running `install.packages("BLSloadR")`. The development version can be found on Github at https://github.com/schmidtDETR/BLSloadR. 
 
 The primary functions in this package all begin with get_ and are listed below:
 
@@ -18,6 +18,10 @@ The primary functions in this package all begin with get_ and are listed below:
 -`get_oews()` - This access the Occupational Employment and Wage Statistics (OEWS) data. This data provides survey-based estimates of employmen and wages by occupation at state and sub-state levels. This is the “OE” database. Note that only current-year data is available for OEWS in this database, as it is not built as a time series.
 
 -`get_salt()` - This data is not actually located within the time.series folder, but instead is sourced from https://www.bls.gov/lau/stalt.htm. These Alternative Measures of Labor Underutilization for States are 12-month averages built from CPS data which provide more expansive or restrictive definitions of unemployment to measure the labor force, known as U1 through U6. This function also includes the optional geometry argument. If set to TRUE, this will use `tigris::states()` and `tigris::shift_geometry()` to provide state polygons for convenient mapping of the output.
+
+-`get_jolts()` - This accesses data from the Job Openings and Labor Turnover Survey (JOLTS) which has both national and state data.  NOTE: Beginning in 2026, the BLS will discontinue publishing state JOLTS data on a monthly basis, moving to an annual release of data. This function will still pull data, but the frequency of state data will change. This is the "JT" database.
+
+-`get_qcew()` - This accesses data from the Quarterly Census of Employment and Wages (QCEW).  This is a very large data set, so access is filtered by area or industry.  This function iterates requesting single-quarter files via the BLS QCEW Data Slices tool at https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm.  This function was included beginning in version 0.3.1.
 
 # General BLS Time Series Functions
 These optional helper functions can aid the user of this package by providing ways to summarize and explore all the time.series databases. These functions are a bit different than the specific functions above, as they implement a general way to merge and import BLS time.series databases, but do not manually specify the data, series, and lookup files to be joined.  As such, they return a bls_data_collection object which includes the joined data as well as diagnostic results including dropped columns, unexpected join results, and other tools to help review the data before use.  Further, when multiple data or series files are present, the user is prompted to choose one, so these tools are not suitable for a typical piped script.
