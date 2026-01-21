@@ -46,7 +46,7 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 \item{return_diagnostics}{Logical. If FALSE (default), returns only the data. If TRUE,
 returns the full bls_data_collection object with diagnostics.}
 
-\item{cache}{Logical. Defaults to FALSE.  If TRUE, attempts to download and use a local cache of the BLS files. New files are ownloaded when the server file is newer or different in size than the cached version.}
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 By default, returns a data.table with CES data. If return_diagnostics = TRUE,

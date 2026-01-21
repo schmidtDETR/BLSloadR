@@ -39,7 +39,7 @@ and diagnostics. If FALSE, displays warning output and diagnostic information.}
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
 
-\item{cache}{Logical.  If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 By default, returns a data.table with CES data. If return_diagnostics = TRUE,

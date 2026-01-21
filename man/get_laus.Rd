@@ -52,7 +52,7 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
 
-\item{cache}{Logical.  If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
