@@ -12,7 +12,8 @@ get_ces(
   monthly_only = TRUE,
   simplify_table = TRUE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 
 \item{return_diagnostics}{Logical. If FALSE (default), returns only the data. If TRUE,
 returns the full bls_data_collection object with diagnostics.}
+
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 By default, returns a data.table with CES data. If return_diagnostics = TRUE,

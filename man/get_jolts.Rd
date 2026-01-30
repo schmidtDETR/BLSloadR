@@ -9,7 +9,8 @@ get_jolts(
   remove_regions = TRUE,
   remove_national = TRUE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
+
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 By default, returns a data.table with JOLTS data. If return_diagnostics = TRUE,

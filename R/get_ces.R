@@ -25,6 +25,7 @@
 #'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If FALSE (default), returns only the data. If TRUE,
 #'   returns the full bls_data_collection object with diagnostics.
+#' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'
 #' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics.
@@ -90,7 +91,7 @@
 #' }
 get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = FALSE,
                     transform = TRUE, monthly_only = TRUE, simplify_table = TRUE,
-                    suppress_warnings = TRUE, return_diagnostics = FALSE) {
+                    suppress_warnings = TRUE, return_diagnostics = FALSE, cache = check_bls_cache_env()) {
 
 
   # Define state-specific URLs mapping
@@ -246,7 +247,7 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
 
   # Download all files
   if(!suppress_warnings){message("Starting CES data download...\n")}
-  downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings)
+  downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings, cache = cache)
 
   # Extract data from downloads - handle multiple data files when downloading by states
   if (!is.null(states) && !current_year_only && is.null(industry_filter)) {

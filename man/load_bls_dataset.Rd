@@ -9,7 +9,8 @@ load_bls_dataset(
   return_full = FALSE,
   simplify_table = TRUE,
   suppress_warnings = FALSE,
-  which_data = NULL
+  which_data = NULL,
+  cache = check_bls_cache_env()
 )
 }
 \arguments{
@@ -41,7 +42,9 @@ and generates a date column from the year and period columns in the data.}
   \item "current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").
   \item NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.
 }
-If the requested pattern is not found, the function falls back to the default behavior.}
+If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.}
+
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 This function will return either a bls_data_collection object (if return_full is FALSE or not provided)

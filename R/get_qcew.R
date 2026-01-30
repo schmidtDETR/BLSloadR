@@ -214,9 +214,8 @@ get_qcew <- function(period_type = "quarter",
   for (yr in years) {
     for (qtr in quarters) {
       
-      # Construct the dynamic part of the URL based on input
+      # Construct the dynamic part of the URL
       if (!is.null(industry_code)) {
-        # BLS uses underscores instead of hyphens in URLs (e.g., 31-33 becomes 31_33)
         clean_code <- stringr::str_replace_all(industry_code, "-", "_")
         url_path <- paste(yr, qtr, "industry", paste0(clean_code, ".csv"), sep = "/")
       } else {
@@ -225,24 +224,32 @@ get_qcew <- function(period_type = "quarter",
       
       full_url <- paste(base_url, url_path, sep = "/")
       
-      # Display status message if not silent
       if (!silently) {
-        message(paste("Accessing:", full_url))
+        message("Accessing: ", full_url)
       }
       
       # Attempt to fetch data
       tryCatch({
-        # fread is efficient for direct URL CSV reading
-        # colClasses ensures industry_code is character to preserve formatting
-        temp_dt <- data.table::fread(full_url, 
-                                     showProgress = FALSE, 
-                                     colClasses = c("industry_code" = "character"))
+        # suppressWarnings hides the messy download.file output
+        temp_dt <- suppressWarnings(
+          data.table::fread(full_url, 
+                            showProgress = FALSE, 
+                            colClasses = c("industry_code" = "character"))
+        )
         
         data_list[[length(data_list) + 1]] <- temp_dt
         
       }, error = function(e) {
-        # Handle 404s (e.g., future quarters not yet released) silently or with a warning
-        warning(paste("Could not fetch data for:", full_url, "-", e$message))
+        # Determine the period label for the clean warning
+        period_label <- if(qtr == "a") "Annual" else paste0("Q", qtr)
+        
+        # Check if the error is a missing file (Status 404)
+        if (grepl("cannot open URL", e$message)) {
+          warning(paste(yr, period_label, "is not found (Status 404)"), call. = FALSE)
+        } else {
+          # Provide a clean warning for other types of errors
+          warning(paste("Error fetching", yr, period_label, ":", e$message), call. = FALSE)
+        }
       })
     }
   }
