@@ -11,7 +11,7 @@ and wage estimates by occupation and geographic area. Note that OEWS is a large 
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,8 @@ and wage estimates by occupation and geographic area. Note that OEWS is a large 
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  suppress_warnings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  fast_read <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  fast_read <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -79,6 +80,10 @@ with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
 
 <dt id="arg-fast-read">fast_read<a class="anchor" aria-label="anchor" href="#arg-fast-read"></a></dt>
 <dd><p>Logical.  If TRUE (default), derives lookup values directly from series_id to avoid reading the series file, to speed download process. With fast_read, the data can download in 17 seconds (depending on bandwidth).  Without fast_read, the same download takes 57 seconds.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.</p></dd>
 
 </dl></div>
     <div class="section level2">

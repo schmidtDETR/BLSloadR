@@ -15,7 +15,7 @@ will prompt for an input of which file to use."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,8 @@ will prompt for an input of which file to use.</p>
 <span>  return_full <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  which_data <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  which_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -102,7 +103,11 @@ and generates a date column from the year and period columns in the data.</p></d
 <dd><p>Character string or NULL. Defaults to NULL.</p><ul><li><p>"all" - Automatically selects the data file containing ".1.All" (e.g., "bd.data.1.AllItems" or "le.data.1.AllData").</p></li>
 <li><p>"current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").</p></li>
 <li><p>NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.</p></li>
-</ul><p>If the requested pattern is not found, the function falls back to the default behavior.</p></dd>
+</ul><p>If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -121,15 +126,6 @@ and generates a date column from the year and period columns in the data.</p></d
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No aspect files found in the BLS database directory.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.data.1.AllData...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.series...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Single FileData Download Warnings:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ====================================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:TRUE</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. Phantom columns detected and cleaned: 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. Empty columns removed: 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.chld...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fchld...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fdat...</span>
@@ -183,20 +179,7 @@ and generates a date column from the year and period columns in the data.</p></d
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.wkst on column: wkst_code</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Simplifying table structure...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> BLS-FMData Download Warnings:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ===============================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:27</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:35306 x 35</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. fm.series : Phantom columns detected and cleaned: 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. fm.series : Empty columns removed: 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Use print_bls_warnings(result, detailed = TRUE) for detailed diagnostics</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Download completed successfully with no issues detected.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get $data element</span></span></span>
 <span class="r-in"><span><span class="va">fm_data</span> <span class="op">&lt;-</span> <span class="va">fm_import</span><span class="op">$</span><span class="va">data</span></span></span>

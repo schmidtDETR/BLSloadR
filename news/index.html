@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,32 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4" id="blsloadr-04">BLSloadR 0.4<a class="anchor" aria-label="anchor" href="#blsloadr-04"></a></h2>
+<div class="section level3">
+<h3 id="functional-enhancements-0-4">Functional Enhancements<a class="anchor" aria-label="anchor" href="#functional-enhancements-0-4"></a></h3>
+<div class="section level4">
+<h4 id="local-file-cache-0-4">Local File Cache<a class="anchor" aria-label="anchor" href="#local-file-cache-0-4"></a></h4>
+<p>Because some BLS series update only infrequently, using a local file cache reduces demand for regularly re-downloading data from the BLS.</p>
+<ul><li>BLSloadR now includes optional local download and retention of files from the BLS. To preserve existing functionality, this is disabled by default. When enabled, BLSloadR checks the local cache for files and compares the date and size of the files to the BLS file to determine if a new file is needed.</li>
+<li>This introduces two new environment variables to help control file caching
+<ul><li>
+<code>BLS_CACHE_DIR</code> can be set to a file path to use as the BLSloadR cache folder. If this is not set, but caching is selected, the system will default to the path given by <code>tools::R_user_dir("BLSloadR", which = "cache")</code>
+</li>
+<li>
+<code>USE_BLS_CACHE</code> can be used to allow functions to default to using the cache, without needing to manually set an argument in each call.</li>
+</ul></li>
+<li>To use the file caching, either set the <code>cache=TRUE</code> argument in your function call or set the USE_BLS_CACHE environment variable to “TRUE”</li>
+</ul></div>
+<div class="section level4">
+<h4 id="performance-improvements-0-4">Performance Improvements<a class="anchor" aria-label="anchor" href="#performance-improvements-0-4"></a></h4>
+<p>In addition to implementing a local file cache, some improvements have been made to the operation of <code><a href="../reference/fread_bls.html">fread_bls()</a></code> behind the scenes to more efficiently check BLS files for issues like phantom columns. It is becoming evident that with the implementation of a local cache for files this is now the slowest part of the process, so future enhancements may include options to skip some of this processing for files where the BLS file structure is already known and verified.</p>
+</div>
+<div class="section level4">
+<h4 id="documentation-updates-0-4">Documentation Updates<a class="anchor" aria-label="anchor" href="#documentation-updates-0-4"></a></h4>
+</div>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="blsloadr-031-patch-notes">BLSloadR 0.3.1 patch notes<a class="anchor" aria-label="anchor" href="#blsloadr-031-patch-notes"></a></h2>
 <div class="section level3">

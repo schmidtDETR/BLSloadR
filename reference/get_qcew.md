@@ -395,16 +395,11 @@ For Annual files:
 # Includes industry/area descriptions and a date column by default
 dt_default <- get_qcew(industry_code = "10")
 #> Accessing: https://data.bls.gov/cew/data/api/2025/1/industry/10.csv
-#> Warning: Some columns are type 'integer64' but package bit64 is not installed. Those columns will print as strange looking floating point data. There is no need to reload the data. Simply install.packages('bit64') to obtain the integer64 print method and print the data again.
 #> Accessing: https://data.bls.gov/cew/data/api/2025/2/industry/10.csv
-#> Warning: cannot open URL 'https://data.bls.gov/cew/data/api/2025/2/industry/10.csv': HTTP status was '404 Not Found'
-#> Warning: Could not fetch data for: https://data.bls.gov/cew/data/api/2025/2/industry/10.csv - cannot open URL 'https://data.bls.gov/cew/data/api/2025/2/industry/10.csv'
 #> Accessing: https://data.bls.gov/cew/data/api/2025/3/industry/10.csv
-#> Warning: cannot open URL 'https://data.bls.gov/cew/data/api/2025/3/industry/10.csv': HTTP status was '404 Not Found'
-#> Warning: Could not fetch data for: https://data.bls.gov/cew/data/api/2025/3/industry/10.csv - cannot open URL 'https://data.bls.gov/cew/data/api/2025/3/industry/10.csv'
+#> Warning: 2025 Q3 is not found (Status 404)
 #> Accessing: https://data.bls.gov/cew/data/api/2025/4/industry/10.csv
-#> Warning: cannot open URL 'https://data.bls.gov/cew/data/api/2025/4/industry/10.csv': HTTP status was '404 Not Found'
-#> Warning: Could not fetch data for: https://data.bls.gov/cew/data/api/2025/4/industry/10.csv - cannot open URL 'https://data.bls.gov/cew/data/api/2025/4/industry/10.csv'
+#> Warning: 2025 Q4 is not found (Status 404)
 
 # Get annual data for Nevada (Code 32000) for 2023 without lookups or messages
 dt_year <- get_qcew(period_type = "year",
@@ -413,6 +408,5 @@ dt_year <- get_qcew(period_type = "year",
                     area_code = "32000",
                     add_lookups = FALSE,
                     silently = TRUE)
-#> Warning: Some columns are type 'integer64' but package bit64 is not installed. Those columns will print as strange looking floating point data. There is no need to reload the data. Simply install.packages('bit64') to obtain the integer64 print method and print the data again.
 # }
 ```

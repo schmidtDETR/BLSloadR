@@ -1,5 +1,43 @@
 # Changelog
 
+## BLSloadR 0.4
+
+### Functional Enhancements
+
+#### Local File Cache
+
+Because some BLS series update only infrequently, using a local file
+cache reduces demand for regularly re-downloading data from the BLS.
+
+- BLSloadR now includes optional local download and retention of files
+  from the BLS. To preserve existing functionality, this is disabled by
+  default. When enabled, BLSloadR checks the local cache for files and
+  compares the date and size of the files to the BLS file to determine
+  if a new file is needed.
+- This introduces two new environment variables to help control file
+  caching
+  - `BLS_CACHE_DIR` can be set to a file path to use as the BLSloadR
+    cache folder. If this is not set, but caching is selected, the
+    system will default to the path given by
+    `tools::R_user_dir("BLSloadR", which = "cache")`
+  - `USE_BLS_CACHE` can be used to allow functions to default to using
+    the cache, without needing to manually set an argument in each call.
+- To use the file caching, either set the `cache=TRUE` argument in your
+  function call or set the USE_BLS_CACHE environment variable to “TRUE”
+
+#### Performance Improvements
+
+In addition to implementing a local file cache, some improvements have
+been made to the operation of
+[`fread_bls()`](https://schmidtdetr.github.io/BLSloadR/reference/fread_bls.md)
+behind the scenes to more efficiently check BLS files for issues like
+phantom columns. It is becoming evident that with the implementation of
+a local cache for files this is now the slowest part of the process, so
+future enhancements may include options to skip some of this processing
+for files where the BLS file structure is already known and verified.
+
+#### Documentation Updates
+
 ## BLSloadR 0.3.1 patch notes
 
 ### Function Enhancements

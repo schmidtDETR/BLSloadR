@@ -14,7 +14,8 @@ get_jolts(
   remove_regions = TRUE,
   remove_national = TRUE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
 )
 ```
 
@@ -47,6 +48,12 @@ get_jolts(
 
   Logical. If TRUE, returns a bls_data_collection object with full
   diagnostics. If FALSE (default), returns just the data table.
+
+- cache:
+
+  Logical. Uses USE_BLS_CACHE environment variable, or defaults to
+  FALSE. If TRUE, will download a cached file from BLS server and update
+  cache if BLS server indicates an updated file.
 
 ## Value
 
@@ -121,6 +128,10 @@ The function performs several data transformations:
 # \donttest{
 # Download state-level JOLTS data (default - returns data directly)
 jolts_data <- get_jolts()
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 
 # Include national data with industry breakdowns
 jolts_national <- get_jolts(remove_national = FALSE)
@@ -131,19 +142,12 @@ jolts_national <- get_jolts(remove_national = FALSE)
 
 # Get full diagnostic object if needed
 jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 print_bls_warnings(jolts_with_diagnostics)
-#> JOLTSData Download Warnings:
-#> ==============================
-#> Total files downloaded:7
-#> Files with issues:1
-#> Total warnings:2
-#> Final data dimensions:318087 x 22
-#> 
-#> Summary of warnings:
-#>   1. series : Phantom columns detected and cleaned: 1
-#>   2. series : Empty columns removed: 1
-#> 
-#> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details
+#> No warnings forJOLTSdata download
 
 # View job openings by state for latest period
 job_openings <- jolts_data[dataelement_text == "Job openings" & 

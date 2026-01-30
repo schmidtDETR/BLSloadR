@@ -4,6 +4,8 @@
 
 - [`area_lookup`](https://schmidtdetr.github.io/BLSloadR/reference/area_lookup.md)
   : Area Lookup Tables (QCEW)
+- [`bls_get_cache_dir()`](https://schmidtdetr.github.io/BLSloadR/reference/bls_get_cache_dir.md)
+  : Get the current BLSloadR Cache Directory
 - [`bls_overview()`](https://schmidtdetr.github.io/BLSloadR/reference/bls_overview.md)
   : Display BLS Dataset Overview
 - [`create_bls_object()`](https://schmidtdetr.github.io/BLSloadR/reference/create_bls_object.md)
@@ -58,3 +60,5 @@
   : Show CES Data Filtering Options
 - [`show_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.md)
   : Show National CES Dataset Options and Usage Examples
+- [`smart_bls_download()`](https://schmidtdetr.github.io/BLSloadR/reference/smart_bls_download.md)
+  : Check and Download BLS File with Local Caching

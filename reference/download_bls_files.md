@@ -6,7 +6,7 @@ Statistics into 'fread_bls()'
 ## Usage
 
 ``` r
-download_bls_files(urls, suppress_warnings = TRUE)
+download_bls_files(urls, suppress_warnings = TRUE, cache = FALSE)
 ```
 
 ## Arguments
@@ -18,6 +18,10 @@ download_bls_files(urls, suppress_warnings = TRUE)
 - suppress_warnings:
 
   Logical. If TRUE, suppress individual download warnings
+
+- cache:
+
+  Logical. If TRUE, download and cache local copy of files.
 
 ## Value
 

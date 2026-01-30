@@ -52,6 +52,11 @@ ces_overview <- read_bls_text(
 
 # Display the first few lines
 head(ces_overview)
-#> [1] NA
+#> [1] "Current Employment Statistics: Employment, Hours, and Earnings--National (CE)          \r"
+#> [2] "     ce.txt  \r"                                                                          
+#> [3] "\r"                                                                                       
+#> [4] "Section Listing                                                                        \r"
+#> [5] "                                                                                       \r"
+#> [6] "1. Survey Definition                                                                   \r"
 # }
 ```

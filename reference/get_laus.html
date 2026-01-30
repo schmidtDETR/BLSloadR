@@ -17,7 +17,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,8 @@
 <span>  monthly_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  suppress_warnings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,6 +118,10 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 <dt id="arg-return-diagnostics">return_diagnostics<a class="anchor" aria-label="anchor" href="#arg-return-diagnostics"></a></dt>
 <dd><p>Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.</p></dd>
+
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.</p></dd>
 
 </dl></div>
     <div class="section level2">

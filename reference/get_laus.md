@@ -16,7 +16,8 @@ get_laus(
   monthly_only = TRUE,
   transform = TRUE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
 )
 ```
 
@@ -91,6 +92,12 @@ get_laus(
 
   Logical. If TRUE, returns a bls_data_collection object with full
   diagnostics. If FALSE (default), returns just the data table.
+
+- cache:
+
+  Logical. Uses USE_BLS_CACHE environment variable, or defaults to
+  FALSE. If TRUE, will download a cached file from BLS server and update
+  cache if BLS server indicates an updated file.
 
 ## Value
 

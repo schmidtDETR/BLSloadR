@@ -18,7 +18,8 @@ website within an R environment.
 # Basic Usage
 
 BLSloadR can be installed from CRAN by running
-`install.packages("BLSloadR")`.
+`install.packages("BLSloadR")`. The development version can be found on
+Github at <https://github.com/schmidtDETR/BLSloadR>.
 
 The primary functions in this package all begin with get\_ and are
 listed below:
@@ -60,6 +61,21 @@ If set to TRUE, this will use
 [`tigris::states()`](https://rdrr.io/pkg/tigris/man/states.html) and
 [`tigris::shift_geometry()`](https://rdrr.io/pkg/tigris/man/shift_geometry.html)
 to provide state polygons for convenient mapping of the output.
+
+\-[`get_jolts()`](https://schmidtdetr.github.io/BLSloadR/reference/get_jolts.md) -
+This accesses data from the Job Openings and Labor Turnover Survey
+(JOLTS) which has both national and state data. NOTE: Beginning in 2026,
+the BLS will discontinue publishing state JOLTS data on a monthly basis,
+moving to an annual release of data. This function will still pull data,
+but the frequency of state data will change. This is the “JT” database.
+
+\-[`get_qcew()`](https://schmidtdetr.github.io/BLSloadR/reference/get_qcew.md) -
+This accesses data from the Quarterly Census of Employment and Wages
+(QCEW). This is a very large data set, so access is filtered by area or
+industry. This function iterates requesting single-quarter files via the
+BLS QCEW Data Slices tool at
+<https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm>.
+This function was included beginning in version 0.3.1.
 
 # General BLS Time Series Functions
 

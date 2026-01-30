@@ -13,7 +13,8 @@ get_oews(
   simplify_table = TRUE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
-  fast_read = TRUE
+  fast_read = TRUE,
+  cache = check_bls_cache_env()
 )
 ```
 
@@ -43,6 +44,12 @@ get_oews(
   series_id to avoid reading the series file, to speed download process.
   With fast_read, the data can download in 17 seconds (depending on
   bandwidth). Without fast_read, the same download takes 57 seconds.
+
+- cache:
+
+  Logical. Uses USE_BLS_CACHE environment variable, or defaults to
+  FALSE. If TRUE, will download a cached file from BLS server and update
+  cache if BLS server indicates an updated file.
 
 ## Value
 

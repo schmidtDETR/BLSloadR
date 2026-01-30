@@ -11,7 +11,7 @@ By default, all available areas, data types, and periods are included."></head><
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,8 @@ By default, all available areas, data types, and periods are included.</p>
 <span>  monthly_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  suppress_warnings <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  return_diagnostics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -111,6 +112,10 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 <dd><p>Logical. If FALSE (default), returns only the data. If TRUE,
 returns the full bls_data_collection object with diagnostics.</p></dd>
 
+
+<dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
+<dd><p>Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -145,12 +150,15 @@ Puerto Rico = "PR", Virgin Islands = "VI", District of Columbia = "DC".</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># Fast download: Massachusetts and Connecticut data only (all industries)</span></span></span>
 <span class="r-in"><span><span class="va">ces_states</span> <span class="op">&lt;-</span> <span class="fu">get_ces</span><span class="op">(</span>states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MA"</span>, <span class="st">"CT"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No download issues detected.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fast download: Manufacturing data for all states</span></span></span>
 <span class="r-in"><span><span class="va">ces_manufacturing</span> <span class="op">&lt;-</span> <span class="fu">get_ces</span><span class="op">(</span>industry_filter <span class="op">=</span> <span class="st">"manufacturing"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No download issues detected.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fast download: Current year data for all states and industries</span></span></span>
 <span class="r-in"><span><span class="va">ces_current</span> <span class="op">&lt;-</span> <span class="fu">get_ces</span><span class="op">(</span>current_year_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No download issues detected.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Complete dataset (slower - all states, industries, and years)</span></span></span>
 <span class="r-in"><span><span class="va">ces_all</span> <span class="op">&lt;-</span> <span class="fu">get_ces</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -158,27 +166,17 @@ Puerto Rico = "PR", Virgin Islands = "VI", District of Columbia = "DC".</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `value = as.numeric(value)`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> NAs introduced by coercion</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No download issues detected.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Download with full diagnostics if needed</span></span></span>
 <span class="r-in"><span><span class="va">ces_result</span> <span class="op">&lt;-</span> <span class="fu">get_ces</span><span class="op">(</span>states <span class="op">=</span> <span class="st">"MA"</span>, return_diagnostics <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No download issues detected.</span>
 <span class="r-in"><span><span class="va">ces_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_bls_data.html">get_bls_data</a></span><span class="op">(</span><span class="va">ces_result</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Check for download issues</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="has_bls_issues.html">has_bls_issues</a></span><span class="op">(</span><span class="va">ces_result</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="print_bls_warnings.html">print_bls_warnings</a></span><span class="op">(</span><span class="va">ces_result</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> CESData Download Warnings:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ============================</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:210438 x 14</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. Series Metadata : Phantom columns detected and cleaned: 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. Series Metadata : Empty columns removed: 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

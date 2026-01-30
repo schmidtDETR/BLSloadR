@@ -16,7 +16,8 @@ load_bls_dataset(
   return_full = FALSE,
   simplify_table = TRUE,
   suppress_warnings = FALSE,
-  which_data = NULL
+  which_data = NULL,
+  cache = check_bls_cache_env()
 )
 ```
 
@@ -71,7 +72,13 @@ load_bls_dataset(
     multiple exist, or selects the single available file.
 
   If the requested pattern is not found, the function falls back to the
-  default behavior.
+  default behavior, prompting the user to select a file.
+
+- cache:
+
+  Logical. Uses USE_BLS_CACHE environment variable, or defaults to
+  FALSE. If TRUE, will download a cached file from BLS server and update
+  cache if BLS server indicates an updated file.
 
 ## Value
 
@@ -90,15 +97,6 @@ fm_import <- load_bls_dataset("fm", which_data = "all")
 #> No aspect files found in the BLS database directory.
 #> Downloadingfm.data.1.AllData...
 #> Downloadingfm.series...
-#> Single FileData Download Warnings:
-#> ====================================
-#> Total files downloaded:1
-#> Files with issues:TRUE
-#> Total warnings:2
-#> 
-#> Summary of warnings:
-#>   1. Phantom columns detected and cleaned: 1
-#>   2. Empty columns removed: 1
 #> Downloadingfm.chld...
 #> Downloadingfm.fchld...
 #> Downloadingfm.fdat...
@@ -152,20 +150,7 @@ fm_import <- load_bls_dataset("fm", which_data = "all")
 #> Joining mapping file fm.wkst on column: wkst_code
 #> Simplifying table structure...
 #> 
-#> BLS-FMData Download Warnings:
-#> ===============================
-#> Total files downloaded:27
-#> Files with issues:1
-#> Total warnings:2
-#> Final data dimensions:35306 x 35
-#> 
-#> Summary of warnings:
-#>   1. fm.series : Phantom columns detected and cleaned: 1
-#>   2. fm.series : Empty columns removed: 1
-#> 
-#> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details
-#> 
-#> Use print_bls_warnings(result, detailed = TRUE) for detailed diagnostics
+#> Download completed successfully with no issues detected.
 
 # Get $data element
 fm_data <- fm_import$data
