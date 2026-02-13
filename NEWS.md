@@ -1,4 +1,4 @@
-# BLSloadR 0.4
+# BLSloadR 0.4 patch notes
 
 ## Functional Enhancements
 
@@ -16,7 +16,13 @@ Because some BLS series update only infrequently, using a local file cache reduc
 
 In addition to implementing a local file cache, some improvements have been made to the operation of `fread_bls()` behind the scenes to more efficiently check BLS files for issues like phantom columns. It is becoming evident that with the implementation of a local cache for files this is now the slowest part of the process, so future enhancements may include options to skip some of this processing for files where the BLS file structure is already known and verified.
 
+Added `fast_read` option in `get_oews()` to improve function performance. This option pasrses the series_id within the data file instead of reading in the full series file in order to avoid redundant downloads.
+
 ### Documentation Updates
+
+-   Added vignette documenting use of file cache.
+
+-   Added article describing usage of `get_qcew()`
 
 # BLSloadR 0.3.1 patch notes
 

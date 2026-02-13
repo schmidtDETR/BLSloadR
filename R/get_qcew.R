@@ -191,7 +191,7 @@ get_qcew <- function(period_type = "quarter",
   }
   
   if (!is.null(industry_code) && !is.null(area_code)) {
-    stop("Please provide only one: industry_code OR area_code, not both.")
+    warning("Please provide only one: industry_code OR area_code, not both. Defaulting to use industry_code for all areas.")
   }
   
   # --- Setup Iteration Parameters ---
@@ -234,7 +234,8 @@ get_qcew <- function(period_type = "quarter",
         temp_dt <- suppressWarnings(
           data.table::fread(full_url, 
                             showProgress = FALSE, 
-                            colClasses = c("industry_code" = "character"))
+                            colClasses = c("industry_code" = "character",
+                                           "area_fips" = "character"))
         )
         
         data_list[[length(data_list) + 1]] <- temp_dt
