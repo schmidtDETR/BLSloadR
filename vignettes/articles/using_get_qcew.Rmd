@@ -1,0 +1,153 @@
+---
+title: "Working with QCEW Data"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,    # Hide download messages
+  warning = FALSE,    # Hide coercion warnings
+  fig.width = 9,
+  fig.height = 6
+)
+
+```
+
+```{r setup}
+library(dplyr)
+library(tidyr)
+library(gt)
+library(ggplot2)
+library(BLSloadR)
+```
+
+## General Concepts
+
+`BLSloadR` streamlines access to data from the U.S. Bureau of Labor Statistics. Its primary benefit is in providing data in a handy form so that it can be manipulated and used to compare data across areas, periods, and data types. One simple example includes using the data across areas to calculate percentiles for a particular data element to compare a single state to the range of experiences across other states.
+
+### General Usage of `get_qcew()`
+
+The Quarterly Census of Employment and Wages is the largest and most granular dataset accessible with `BLSloadR`. It is created from the unemployment insurance reports submitted each quarter by employers covered by the unemployment insurance program, and provides nearly-complete data about employment and wages in detailed industries within detailed geographic areas including states, counties, and metropolitan statistical areas. While programs like Current Employment Statistics (CES) and Local Area Unemployment Statistics (LAUS) rely on surveys, the underlying data for the QCEW is administrative records, making it more complete, but also slower to be produced.
+
+Data retrieved from the QCEW is pulled in a different manner than other data sources in `BLSloadR` because it streamlines accessing specific slices of data. The QCEW is a very large data product, so downloading the entire database would be prohibitively large. The BLS provides a method to access the data for a single quarter for a single area **or** a single industry. The `get_qcew()` function maintains the area **or** industry specification while requesting the sequence of all years between `year_start` and `year_end`. If not specified, both of these arguments will default to the year of the date 6 months prior to the system date.
+
+If an `industry_code` is provided, the function will return data for all available areas for that industry. If an `area_code` is provided, then the function will return data for all industries in that area.
+
+#### Available Industries
+
+QCEW data includes aggregations based on the North American Industrial Classification System (NAICS). NAICS codes are structured in a fixed structure, beginning with 2 digits and up to 6 digits, with each additional digit providing additional detail. For example, NAICS 72 is broad enough to include casino hotels, fast food restaurants, RV parks and more. But as we add digits, we can narrow the categories such that NAICS 721191 is Bed-and-Breakfast Inns, a much more detailed subset of businesses.
+
+-   NAICS 72 - Accommodation & Food Services
+
+    -   NAICS 721 - Accommodation
+
+        -   NAICS 7211 - Traveler Accommodation
+
+            -   NAICS 72119 - Other Traveler Accommodation
+
+                -   NAICS 721191 - Bed-and-Breakfast Inns
+
+A full list of industries from the most recent NAICS is included in the data provided with BLSloadR in the `ind_lookup` table. Note that NAICS codes change over time, and prior quarters are **not** revised to match current codes. The NAICS code for businesses is reviewed periodically and may change when the primary work activity of a business changes, or when the NAICS structure changes.
+
+```{r}
+ind_lookup |> 
+  filter(grepl("^72", industry_code)) |> 
+  head(10) |> 
+  knitr::kable()
+```
+
+#### Available Areas
+
+The areas available in `get_qcew()` range from small and detailed to national data
+
+```{r}
+unique_areas <- data.frame(area_type = unique(area_lookup$area_type))
+knitr::kable(unique_areas, caption = "Unique Area Types in QCEW Data")
+```
+
+The `area_lookup` table can be used to identify the code or which you want to pull data from the QCEW. It is possible to filter the table to narrower definitions, but caution should be used. For example, the Abilene-Sweetwater, TX Combined Statistical Area indicates that it is in Texas, but the `stfips` provided by the BLS is 00. This is because combined areas may span multiple states. The `specified_region` column was added to the BLS lookup to help provide a reference to these multi-state regions for filtering purposes. The `stfips` will only populate for state or county areas, as these are by definition entirely within one state.
+
+Comapre the following:
+
+```{r}
+area_lookup |> 
+  filter(stfips == "32") |> 
+  knitr::kable()
+```
+
+```{r}
+area_lookup |> 
+  filter(grepl("NV", specified_region)) |>  
+  knitr::kable()
+```
+
+#### Using the `add_lookups` Argument
+
+The `get_qcew()` function includes the `add_lookups` argument to join the `ind_lookup` and `area_lookup` tables to the results of the QCEW data retrieved from the BLS. This can make subsequent filtering and comparisons more convenient. For example, this lets us quickly look at the aggregates for Metal Ore Mining in Nevada.
+
+```{r}
+metal_ore_mining <- get_qcew(industry_code = "2122", year_start = 2024, year_end = 2024, add_lookups = TRUE)
+
+metal_ore_mining |>
+  filter(specified_region == "NV") |> 
+  head(20) |> 
+  knitr::kable()
+```
+
+### Working with QCEW Data
+
+#### Disclosed vs. Suppressed Data
+
+As we look at Metal Ore Mining in Nevada, it's apparent there is not a lot of data. The BLS suppresses data which is too specific and might reveal the details of individual businesses. In using the QCEW, we must remember that no data may not be the absence of data, but the absence of **releasable** data. We can use the `disclosure_code` columns in the returned data to help weed out these suppressed values, but they will tell us when there **is** data but it is not **released.**
+
+Let's look at Metal Ore Mining in Esmeralda County, Nevada:
+
+```{r}
+metal_ore_mining |> 
+  filter(area_fips == "32009") |> 
+  select(area_title, year, qtr, disclosure_code:avg_wkly_wage) |> 
+  knitr::kable()
+```
+
+Here we can see that in 2024, quarters 1-3 were suppressed, as the `disclosure_code` is "N" but quarter 4 is available. If we were to simply average the employment or wage data while ignoring this, we would get an average of 5-6 employees. Note that this can be true even for larger areas and businesses - if a large business represents too-large a share of an area, significant employment and wages may end up suppressed.
+
+#### Quarterly vs. Annual Data
+
+The QCEW is built from quarterly data, so the default type of data provided by `get_qcew()` is quarterly data. However, annual data is also available from the BLS - in some cases, this may simplify the analysis by removing seasonality and the need to look across multiple months within a quarter. To retrieve annual data, set `period_type = "year"` in your function call. Here, let's pull the annual data and then use it to see where the highest concentrations of businesses engaged in Metal Ore Mining are located:
+
+```{r}
+metal_ore_mining_annual <- get_qcew(industry_code = "2122", year_start = 2024, year_end = 2024, add_lookups = TRUE, period_type = "year")
+
+metal_ore_mining_annual |>
+  arrange(-lq_annual_avg_estabs) |>
+  head(5) |>
+  select(area_title, lq_annual_avg_estabs, annual_avg_estabs)
+```
+
+## Specific Applications of QCEW
+
+### Mapping QCEW
+
+Because QCEW data is built from a very deep administrative data set, it may be able to provide granular data which is unavailable from other surveys. The data within QCEW includes state, county, and metropolitan area aggregations, and can be combined with shapefiles available from the U.S. Census Bureau to map and explore data across the country. The example below uses the `tigris` package to access metropolitan area shapefiles using the `core_based_statistical_areas()` function, manipulates the unique identifiers provided in the QCEW data to match those in the Census data, and then maps the results using `mapgl::maplibre_view()`.
+
+```{r}
+library(mapgl)
+
+msa_shapes <- tigris::core_based_statistical_areas()
+
+ambulatory_services <- get_qcew(period_type = "year",
+                                year_start = 2024, year_end = 2024,
+                                industry_code = "621") |> 
+  filter(area_type %in% c("Metropolitan Statistical Area", "Micropolitan Statistical Area"),
+         disclosure_code != "N") |> 
+  mutate(GEOID = substr(area_fips,2,5),
+         GEOID = paste0(GEOID,"0")) |> 
+  left_join(msa_shapes, by = "GEOID") |> 
+  st_as_sf() |> 
+  select(area_title, annual_avg_wkly_wage, annual_avg_estabs, annual_avg_emplvl)
+
+maplibre_view(ambulatory_services, column = "annual_avg_wkly_wage")
+
+
+```
