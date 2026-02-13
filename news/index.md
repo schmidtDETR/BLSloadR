@@ -1,6 +1,6 @@
 # Changelog
 
-## BLSloadR 0.4
+## BLSloadR 0.4 patch notes
 
 ### Functional Enhancements
 
@@ -36,7 +36,18 @@ a local cache for files this is now the slowest part of the process, so
 future enhancements may include options to skip some of this processing
 for files where the BLS file structure is already known and verified.
 
+Added `fast_read` option in
+[`get_oews()`](https://schmidtdetr.github.io/BLSloadR/reference/get_oews.md)
+to improve function performance. This option pasrses the series_id
+within the data file instead of reading in the full series file in order
+to avoid redundant downloads.
+
 #### Documentation Updates
+
+- Added vignette documenting use of file cache.
+
+- Added article describing usage of
+  [`get_qcew()`](https://schmidtdetr.github.io/BLSloadR/reference/get_qcew.md)
 
 ## BLSloadR 0.3.1 patch notes
 

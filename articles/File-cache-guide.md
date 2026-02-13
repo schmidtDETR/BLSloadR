@@ -1,0 +1,88 @@
+# Using the BLSloadR File Cache
+
+``` r
+library(BLSloadR)
+```
+
+## Overview of BLS File Structure
+
+`BLSloadR` streamlines access to data from the U.S. Bureau of Labor
+Statistics (BLS). The primary source of this data is the BLS “flat
+files” which are published at
+<https://download.bls.gov/pub/time.series/>. This data is published as
+text files in the form of a relational database, with data organized
+into three main categories of file:
+
+1.  Data files, which contain the values associated with discrete data
+    series.
+2.  Series files, which link data files to a series of data lookup codes
+    via a series code.
+3.  Lookup files, which map the series lookup codes to descriptive
+    values.
+
+Some databases will use multiple data files that act as slices of the
+larger data set. Others use an “aspect” file to add additional
+dimensions to the data.
+
+## File Caching in BLSloadR
+
+This article discusses the implementation of a file cache for
+`BLSloadR`, which will optionally download files from the BLS to local
+storage to accomplish two goals:
+
+1.  Maintain a local copy of the data in case of network disruption.
+2.  Reduce network overhead when regularly accessing BLS data, more
+    frequently than the data is updated by BLS.
+
+To preserve existing functionality, file caching is not enabled by
+default in `BLSloadR`. There are two ways to use file caching - as a
+one-off argument in a supported function, or by setting the environment
+variable in your Renviron file. When file caching is enabled, `BLSloadR`
+will take the following steps:
+
+1.  View information about the remote files (size and last-modified
+    date)
+2.  Look for the corresponding file in your local cache
+
+If the local file does not exist, or is older or a different size than
+the BLS file, then a new file is downloaded to the cache and then read.
+Otherwise, the local file will be read. Functions currently supporting a
+file cache are:
+
+- [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
+
+- [`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md)
+
+- [`get_laus()`](https://schmidtdetr.github.io/BLSloadR/reference/get_laus.md)
+
+- [`get_oews()`](https://schmidtdetr.github.io/BLSloadR/reference/get_oews.md)
+
+- [`get_jolts()`](https://schmidtdetr.github.io/BLSloadR/reference/get_jolts.md)
+
+### Using File Cache Case-by-Case
+
+Supported functions in `BLSloadR` include the `cache` argument, which
+defaults to FALSE. Using the file cache on a case-by-case basis can be
+done by setting `cache=TRUE` in the function. Note that subsequent usage
+without setting the cache variable will ignore any cached files - in
+order to evaluate whether there are any cached files, the argument must
+be set to TRUE.
+
+### Enable Default File Caching
+
+In order to enable file caching by default, you can set an environment
+variable in your Renviron file, and add the following:
+`USE_BLS_CACHE="TRUE"`
+
+When file caching is enabled by default, you can still disable use of
+the cache on a temporary basis by using the cache argument within the
+supported functions: `cache=FALSE`
+
+### Controlling Cache Location
+
+The BLS file cache can be controlled with the `BLS_CACHE_DIR`
+environment variable. If this variable is not set but the cache is used,
+`BLSloadR` will use the folder location given by
+`tools::R_user_dir("BLSloadR", which = "cache")`. You can check the
+cache directory with the helper function
+[`bls_get_cache_dir()`](https://schmidtdetr.github.io/BLSloadR/reference/bls_get_cache_dir.md).

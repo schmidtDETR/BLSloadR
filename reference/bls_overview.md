@@ -40,254 +40,310 @@ argument.
 
 ``` r
 # \donttest{
-# Display labor force statistics overview
-bls_overview("ln")
+# Display Average Price Data overview
+bls_overview("ap")
 
 # Display consumer price index overview  
 bls_overview("cu")
 
 # Display in console instead of viewer
-bls_overview("ln", display_method = "console")
+bls_overview("ap", display_method = "console")
 #> 
-#> === BLS Dataset Overview: LN ===
-#> Source: https://download.bls.gov/pub/time.series/ln/ln.txt
+#> === BLS Dataset Overview: AP ===
+#> Source: https://download.bls.gov/pub/time.series/ap/ap.txt
 #> ================================================== 
 #> 
-#> LABOR FORCE STATISTICS FROM THE CURRENT POPULATION SURVEY (LN database)
-#>              ln.txt
+#>              Average Price Data (AP)
+#>                  ap.txt
 #> 
 #> Section Listing
 #> 
-#> 1. Survey Definition
-#> 2. Flat files listed in the survey directory.
-#> 3. Time series, series file, data file, & mapping file definitions and relationships
-#> 4. Series file format and field definitions
-#> 5. Data file format and field definitions
-#> 6. Mapping file formats and field definitions
+#> 1.  Survey Definition
+#> 2.  FTP files listed in the survey directory
+#> 3.  Time series, series file, data file, & mapping file definitions and relationships
+#> 4.  Series file format and field definitions
+#> 5.  Data file format and field definitions
+#> 6.  Mapping file formats and field definitions
+#> 7.  Data Element Dictionary
 #> 
+#> ===================================================================================
+#> Section 1
+#> ===================================================================================
 #> 
-#> ================================================================================
-#> Section 1 - Survey Definition
-#> ================================================================================
+#> The following is a definition of:  Average Price Data (AP)
 #> 
-#> The following is a definition of: LABOR FORCE STATISTICS FROM THE CURRENT POPULATION SURVEY (LN)
+#> Survey Description: Average consumer prices are calculated for household
+#> fuel, motor fuel, and food items from prices collected for the Consumer
+#> Price Index (CPI). Average prices are best used to measure the price level
+#> in a particular month, not to measure price change over time. It is more
+#> appropriate to use CPI index values for the particular item categories to measure
+#> price change.
 #> 
-#> Survey Description:   
+#> Prices, except for electricity, are collected monthly by BLS representatives
+#> in the 75 urban areas priced for the CPI.  Electricity prices are collected
+#> for the BLS for the same 75 areas on a monthly basis by the Department of
+#> Energy using mail questionnaires. All fuel prices include applicable
+#> Federal, State, and local taxes; prices for natural gas and electricity also
+#> include fuel and purchased gas adjustments.
 #> 
-#> The Current Population Survey (CPS) is a sample survey of the population 16 years of age and over.  
-#> The survey is conducted each month by the U.S. Census Bureau for the Bureau of Labor Statistics and provides 
-#> comprehensive data on the labor force, the employed, and the unemployed, classified by such characteristics 
-#> as age, sex, race, family relationship, marital status, occupation, and industry attachment.  The information 
-#> is collected by trained interviewers from a sample of about 60,000 households. Sample areas are chosen to 
-#> represent all counties and independent cities in the United States, with coverage in 50 States and the District of 
-#> Columbia.  The data collected are based on the activity or status reported for the calendar week including the 
-#> 12th of the month.  
+#> Summary Data Available: Average consumer prices for household fuel and
+#> motor fuel are available for the U.S. city average, 23 urban areas, 4
+#> regions, 12 region/size class groupings, and 9 divisions.
 #> 
-#> Summary Data Available: CPS data are available for the civilian, noninstitutional population age 16 
-#> and older and various detailed groups, with estimates available by age, race, sex, Hispanic or Latino
-#> ethnicity, employment status, occupation, industry, class of worker, educational attainment, telework status,
-#> and other characteristics.
+#> Average consumer prices for food are available for the U.S. city average, and
+#> four regions. 
 #> 
-#> Frequency of observations: CPS data are collected each month, and monthly estimates are presented in the Employment 
-#> Situation News Release. Some data series are available as quarterly or annual averages.
+#> Monthly data are available for up to 6 household fuel categories, 6
+#> motor fuel categories, and around 100 food categories.
 #> 
-#> Data characteristics: Data include counts (presented in thousands) and rates such as the unemploment
-#> rate, labor force participation rate, and employment-population ratio.
+#> Frequency of Observations: All data are monthly; annual averages are not
+#> available.
 #> 
-#> Updating schedule: Updates are available with the issuance of the monthly
-#> Employment Situation news release.
+#> Data Characteristics: Average prices are stored to three decimal places.
 #> 
+#> Updating Schedule: Updates become available with the monthly release of new data, typically from the 10th to the  14th of the month
+#> following the reference month.
+#> ====================================================================================
+#> Section 2
+#> ====================================================================================
+#> The following Average Price Data files are on the BLS internet in the sub-directory 
+#> pub/time.series/ap:
 #> 
-#> ================================================================================
-#> Section 2 - Flat files listed in the survey directory.
-#> ================================================================================
-#> 
-#> The following CPS labor force files are on the BLS internet in the 
-#> sub-directory pub/time.series/ln:
-#> 
-#>        ln.absn           - Absence codes             mapping file
-#>        ln.activity       - Activity codes                mapping file
-#>        ln.ages           - Age group codes               mapping file
-#>        ln.born           - Nativity/Citizenship codes        mapping file
-#>        ln.cert           - Certification codes           mapping file
-#>        ln.chld           - Presence of children codes        mapping file
-#>        ln.class          - Class of worker codes         mapping file
-#>        ln.data.1.AllData - All data              data file
-#>        ln.disa           - Disability codes              mapping file
-#>        ln.duration       - Duration codes                mapping file
-#>        ln.education      - Education codes           mapping file
-#>        ln.entr           - Entrance to labor force codes     mapping file
-#>        ln.expr           - Work experience codes         mapping file
-#>        ln.footnote       - Footnote codes            mapping file
-#>        ln.hheader        - Head of household codes       mapping file
-#>        ln.hour           - Hours worked codes            mapping file
-#>        ln.indy           - Industry codes            mapping file
-#>        ln.jdes           - Want a job codes          mapping file
-#>        ln.lfst           - Labor force status codes      mapping file
-#>        ln.look           - Job seeker codes          mapping file
-#>        ln.mari           - Marital status codes          mapping file
-#>        ln.mjhs           - Multiple jobholder codes      mapping file
-#>        ln.occupation         - Occupation codes          mapping file
-#>        ln.orig           - Hispanic or Latino origin codes   mapping file
-#>        ln.pcts           - Percentage codes          mapping file
-#>        ln.periodicity        - Periodicity codes         mapping file
-#>        ln.race           - Race codes                mapping file
-#>        ln.rjnw           - Absence reason codes          mapping file
-#>        ln.rnlf           - Job search codes          mapping file
-#>        ln.rwns           - Part time reason codes        mapping file
-#>        ln.seasonal       - Seasonal adjustment codes     mapping file
-#>        ln.seek           - Job seeker codes          mapping file
-#>        ln.series     - All series with beginning and end dates
-#>        ln.sexs           - Sex codes             mapping file
-#>        ln.tdat           - Data type codes           mapping file
-#>        ln.tlwk           - Telework codes            mapping file
-#>        ln.txt            - General information
-#>        ln.vets           - Veteran status codes          mapping file
-#>        ln.wkst           - Work status codes         mapping file
+#>  ap.data.0.Current       - All current year-to-date data
+#>  ap.data.1.HouseholdFuels    - All household fuels data
+#>  ap.data.2.Gasoline      - All gasoline data
+#>  ap.data.3.Food          - All food data
+#>  ap.area             - Area codes        mapping file
+#>  ap.contacts         - Contacts for ap survey  
+#>  ap.footnote         - Footnote codes    mapping file
+#>  ap.item             - Item codes        mapping file
+#>  ap.period           - Period codes      mapping file
+#>  ap.series           - All series and their beginning and end Dates
+#>  ap.txt              - General information
 #>  
-#> ================================================================================
-#> Section 3 - Time series, series file, data file, & mapping file definitions and relationships
-#> ================================================================================
+#> =================================================================================
+#> Section 3
+#> =================================================================================
 #> The definition of a time series, its relationship to and the interrelationship
 #> among series, data and mapping files is detailed below:
 #> 
 #> A time series refers to a set of data observed over an extended period of time
-#> over consistent time intervals (i.e. monthly, quarterly, semi-annually, annually).
-#> CPS time series data are available as monthly estimates, or as quarterly or annual averages.
-#> Not seasonally adjusted data are considered final when published. At the end of each calendar
-#> year, the Bureau of Labor Statistics (BLS) reestimates the seasonal factors for the CPS series 
-#> by including another full year of data in the estimation process. Following this annual reestimation, 
-#> BLS revises the historical seasonally adjusted data for the previous 5 years.
+#> over consistent time intervals (i.e. monthly, quarterly, semi-annually, annually).  
+#> BLS time series data are typically produced at monthly intervals and represent data 
+#> ranging from a specific consumer item in a specific geographical area whose price 
+#> is gathered monthly to a category of worker in a specific industry whose employment
+#> rate is being recorded monthly, etc.
 #> 
-#> The flat files are organized such that data users are provided with the following
+#> The FTP files are organized such that data users are provided with the following
 #> set of files to use in their efforts to interpret data files:
 #> 
-#> a)  a series file (only one series file per database)
+#> a)  a series file (only one series file per survey)
 #> b)  mapping files
 #> c)  data files
 #> 
-#> The series file contains series identification codes that serve to uniquely identify 
-#> time series within the database, along with their titles and attributes (age, sex, race, 
-#> occupation, industry, etc.). Additionally, the series file also contains the following 
-#> series-level information:
+#> The series file contains a set of codes which, together, compose a series 
+#> identification code that serves to uniquely identify a single time series.  
+#> Additionally, the series file also contains the following series-level information:
 #> 
 #> a) the period and year corresponding to the first data observation 
 #> b) the period and year corresponding to the most recent data observation 
-#> c) characteristics of the series corresponding to values in the mapping files
 #> 
-#> The mapping files are definition files that contain explanatory text 
-#> descriptions that correspond to information contained within the series file.
+#> The mapping files are definition files that contain explanatory text descriptions
+#> that correspond to each of the various codes contained within each series
+#> identification code.
 #> 
-#> The data file contains one line of data for each observation period pertaining 
-#> to a specific time series.  Each line contains a reference to the following:
+#> The data file contains one line of data for each observation period pertaining to a
+#> specific time series.  Each line contains a reference to the following:
 #> 
 #> a) a series identification code
 #> b) year in which data is observed
-#> c) period for which data is observed (M01 to M12 indicate monthly data, 
-#> A01 and M13 indicate annual averages, and Q01, Q01, Q03, Q04 indicate quarterly averages)
+#> c) period for which data is observed (M13, Q05, and S03 indicate annual averages)
 #> d) value
 #> e) footnote code (if available)
-#> 
-#> For series that have monthly data, M13 indicates annual averages. For series that do
-#> not have monthly data, A01 indicates annual averages.
-#> 
-#> ================================================================================
-#> Section 4 - Series file format and field definitions
-#> ================================================================================
-#> File Structure and Format: The following represents the file format used to 
-#> define ln.series. Note that the Field Numbers are for reference only; they do 
-#> not exist in the database. Data files are in ASCII text format. Data elements 
-#> are separated by tabs; the first record of each file contains the column headers 
-#> for the data elements stored in each field. Each record ends with a new line 
-#> character. 
+#> =================================================================================
+#> Section 4
+#> =================================================================================
+#> File Structure and Format: The following represents the file format used to define
+#> ap.series.  Note the Field Numbers are for reference only; they do not exist in the
+#> database.  Data files are in ASCII text format.  Data elements are separated by 
+#> spaces; the first record of each file contains the column headers for the data 
+#> elements stored in each field.  Each record ends with a new line character. 
 #> 
 #> Field #/Data Element Length      Value(Example)      
 #> 
-#> 1.  series_id          varies    LNU04000000
+#> 1.  series_id          17        APU0000701111
 #> 
-#>  Description of the components in the series ID 
+#> 2.  area_code           4        S100
 #> 
-#> 2.  prefix         2             LN
+#> 3.  item_code           7        712211
 #> 
-#> 3.  seasonal code      1     U
+#> 4.  begin_year          4        1980
 #> 
-#> 4.  series code        8     04000000
+#> 5.  begin_period    3        M01     
+#>              
+#> 6.  end_year        4        2002        
 #> 
-#>      
-#> In the LN database, series ID codes cannot be decoded to refer to specific data types by looking at 
-#> the value of different components of the series code. Series in the LN database have many characteristics 
-#> and representing them all within the series code would result in extremely long ID codes. The only meaningful 
-#> values are the initial positions where LNS identifies a seasonally adjusted series and LNU identifies a not 
-#> seasonally adjusted series. The other values in the series ID code cannot be broken down into meaningful 
-#> components. You must use the ln.series file to identify series.
+#> 7.  end_period          3        M02 
+#>                  
 #> 
-#> Additional fields in the Series file correspond to each of the mapping files and 
-#> information about the period for which the data series are defined.
+#> The series_id (APU0000701111) can be broken out into:
 #> 
-#> begin_year         4     1947
+#> Code                 Value(Example)
 #> 
-#> begin_period       3     M13
+#> survey abbreviation  =       AP
+#> seasonal(code)       =       U
+#> area_code        =       0000
+#> item_code        =       701111
+#> ==================================================================================
+#> Section 5
+#> ==================================================================================
+#> File Structure and Format: The following represents the file format used to define
+#> each data file. Note that the field numbers are for reference only; they do not 
+#> exist in the database.  Data files are in ASCII text format. Data elements are 
+#> separated by spaces; the first record of each file contains the column headers for 
+#> the data elements stored in each field. Each record ends with a new line character.  
 #> 
-#> end_year       4     2023
+#> The ap.data file is partitioned into four separate files:  
 #> 
-#> end_period         3     M10
+#>  1.  ap.data.0.Current       = All current year-to-date data
+#>  2.  ap.data.1.HouseholdFuels    = All household fuel (fuel oil,
+#>                    utility gas, electricity) data
+#>  3.  ap.data.2.Gasoline      = All gasoline data
+#>  4.  ap.data.3.Food      = All food data
 #> 
+#> Both of the above data files have the following format:
 #> 
+#> Field #/Data Element Length      Value(Example)      
 #> 
+#> 1. series_id       17        APU0000701111
 #> 
+#> 2. year             4        1980    
 #> 
-#> ================================================================================
-#> Section 5 - Data file format and field definitions
-#> ================================================================================
-#> Data File Structure and Format: The following represents the file format used to 
-#> define each data file. Note that the field numbers are for reference only; they 
-#> do not exist in the database. Data files are in ASCII text format. Data 
-#> elements are separated by tabs; the first record of each file contains the 
-#> column headers for the data elements stored in each field. Each record ends 
-#> with a new line character. 
+#> 3. period           3        M01     
 #> 
-#> The ln.data file is stored in one file:  
-#> 
-#>  1.  ln.data.1.AllData   - All data
-#> 
-#> The above data file has the following format:
-#> 
-#> Field #/Data Element Length      Value(Example)  
-#> 
-#> 1. series_id       varies    LNU04000000
-#> 
-#> 2. year             4        2023    
-#> 
-#> 3. period           3        M10 
-#> 
-#> 4. value       12        3.6 
+#> 4. value       12        0.238   
+#>               
 #> 
 #> 5. footnote_codes      10        It varies
+#>              
+#> 
+#> The series_id (APU0000701111) can be broken out into:
+#> 
+#> Code                 Value(Example)
+#> 
+#> survey abbreviation  =       AP
+#> seasonal(code)       =       U
+#> area_code        =       0000
+#> item_code        =       701111
+#> ============================================================================
+#> Section 6
+#> ============================================================================
+#> File Structure and Format: The following represents the file format used to define
+#> each mapping file. Note that the field numbers are for reference only; they do not
+#> exist in the database. Mapping files are in ASCII text format. Data elements are
+#> separated by tabs; the first record of each file contains the column headers for the
+#> data elements stored in each field. Each record ends with a new line character. 
+#> 
+#> File Name:  ap.area
+#> 
+#> Field #/Data Element     Length      Value(Example)
+#> 
+#> 1. area_code         4       A100
+#> 
+#> 2. area_name         80      Text
 #> 
 #> 
-#> =================================================================================
-#> Section 6 - Mapping file formats and field definitions
-#> =================================================================================
-#> Mapping File Structure and Format: The following represents the file format used to 
-#> define each mapping file. Note that the field numbers are for reference only; they 
-#> do not exist in the database. Mapping files are in ASCII text format. Data elements 
-#> are separated by tabs. The first record of each file contains the column headers 
-#> for the data elements stored in each field. Each record ends with a new line character. 
+#> File Name:  ap.footnote
 #> 
-#> Each mapping file follows a similar format:
+#> Field #/Data Element     Length      Value(Example)
 #> 
-#> Field #/Data Element     Length      Value (Example)
+#> 1. footnote_code     1       C
 #> 
-#> 1. characteristic code       varies      varies
-#> 
-#> 2. characteristic text       varies      varies
+#> 2. footnote_text     100     Text
 #> 
 #> 
-#> For example, the ln.ages mapping file contains
+#> File Name:  ap.item
 #> 
-#> 1. ages_code         2       00
+#> Field #/Data Element     Length      Value(Example)
 #> 
-#> 2. ages_text         17      16 years and over
+#> 1. item_code         7       712211
+#> 
+#> 2. item_name         100     Text
+#> 
+#> 
+#> File Name:  ap.period
+#> 
+#> Field #/Data Element     Length      Value(Example)
+#> 
+#> 1. period            3       M01
+#> 
+#> 2. period_abbr           5       JAN
+#> 
+#> 3. period_name           20      Text
+#> ==============================================================================
+#> Section 7
+#> ==============================================================================
+#> 
+#> AVERAGE PRICE DATA (AP) DATABASE ELEMENTS
+#> 
+#> 
+#> Data Element Length      Value(Example)          Description
+#> 
+#> area_code    4       A100            Unique code used to identify
+#>                          a specific geographic area.
+#> 
+#> area_name    80      Text            Name of specific geographic
+#>              Ex: MIAMI, FLA      area.
+#>              
+#> begin_period 3       M02         Identifies first data observation
+#>              Ex: M02=Feb     within the first year for which
+#>              (M=Monthly, M13=    data is available for a given time
+#>              Annual Avg)     series.                 
+#>                      
+#> begin_year   4       1990            Identifies first year for which
+#>                              data is available for a given time
+#>                          series.
+#>                      
+#> end_period   3       M06         Identifies last data observation 
+#>                  Ex: M06=June        within the last year for which
+#>              (M=Monthly, M13=    data is available for a given time
+#>              Annual Avg)     series.
+#>                      
+#> end_year 4       2000            Identifies last year for which data
+#>                              is available for a given time
+#>                          series.
+#>                          
+#> footnote_code    1       C           Identifies footnote for the data 
+#>                          series.
+#> 
+#> footnote_codes   10      It varies       Identifies footnotes for the data 
+#>                          series. 
+#>                          
+#> footnote_text    100     Text            Contains the text of the footnote.
+#> 
+#> item_code    7       712211          Identifies item for which
+#>                              data observations pertain.
+#> 
+#> item_name    100     Text            Full names of items.
+#>                  
+#> period_abbr  5       JAN         Abbreviation of period name.
+#>                      
+#> period       3       M01         Identifies period for which data 
+#>                  Ex: M01=Jan     is observed.
+#>              (M=Monthly, M13=    
+#>              Annual Avg)
+#>                  
+#> period_name  20      Text            Full name of period to which
+#>                  Ex: January     the data observation refers.
+#>              
+#> 
+#> series_id    17      APU0000701111       Code identifying the specific 
+#>                              series.
+#> 
+#> value        12      10.124          Average price of item.
+#>      
+#> year     4       1990            Identifies year of observation.         
+#>              
 #> 
 #> 
 #>  

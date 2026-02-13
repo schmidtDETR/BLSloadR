@@ -19,8 +19,10 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
+    <li><a class="dropdown-item" href="../articles/File-cache-guide.html">Using the BLSloadR File Cache</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_oews.html">Working with OEWS Data</a></li>
+    <li><a class="dropdown-item" href="../articles/using_get_qcew.html">Working with QCEW Data</a></li>
     <li><a class="dropdown-item" href="../articles/working_with_ces_data.html">Working with CES Data: Enhanced Features and Performance</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -39,7 +41,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4" id="blsloadr-04">BLSloadR 0.4<a class="anchor" aria-label="anchor" href="#blsloadr-04"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4" id="blsloadr-04-patch-notes">BLSloadR 0.4 patch notes<a class="anchor" aria-label="anchor" href="#blsloadr-04-patch-notes"></a></h2>
 <div class="section level3">
 <h3 id="functional-enhancements-0-4">Functional Enhancements<a class="anchor" aria-label="anchor" href="#functional-enhancements-0-4"></a></h3>
 <div class="section level4">
@@ -58,10 +60,13 @@
 <div class="section level4">
 <h4 id="performance-improvements-0-4">Performance Improvements<a class="anchor" aria-label="anchor" href="#performance-improvements-0-4"></a></h4>
 <p>In addition to implementing a local file cache, some improvements have been made to the operation of <code><a href="../reference/fread_bls.html">fread_bls()</a></code> behind the scenes to more efficiently check BLS files for issues like phantom columns. It is becoming evident that with the implementation of a local cache for files this is now the slowest part of the process, so future enhancements may include options to skip some of this processing for files where the BLS file structure is already known and verified.</p>
+<p>Added <code>fast_read</code> option in <code><a href="../reference/get_oews.html">get_oews()</a></code> to improve function performance. This option pasrses the series_id within the data file instead of reading in the full series file in order to avoid redundant downloads.</p>
 </div>
 <div class="section level4">
 <h4 id="documentation-updates-0-4">Documentation Updates<a class="anchor" aria-label="anchor" href="#documentation-updates-0-4"></a></h4>
-</div>
+<ul><li><p>Added vignette documenting use of file cache.</p></li>
+<li><p>Added article describing usage of <code><a href="../reference/get_qcew.html">get_qcew()</a></code></p></li>
+</ul></div>
 </div>
 </div>
     <div class="section level2">
