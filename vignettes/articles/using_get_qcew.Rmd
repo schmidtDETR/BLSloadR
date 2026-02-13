@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(tidyr)
 library(gt)
+library(sf)
 library(ggplot2)
 library(BLSloadR)
 ```
