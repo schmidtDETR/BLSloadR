@@ -2,7 +2,7 @@
 title: "Using the BLSloadR File Cache"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to BLSloadR}
+  %\VignetteIndexEntry{Using the BLSloadR File Cache}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

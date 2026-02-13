@@ -18,14 +18,14 @@
 #'
 #' @examples
 #' \donttest{
-#' # Display labor force statistics overview
-#' bls_overview("ln")
+#' # Display Average Price Data overview
+#' bls_overview("ap")
 #' 
 #' # Display consumer price index overview  
 #' bls_overview("cu")
 #' 
 #' # Display in console instead of viewer
-#' bls_overview("ln", display_method = "console")
+#' bls_overview("ap", display_method = "console")
 #' }
 bls_overview <- function(series_id, 
                          display_method = "viewer",
