@@ -2,6 +2,8 @@
 
 ## BLSloadR 0.4 patch notes
 
+CRAN release: 2026-02-13
+
 ### Functional Enhancements
 
 #### Local File Cache
