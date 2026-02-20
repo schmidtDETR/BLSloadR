@@ -22,17 +22,17 @@ Options include:
   \item "real_earnings_production" - Real earnings data for production employees
 }}
 
-\item{monthly_only}{Logical. If TRUE (default), excludes annual averages 
-(period "M13") and returns only monthly data. If FALSE, includes all 
+\item{monthly_only}{Logical. If TRUE (default), excludes annual averages
+(period "M13") and returns only monthly data. If FALSE, includes all
 periods including annual averages.}
 
-\item{simplify_table}{Logical. If TRUE (default), removes several metadata 
-columns (series_title, begin_year, begin_period, end_year, end_period, 
-naics_code, publishing_status, display_level, selectable, sort_sequence) 
-and adds a formatted date column. If FALSE, returns the full dataset 
+\item{simplify_table}{Logical. If TRUE (default), removes several metadata
+columns (series_title, begin_year, begin_period, end_year, end_period,
+naics_code, publishing_status, display_level, selectable, sort_sequence)
+and adds a formatted date column. If FALSE, returns the full dataset
 with all available columns.}
 
-\item{suppress_warnings}{Logical. If TRUE (default), suppresses download warnings 
+\item{suppress_warnings}{Logical. If TRUE (default), suppresses download warnings
 and diagnostics. If FALSE, displays warning output and diagnostic information.}
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
@@ -43,45 +43,45 @@ By default, returns a data.table with CES data. If return_diagnostics = TRUE,
   returns a bls_data_collection object containing data and comprehensive diagnostics.
 }
 \description{
-This function downloads and processes national Current Employment Statistics (CES) 
-data from the Bureau of Labor Statistics (BLS). It retrieves multiple related 
-datasets and joins them together to create a comprehensive employment statistics 
+This function downloads and processes national Current Employment Statistics (CES)
+data from the Bureau of Labor Statistics (BLS). It retrieves multiple related
+datasets and joins them together to create a comprehensive employment statistics
 dataset with industry classifications, data types, and time period information.
 }
 \details{
-The function can download one of four specialized national CES datasets based on 
+The function can download one of four specialized national CES datasets based on
 the dataset_filter parameter:
 \itemize{
-  \item all_data: Complete dataset (ce.data.0.AllCESSeries) - contains entire 
+  \item all_data: Complete dataset (ce.data.0.AllCESSeries) - contains entire
     history of all series currently published by the CES program
-  \item current_seasonally_adjusted: (ce.data.01a.CurrentSeasAE) - contains 
+  \item current_seasonally_adjusted: (ce.data.01a.CurrentSeasAE) - contains
     every seasonally adjusted all employee series and complete history
-  \item real_earnings_all_employees: (ce.data.02b.AllRealEarningsAE) - contains 
+  \item real_earnings_all_employees: (ce.data.02b.AllRealEarningsAE) - contains
     real earnings data (1982-84 dollars) for all employees
-  \item real_earnings_production: (ce.data.03c.AllRealEarningsPE) - contains 
+  \item real_earnings_production: (ce.data.03c.AllRealEarningsPE) - contains
     real earnings data (1982-84 dollars) for production/nonsupervisory employees
 }
 
 Additional metadata files are always downloaded and joined:
 \itemize{
   \item ce.series - Series metadata
-  \item ce.industry - Industry classifications  
+  \item ce.industry - Industry classifications
   \item ce.datatype - Data type definitions
   \item ce.period - Time period definitions
   \item ce.supersector - Supersector classifications
 }
 
-These datasets are joined together to provide context and labels for the 
-employment statistics. The function uses the enhanced `download_bls_files()` 
+These datasets are joined together to provide context and labels for the
+employment statistics. The function uses the enhanced `download_bls_files()`
 helper function for robust downloads with diagnostic reporting.
 
-Performance Note: Using specialized datasets (other than "all_data") can 
-significantly reduce download time and file size while still providing 
+Performance Note: Using specialized datasets (other than "all_data") can
+significantly reduce download time and file size while still providing
 comprehensive employment statistics.
 }
 \note{
-This function requires the following packages: dplyr, data.table, httr, and 
-lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()` 
+This function requires the following packages: dplyr, data.table, httr, and
+lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()`
 and `create_bls_object()` helper functions must be available in your environment.
 }
 \examples{
@@ -96,7 +96,7 @@ ces_seasonal <- get_national_ces(dataset_filter = "current_seasonally_adjusted")
 ces_real_earnings <- get_national_ces(dataset_filter = "real_earnings_all_employees")
 
 # Get all data including annual averages with full metadata
-ces_full <- get_national_ces(dataset_filter = "all_data", 
+ces_full <- get_national_ces(dataset_filter = "all_data",
                              monthly_only = FALSE, simplify_table = FALSE)
 
 # Get data with warnings and diagnostic information displayed

@@ -1,8 +1,8 @@
 ## R CMD check results
 
-BLSloadR 0.2 ────
+BLSloadR 0.2
 Duration: 5m 47.6s
-0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+0 errors | 0 warnings | 0 notes
 R CMD check succeeded
 
 * New package (3rd submission attempt)

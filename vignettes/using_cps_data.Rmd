@@ -1,0 +1,369 @@
+---
+title: "Working with Current Population Survey (CPS) Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with Current Population Survey (CPS) Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+```{r setup}
+library(BLSloadR)
+library(dplyr)
+library(ggplot2)
+```
+
+## Introduction
+
+The Bureau of Labor Statistics' Current Population Survey (LN series) contains comprehensive labor force statistics including employment, unemployment, and labor force participation data broken down by various demographic and economic characteristics.
+
+BLSloadR provides three complementary functions to make working with CPS data easier:
+
+1. **`explore_cps_characteristics()`** - Discover available demographic/economic filters
+2. **`explore_cps_series()`** - Search for specific series by keywords or characteristics
+3. **`get_cps_subset()`** - Retrieve the actual time series data
+
+This vignette demonstrates how to use these functions together to efficiently discover and analyze CPS data.
+
+## Basic Workflow
+
+### Step 1: Explore Available Characteristics
+
+Before filtering data, you need to know what characteristics are available and their valid codes.
+
+```{r}
+# List all available characteristics
+all_characteristics <- explore_cps_characteristics()
+head(all_characteristics, 10)
+```
+
+This returns a data frame showing:
+- `characteristic`: The name of the characteristic (e.g., "ages", "sexs", "education")
+- `code_column`: How it appears in filters (e.g., "ages_code", "sexs_code")
+- `description`: What the characteristic represents
+
+### Step 2: Examine Specific Characteristic Codes
+
+Once you identify a characteristic of interest, explore its valid codes:
+
+```{r}
+# See all valid sex/gender codes
+sex_codes <- explore_cps_characteristics("sexs")
+sex_codes
+#   sexs_code  sexs_text
+# 1         0 Both Sexes
+# 2         1        Men
+# 3         2      Women
+
+# See age group codes
+age_codes <- explore_cps_characteristics("ages")
+head(age_codes, 10)
+```
+
+### Step 3: Search for Relevant Series
+
+Use keywords and filters to find the specific series you need:
+
+```{r}
+# Simple keyword search
+unemployment_series <- explore_cps_series(
+  search = "unemployment rate",
+  max_results = 10
+)
+
+# Filter by demographics
+women_series <- explore_cps_series(
+  search = "unemployment rate",
+  characteristics = list(
+    sexs_code = "2",    # Women
+    ages_code = "00"    # 16 years and over
+  ),
+  seasonal = "S",       # Seasonally adjusted
+  max_results = 5
+)
+women_series[, c("series_id", "series_title")]
+```
+
+### Step 4: Retrieve the Data
+
+Once you've identified the series ID(s) you need, retrieve the data:
+
+```{r}
+# Get data for a specific series
+data <- get_cps_subset(
+  series_ids = "LNS14000002",  # Unemployment rate - Women
+  simplify_table = TRUE,
+  cache = TRUE
+)
+
+# View the data
+head(data$data)
+```
+
+## Practical Examples
+
+### Example 1: Comparing Unemployment by Sex
+
+```{r}
+# Step 1: Find unemployment rate series by sex
+unemployment_by_sex <- explore_cps_series(
+  search = "unemployment rate",
+  characteristics = list(ages_code = "00"),
+  seasonal = "S",
+  max_results = 10
+)
+
+# Filter to just the main series for each sex
+main_series <- unemployment_by_sex |>
+  filter(grepl("^(Seas) Unemployment Rate - (Men|Women)$", series_title))
+
+# Step 2: Get the data
+unemp_data <- get_cps_subset(
+  series_ids = main_series$series_id,
+  simplify_table = TRUE,
+  cache = TRUE
+)
+
+# Step 3: Analyze recent trends
+recent_data <- unemp_data$data |>
+  filter(year >= "2020") |>
+  select(date, value, series_title, sexs_text)
+
+# Plot comparison
+ggplot(recent_data, aes(x = date, y = value, color = sexs_text)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Unemployment Rate by Sex (2020-Present)",
+    x = "Date",
+    y = "Unemployment Rate (%)",
+    color = "Sex"
+  ) +
+  theme_minimal()
+```
+
+### Example 2: Education and Unemployment
+
+```{r}
+# Step 1: Explore education codes
+education_codes <- explore_cps_characteristics("education")
+
+# Focus on key education levels
+key_education <- education_codes |>
+  filter(education_code %in% c("11", "19", "40"))  # Less than HS, HS grad, Bachelor's+
+
+# Step 2: Search for unemployment series by education
+edu_series <- explore_cps_series(
+  search = "unemployment rate",
+  characteristics = list(
+    education_code = c("11", "19", "40"),
+    ages_code = "00"
+  ),
+  seasonal = "S",
+  max_results = 20
+)
+
+# Step 3: Get the data
+edu_unemployment <- get_cps_subset(
+  series_ids = edu_series$series_id,
+  simplify_table = TRUE,
+  cache = TRUE
+)
+
+# Step 4: Compare rates
+latest_rates <- edu_unemployment$data |>
+  filter(year == "2025") |>
+  group_by(education_text) |>
+  summarize(avg_rate = mean(value, na.rm = TRUE)) |>
+  arrange(avg_rate)
+
+latest_rates
+```
+
+### Example 3: Labor Force Participation Trends
+
+```{r}
+# Find labor force participation rate for women aged 25-54
+lfpr_series <- explore_cps_series(
+  search = "labor force participation rate",
+  characteristics = list(
+    sexs_code = "2",    # Women
+    ages_code = "33"    # 25-54 years
+  ),
+  seasonal = "S",
+  max_results = 5
+)
+
+# Get historical data
+lfpr_data <- get_cps_subset(
+  series_ids = lfpr_series$series_id[1],
+  simplify_table = TRUE,
+  cache = TRUE
+)
+
+# Analyze long-term trend
+ggplot(lfpr_data$data, aes(x = date, y = value)) +
+  geom_line(color = "steelblue", size = 1) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linetype = "dashed") +
+  labs(
+    title = "Labor Force Participation Rate: Women Aged 25-54",
+    subtitle = "Seasonally Adjusted",
+    x = "Year",
+    y = "Participation Rate (%)"
+  ) +
+  theme_minimal()
+```
+
+### Example 4: Demographic Deep Dive
+
+Analyze unemployment across multiple demographic dimensions:
+
+```{r}
+# Explore race codes
+race_codes <- explore_cps_characteristics("race")
+race_codes
+
+# Find unemployment data by race for young adults
+race_unemployment <- explore_cps_series(
+  search = "unemployment rate",
+  characteristics = list(
+    ages_code = "20",   # 20-24 years
+    race_code = c("01", "03", "04")  # White, Black, Asian
+  ),
+  seasonal = "S",
+  max_results = 20
+)
+
+# Get the data
+race_data <- get_cps_subset(
+  series_ids = race_unemployment$series_id,
+  simplify_table = TRUE,
+  cache = TRUE
+)
+
+# Compare recent rates
+race_data$data |>
+  filter(year >= "2023") |>
+  group_by(race_text) |>
+  summarize(
+    avg_rate = mean(value, na.rm = TRUE),
+    min_rate = min(value, na.rm = TRUE),
+    max_rate = max(value, na.rm = TRUE)
+  )
+```
+
+## Advanced Tips
+
+### Combining Multiple Filters
+
+You can combine search terms with multiple characteristic filters:
+
+```{r}
+# Find unemployment data for Hispanic women with some college
+specific_series <- explore_cps_series(
+  search = c("unemployment", "rate"),
+  characteristics = list(
+    sexs_code = "2",
+    orig_code = "04",     # Hispanic or Latino origin
+    education_code = "20"  # Some college or associate degree
+  ),
+  seasonal = "S"
+)
+```
+
+### Efficient Caching
+
+Use a persistent cache directory to avoid re-downloading data:
+
+```{r}
+# Set up a permanent cache location
+cache_location <- "C:/BLS_data_cache"
+
+# All three functions support caching
+characteristics <- explore_cps_characteristics("ages", cache_dir = cache_location)
+series <- explore_cps_series(search = "unemployment", cache_dir = cache_location)
+data <- get_cps_subset(series_ids = series$series_id[1], cache_dir = cache_location)
+```
+
+### Working with Multiple Series
+
+Retrieve data for many series at once:
+
+```{r}
+# Get data for multiple related series
+all_age_groups <- explore_cps_series(
+  search = "unemployment rate",
+  characteristics = list(sexs_code = "0"),  # Both sexes
+  seasonal = "S",
+  max_results = 50
+)
+
+# Filter to specific age breakdowns
+age_series <- all_age_groups |>
+  filter(grepl("yrs", series_title))
+
+# Get all data at once
+multi_series_data <- get_cps_subset(
+  series_ids = age_series$series_id,
+  simplify_table = TRUE,
+  cache = TRUE
+)
+```
+
+## Understanding the Data Structure
+
+The `get_cps_subset()` function returns a `bls_data_collection` object with several components:
+
+```{r}
+# Get sample data
+sample_data <- get_cps_subset(series_ids = "LNS14000000")
+
+# Access the data
+str(sample_data)
+
+# Main data table
+head(sample_data$data)
+
+# Download diagnostics
+sample_data$download_diagnostics
+
+# Processing summary
+sample_data$summary
+```
+
+## Best Practices
+
+1. **Start broad, then narrow**: Use `explore_cps_characteristics()` first to understand what's available
+
+2. **Use keyword search**: The `search` parameter in `explore_cps_series()` is very flexible - try different terms
+
+3. **Enable caching**: Set `cache = TRUE` (the default) to speed up repeated queries
+
+4. **Check data ranges**: Different series have different start/end dates - use `begin_year` and `end_year` columns
+
+5. **Simplify when possible**: Use `simplify_table = TRUE` to get clean, analysis-ready data with proper date columns
+
+6. **Review series titles**: Always check the `series_title` to ensure you're getting exactly what you want
+
+## Additional Resources
+
+- [BLS CPS Overview](https://www.bls.gov/cps/)
+- [BLS Labor Force Statistics](https://www.bls.gov/cps/tables.htm)
+- For other BLS datasets, see `vignette("BLSloadR-intro")`
+
+## Conclusion
+
+The CPS data discovery functions in BLSloadR make it easy to:
+
+- Discover what demographic breakdowns are available
+- Search for specific series without knowing exact IDs
+- Retrieve clean, analysis-ready data
+
+By combining `explore_cps_characteristics()`, `explore_cps_series()`, and `get_cps_subset()`, you can efficiently navigate the complex CPS dataset and focus on your analysis.

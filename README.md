@@ -7,13 +7,13 @@ BLSloadR is a packages designed to streamline access to the time series database
 # Basic Usage
 The primary functions in this package all begin with get_ and are listed below:
 
--`get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the “SM” database.
+-`get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the "SM" database.
 
--`get_national_ces()` - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the “CE” database.
+-`get_national_ces()` - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the "CE" database.
 
--`get_laus()` - This accesses data from the Local Area Unemployment Statistics (LAUS) program at a regional, state, and several sub-state levels. This is a localized version of the Current Population Survey (CPS) which is used to drive household-based estiamtes of employment and unemployment. This is the “LA” database. Note that because of the volume of data here, there are several different geographies that may be specified to pull the appropriate data file from BLS.
+-`get_laus()` - This accesses data from the Local Area Unemployment Statistics (LAUS) program at a regional, state, and several sub-state levels. This is a localized version of the Current Population Survey (CPS) which is used to drive household-based estiamtes of employment and unemployment. This is the "LA" database. Note that because of the volume of data here, there are several different geographies that may be specified to pull the appropriate data file from BLS.
 
--`get_oews()` - This access the Occupational Employment and Wage Statistics (OEWS) data. This data provides survey-based estimates of employmen and wages by occupation at state and sub-state levels. This is the “OE” database. Note that only current-year data is available for OEWS in this database, as it is not built as a time series.
+-`get_oews()` - This access the Occupational Employment and Wage Statistics (OEWS) data. This data provides survey-based estimates of employmen and wages by occupation at state and sub-state levels. This is the "OE" database. Note that only current-year data is available for OEWS in this database, as it is not built as a time series.
 
 -`get_salt()` - This data is not actually loated within the time.series folder, but instead is sourced from https://www.bls.gov/lau/stalt.htm. These Alternative Measures of Labor Underutilization for States are 12-month averages built from CPS data which provide more expansive or restrictive definitions of unemployment to measure the labor force, known as U1 through U6. This function also includes the optional geometry argument. If set to TRUE, this will use `tigris::states()` and `tigris::shift_geometry()` to provide state polygons for convenient mapping of the output.
 
