@@ -6,6 +6,7 @@ title: "Working with LAUS Data"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  eval = FALSE,       # Don't execute code during pkgdown build
   message = FALSE,    # Hide download messages
   warning = FALSE,    # Hide coercion warnings
   fig.width = 9,
