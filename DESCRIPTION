@@ -39,7 +39,7 @@ Imports:
     tigris (>= 2.0),
     zoo (>= 1.8)
 RoxygenNote: 7.3.3
-Suggests: 
+Suggests:
     ggplot2,
     knitr,
     mapgl,
