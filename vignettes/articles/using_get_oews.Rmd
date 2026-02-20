@@ -1,0 +1,193 @@
+---
+title: "Working with OEWS Data"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,    # Hide download messages
+  warning = FALSE,    # Hide coercion warnings
+  fig.width = 9,
+  fig.height = 6
+)
+
+```
+
+```{r setup}
+library(dplyr)
+library(tidyr)
+library(gt)
+library(ggplot2)
+library(BLSloadR)
+```
+
+## General Concepts
+
+`BLSloadR` streamlines access to data from the U.S. Bureau of Labor Statistics. Its primary benefit is in providing data in a handy form so that it can be manipulated and used to compare data across areas, periods, and data types. One simple example includes using the data across areas to calculate percentiles for a particular data element to compare a single state to the range of experiences across other states.
+
+### Step 1: Accessing the Data
+
+Accessing data from the BLS is simple. Here, we can use `get_oews()` to pull up the Occupational Employment and Wage Statistics (OEWS) data. OEWS data is a national series with a number of data elements for each occupation at national, state, and local levels. The local areas are divided into metropolitan areas and nonmetropolitan areas, which are combinations of individual counties. Even with only a single time period available (the most recently estimated year), the data set contains over 6 million rows of data, so these downloads will take a little time.
+
+```{r get-data, message=FALSE, warning=FALSE}
+# Get the LAUS data using BLSloadR
+bls_import <- get_oews()
+
+# Get corresponding OEWS shapes
+estimate_year <- unique(bls_import$year)
+area_shapes <- get_oews_areas(ref_year = estimate_year)
+
+```
+
+### Step 2: Filtering and Ordering the Data
+
+Next, we will trim down the size of the OEWS data frame to focus on the Western United States. We can use the `areatype_code` to distinguish between states and substate areas, and we can use the `state_code` - the FIPS for the state - to narrow the data set. We'll filter here to the following states:
+
+| State Name | State FIPS |
+|------------|------------|
+| Arizona    | 04         |
+| California | 06         |
+| Colorado   | 08         |
+| Idaho      | 16         |
+| Montana    | 30         |
+| Nevada     | 32         |
+| New Mexico | 35         |
+| Oregon     | 41         |
+| Utah       | 49         |
+| Washington | 53         |
+| Wyoming    | 56         |
+
+: Western Continental U.S.
+
+We'll use the `areatype_code` to create two data tables - one for statewide data and one for substate areas for further analysis.
+
+```{r filter-data}
+western_metros <- bls_import |> 
+  dplyr::filter(state_code %in% c("04", "06", "08", "16", "30", "32", "35", "41", "49", "53", "56"),
+                areatype_code == "M")
+
+western_states <- bls_import |> 
+  dplyr::filter(state_code %in% c("04", "06", "08", "16", "30", "32", "35", "41", "49", "53", "56"),
+                areatype_code == "S")
+
+nrow(western_states)
+
+
+```
+
+Even narrowing to just state-level data in the Western United States, we sill have over 100,000 rows of data, because OEWS represents several different data types as individual rows. We can pivot this data to better reflect each discrete occupation/area combination as a single row, with columns providing descriptions of that data. To do this, we need to drop the series_id, as this uniquely identifies the area, occupation, and data type and so interfere with pivoting the data. While we're at it, we'll remove some columns which do not have unique values at the state and substate levels. Let's clean this up!
+
+```{r organize-statewide-data}
+
+unique(western_states$seasonal)
+unique(western_states$industry_code)
+unique(western_states$areatype_code)
+unique(western_states$state_code)
+
+western_states <- western_states |> 
+  select(-series_id, -seasonal, -industry_code, -areatype_code, -area_code, -datatype_code) |> 
+  pivot_wider(names_from = datatype_name, values_from = value)
+
+head(western_states)
+```
+
+### Step 3: Exploring the Data with Tables
+
+Now we have a data set that we can more easily summarize and work with. Each observation is a single row (an occupation in a place), and the columns provide information about that observation (employment level, wage bands, employment concentration).
+
+Let's start simple, and create a quick table that shows the spread of employment and hourly wages by state.
+
+```{r western-all-occupations-table}
+estimate_year <- unique(western_states$year)
+
+western_states |> 
+  filter(occupation_name == "All Occupations") |> # Total for All Occupations
+  select(area_name, Employment, `Hourly 10th percentile wage`, `Hourly 25th percentile wage`, `Hourly median wage`, `Hourly 75th percentile wage`, `Hourly 90th percentile wage`) |> 
+  gt() |> 
+  fmt_number(columns = Employment, decimals = 0) |> 
+  fmt_currency(columns = contains("Hourly")) |> 
+  cols_label("area_name" = "State") |> 
+  tab_header(title = "OEWS Employment Statistics for All Occupations",
+             subtitle = paste0("Western United States, ",estimate_year))
+```
+
+Or, we could as easily look at more detailed occupations, as the Standard Occupational Classification code used by OEWS includes both major groups and detailed occupations.
+
+```{r soc-codes-and-names}
+western_states |> 
+  select(occupation_code, occupation_name) |> 
+  distinct() |> 
+  filter(substr(occupation_code,1,2) == "35") |> 
+  gt()
+```
+
+Working from this list, we can filter our data set to a particular occupation to gain insights into employment and wage trends. We'll also include the location quotient, to help us explore whether any states have an unusually high concentration of employment in this occupation.
+
+```{r fast-food-cooks}
+western_states |> 
+  filter(occupation_name == "Cooks, Fast Food") |> 
+  select(area_name, Employment, `Hourly 10th percentile wage`, `Hourly 25th percentile wage`, `Hourly median wage`, `Hourly 75th percentile wage`, `Hourly 90th percentile wage`, `Location Quotient`) |> 
+  gt() |> 
+  fmt_number(columns = Employment, decimals = 0) |> 
+  fmt_currency(columns = contains("Hourly")) |> 
+  cols_label("area_name" = "State") |> 
+  tab_header(title = "OEWS Employment Statistics for Fast Food Cooks",
+             subtitle = paste0("Western United States, ",estimate_year))
+
+```
+
+We can also explore the uniqueness of an occupation, by seeing how the concentration in an area varies compared to the concentration nationally using the location quotient. The **location quotient (LQ)** is defined as the ratio of employment in an occupation in an area to total employment in that area, divided by the ratio of employment in that occupation in the United States to total employment in the United States.  This means that a higher LQ indicates a higher concentration of employment in an area compared to the concentration of employment in that occupation in the country.
+
+$$
+\text{LQ}_{area,occupation} = 
+\frac{\dfrac{Employment_{\text{occupation in area}}}{Employment_{\text{total in area}}}}
+     {\dfrac{Employment_{\text{occupation in U.S.}}}{Employment_{\text{total in U.S.}}}}
+$$
+
+
+
+```{r}
+western_states |> 
+  select(area_name, occupation_name, `Location Quotient`) |> 
+  arrange(-`Location Quotient`) |> 
+  head(20) |> 
+  gt()
+```
+
+### Step 4: Exploring the Data with Graphs
+
+Seeing that different states have different wage levels and employment concentrations for Fast Food Cooks, let's explore this data a little more. First, lets take a quick look at wage levels. In order to use the wage levels in my ggplot as an aesthetic, I'll pivot the data longer again.
+
+```{r fast-food-wage-chart, fig.alt = "A group of column charts comparing wage levels from fast food cooks across western states."}
+western_states |> 
+  filter(occupation_name == "Cooks, Fast Food") |> 
+  select(area_name, `Hourly 10th percentile wage`, `Hourly 25th percentile wage`, `Hourly median wage`, `Hourly 75th percentile wage`, `Hourly 90th percentile wage`) |> 
+  pivot_longer(cols = `Hourly 10th percentile wage`:`Hourly 90th percentile wage`, values_to = "value", names_to = "measure") |> 
+  ggplot(aes(x = area_name, y = value, fill = measure)) +
+  geom_col() +
+  facet_wrap(~measure) +
+  labs(
+    title = "Hourly Wages for Fast Food Cooks",
+    x = NULL, y = "Hourly Wage",
+    caption = "Data from U.S. Bureau of Labor Statistics, OEWS"
+  ) +
+  theme(axis.text.x = element_text(angle = 90),
+        legend.position = "none")
+```
+```{r fast-food-wage-map, fig.alt = "A map comparing median wages for fast food cooks in local areas across the Estern United States."}
+western_metros |> 
+  filter(occupation_name == "Cooks, Fast Food",
+         datatype_name == "Hourly median wage") |> 
+  left_join(area_shapes, by = c("area_code" = "oews_area_code")) |> 
+  sf::st_as_sf() |> 
+  ggplot(aes(fill = value)) +
+  geom_sf() +
+  labs(title = "Hourly Median Wage for Fast Food Cooks in the Western U.S.",
+       fill = "Wage") +
+  scale_fill_viridis_c(labels = scales::dollar) +
+  theme_void() +
+  theme(
+    legend.position = "bottom"
+  )
+```

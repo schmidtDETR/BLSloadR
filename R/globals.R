@@ -64,6 +64,14 @@ utils::globalVariables(c(
   "file_type",
   "file_name",
   "NAME",
+  "oews_area_code",
+  "fips_code",
+  "county_code",
+  "GEOID",
+  "oews_area_name",
+  "temp_month",
+  "ind_lookup",
+  "area_lookup",
   
   # Statistical functions (base R)
   "median",

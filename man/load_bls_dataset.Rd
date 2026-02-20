@@ -8,7 +8,9 @@ load_bls_dataset(
   database_code,
   return_full = FALSE,
   simplify_table = TRUE,
-  suppress_warnings = FALSE
+  suppress_warnings = FALSE,
+  which_data = NULL,
+  cache = check_bls_cache_env()
 )
 }
 \arguments{
@@ -33,6 +35,16 @@ performing time series analysis. This parameter also converts the column "value"
 and generates a date column from the year and period columns in the data.}
 
 \item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings during processing.}
+
+\item{which_data}{Character string or NULL. Defaults to NULL.
+\itemize{
+  \item "all" - Automatically selects the data file containing ".1.All" (e.g., "bd.data.1.AllItems" or "le.data.1.AllData").
+  \item "current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").
+  \item NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.
+}
+If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.}
+
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 This function will return either a bls_data_collection object (if return_full is FALSE or not provided)
@@ -46,7 +58,26 @@ function. When multiple potential data files exist (common in large data sets), 
 will prompt for an input of which file to use.
 }
 \examples{
+\donttest{
+# Import All Data
+fm_import <- load_bls_dataset("fm", which_data = "all")
+
+# Get $data element
+fm_data <- fm_import$data
+
+# Filter to a Series
+# Families with Children Under 6 and No Employed Parent
+
+u6_no_emp <- fm_data |> 
+  dplyr::filter(series_title == "Total families with children under 6 - with no parent employed") |> 
+  dplyr:: select(year, value, fchld_text, fhlf_text, tdat_text)
+
+
+head(u6_no_emp)
+}
+
 \dontrun{
+# Examples requiring manual intervention in the console
 # Download Employer Cost Index Data
 cost_index <- load_bls_dataset("ci")
 
@@ -60,5 +91,6 @@ productivity <- load_bls_dataset("mp", simplify_table = FALSE)
 if (has_bls_issues(cost_index)) {
   print_bls_warnings(cost_index, detailed = TRUE)
 }
+
 }
 }

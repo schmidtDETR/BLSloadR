@@ -9,7 +9,7 @@ fread_bls(url, verbose = FALSE, use_fallback = TRUE)
 \arguments{
 \item{url}{Character string. URL to the BLS flat file}
 
-\item{verbose}{Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.}
+\item{verbose}{Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.}
 
 \item{use_fallback}{Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.}
 }
@@ -24,9 +24,4 @@ A named list with two elements:
 This function downloads a tab-delimited BLS flat file, incorporating
 diagnostic information about the file and returning an object with the
 bls_data class that can be used in the BLSloadR package.
-}
-\examples{
-\donttest{
-data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
-}
 }

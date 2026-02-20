@@ -9,7 +9,8 @@ get_laus(
   monthly_only = TRUE,
   transform = TRUE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
 )
 }
 \arguments{
@@ -50,6 +51,8 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
+
+\item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
 }
 \value{
 By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
@@ -92,10 +95,7 @@ laus_states <- get_laus()
 unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 
 # Download unadjusted state data
-laus_states_unadjusted <- get_laus("state_unadjusted")
-
-# Download metro area data with rates as whole number percentages (64.3 instead of 0.643)
-laus_metro <- get_laus("metro", transform = FALSE)
+laus_states_unadjusted <- get_laus(geography = "state_unadjusted")
 
 # Get full diagnostic object if needed
 laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)

@@ -35,7 +35,7 @@ The primary functions in this package all begin with get\_ and are listed below:
 
 -   `get_oews()` - This access the Occupational Employment and Wage Statistics (OEWS) data. This data provides survey-based estimates of employment and wages by occupation at state and sub-state levels. This is the "OE" database. Note that only current-year data is available for OEWS in this database, as it is not built as a time series. For more information about Occupational Employment and Wage Statistics, please visit <https://www.bls.gov/oes/>.
 
--   `get_salt()` - This data is not actually loaded within the time.series folder, but instead is sourced from <https://www.bls.gov/lau/stalt.htm>. These *Alternative Measures of Labor Underutilization for States* are 12-month averages built from CPS data which provide more expansive or restrictive definitions of unemployment to measure the labor force, known as U1 through U6. This function also includes the optional geometry argument. If set to TRUE, this will use `tigris::states()` and `tigris::shift_geometry()` to provide state polygons for convenient mapping of the output. For more information about the Alternative Measures data, please visit <https://www.bls.gov/lau/stalt.htm>.
+-   `get_salt()` - This data is not actually located within the time.series folder, but instead is sourced from <https://www.bls.gov/lau/stalt.htm>. These *Alternative Measures of Labor Underutilization for States* are 12-month averages built from CPS data which provide more expansive or restrictive definitions of unemployment to measure the labor force, known as U1 through U6. This function also includes the optional geometry argument. If set to TRUE, this will use `tigris::states()` and `tigris::shift_geometry()` to provide state polygons for convenient mapping of the output. For more information about the Alternative Measures data, please visit <https://www.bls.gov/lau/stalt.htm>.
 
 These functions download a series of files in the time.series database from BLS, join those files together, and then perform some simple filtering and streamlining to prepare the data for time series analysis. Generally speaking, these functions may be used with only the default parameters to get a table formatted and ready to be analyzed. To reduce the filtering and summaries performed by these functions, a series of arguments may beset to retain the data closer to its original format.
 
@@ -53,11 +53,13 @@ Within the functions to retrieve specific data sets there are a few common argum
 The CES functions include several powerful filtering options for improved performance:
 
 ### `get_ces()` Filtering Options
+
 -   `states` - Vector of state abbreviations (e.g., `c("MA", "CT", "RI")`) to download only specific states
 -   `industry_filter` - Single industry filter option (e.g., `"retail_trade"`, `"manufacturing"`) to focus on specific sectors
 -   `current_year_only = FALSE` - Set to `TRUE` to download only recent data (2006-present) instead of complete history
 
 ### `get_national_ces()` Dataset Options
+
 -   `dataset_filter` - Choose specialized national datasets:
     -   `"all_data"` (default) - Complete dataset with all series
     -   `"current_seasonally_adjusted"` - Only seasonally adjusted series (faster)
@@ -71,11 +73,13 @@ The CES functions include several powerful filtering options for improved perfor
 The package includes several helper functions to assist with the enhanced CES filtering capabilities:
 
 ### CES Helper Functions
+
 -   `list_ces_states()` - Lists all available states and territories for state-level CES data filtering
 -   `list_ces_industries()` - Lists available industry filtering options with optional descriptions
 -   `show_ces_options()` - Provides a comprehensive overview of all CES filtering options with usage examples
 
 ### National CES Helper Functions
+
 -   `list_national_ces_options()` - Lists available dataset filtering options for national CES data
 -   `show_national_ces_options()` - Shows detailed information about national CES dataset options with performance notes
 
@@ -85,15 +89,12 @@ These helper functions make it easy to discover what filtering options are avail
 
 The enhanced CES functions provide significant performance improvements:
 
-- **State filtering**: Download only specific states instead of all 50+ states (up to 90% faster)
-- **Industry filtering**: Focus on specific industries like retail, manufacturing, or construction
-- **Current year option**: Get only recent data (2006-present) instead of complete historical series
-- **National datasets**: Choose specialized national datasets (seasonally adjusted, real earnings) for faster downloads
+-   **State filtering**: Download only specific states instead of all 50+ states (up to 90% faster)
+-   **Industry filtering**: Focus on specific industries like retail, manufacturing, or construction
+-   **Current year option**: Get only recent data (2006-present) instead of complete historical series
+-   **National datasets**: Choose specialized national datasets (seasonally adjusted, real earnings) for faster downloads
 
-For example:
-- Complete CES download: 60+ seconds for ~5.6M rows
-- Single state (MA): ~3.5 seconds for ~210K rows
-- Seasonally adjusted national: ~3.7 seconds for ~392K rows
+For example: - Complete CES download: 60+ seconds for \~5.6M rows - Single state (MA): \~3.5 seconds for \~210K rows - Seasonally adjusted national: \~3.7 seconds for \~392K rows
 
 ## Helper Functions in the Package
 

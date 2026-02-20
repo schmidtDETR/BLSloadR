@@ -4,12 +4,14 @@
 \alias{download_bls_files}
 \title{Helper function for downloading and tracking BLS files}
 \usage{
-download_bls_files(urls, suppress_warnings = TRUE)
+download_bls_files(urls, suppress_warnings = TRUE, cache = FALSE)
 }
 \arguments{
 \item{urls}{Named character vector of URLs to download}
 
 \item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings}
+
+\item{cache}{Logical. If TRUE, download and cache local copy of files.}
 }
 \value{
 Named list of bls_data objects

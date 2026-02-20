@@ -27,6 +27,16 @@
 #'  and generates a date column from the year and period columns in the data.
 #'  
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings during processing.
+#' 
+#' @param which_data Character string or NULL. Defaults to NULL.
+#'   \itemize{
+#'     \item "all" - Automatically selects the data file containing ".1.All" (e.g., "bd.data.1.AllItems" or "le.data.1.AllData").
+#'     \item "current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").
+#'     \item NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.
+#'   }
+#'   If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.
+#'   
+#' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #'  
 #' @returns This function will return either a bls_data_collection object (if return_full is FALSE or not provided)
 #'  or a named list of the returned data including the bls_data_collection object.
@@ -43,7 +53,26 @@
 #' @importFrom utils head
 #' 
 #' @examples
+#' \donttest{
+#' # Import All Data
+#' fm_import <- load_bls_dataset("fm", which_data = "all")
+#' 
+#' # Get $data element
+#' fm_data <- fm_import$data
+#' 
+#' # Filter to a Series
+#' # Families with Children Under 6 and No Employed Parent
+#' 
+#' u6_no_emp <- fm_data |> 
+#'   dplyr::filter(series_title == "Total families with children under 6 - with no parent employed") |> 
+#'   dplyr:: select(year, value, fchld_text, fhlf_text, tdat_text)
+#' 
+#' 
+#' head(u6_no_emp)
+#' }
+#' 
 #' \dontrun{
+#' # Examples requiring manual intervention in the console
 #' # Download Employer Cost Index Data
 #' cost_index <- load_bls_dataset("ci")
 #'
@@ -57,13 +86,19 @@
 #' if (has_bls_issues(cost_index)) {
 #'   print_bls_warnings(cost_index, detailed = TRUE)
 #' }
+#' 
 #' }
 
-load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE, suppress_warnings = FALSE) {
+load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table = TRUE, suppress_warnings = FALSE, which_data = NULL, cache = check_bls_cache_env()) {
   
   # Validate inputs
   if (!is.character(database_code) || length(database_code) != 1) {
     stop("database_code must be a single character string")
+  }
+  
+  # Validate which_data input
+  if (!is.null(which_data) && (!is.character(which_data) || length(which_data) != 1 || !which_data %in% c("all", "current"))) {
+    stop("which_data must be NULL, 'all', or 'current'")
   }
   
   base_url <- sprintf("https://download.bls.gov/pub/time.series/%s/", database_code)
@@ -167,31 +202,60 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   }
   
   # --- Logic for data file selection ---
-  if (length(data_files) > 1) {
-    # If there are multiple data files, prompt the user to choose
-    message("Multiple data files found. Please select a file to load:\n")
-    for (i in seq_along(data_files)) {
-      message(i, ": ", data_files[i], "\n")
+  selected_data_file <- NULL
+  
+  # 1. Attempt Auto-selection if requested
+  if (!is.null(which_data)) {
+    pattern <- NULL
+    if (which_data == "all") {
+      pattern <- ".1.All"
+    } else if (which_data == "current") {
+      pattern <- "Current"
     }
     
-    # Get user input for file selection
-    selected_index <- as.integer(readline(prompt = "Enter the number of the file you want to load: "))
-    
-    # Validate the input
-    if (is.na(selected_index) || selected_index < 1 || selected_index > length(data_files)) {
-      stop("Invalid selection. Please run the function again and enter a valid number.")
+    if (!is.null(pattern)) {
+      # Look for files containing the pattern (case insensitive)
+      # We check if pattern is in the filename
+      matches <- grep(pattern, data_files, ignore.case = TRUE, value = TRUE)
+      
+      if (length(matches) > 0) {
+        # Use the first match
+        selected_data_file <- matches[1]
+        message("Auto-selected '", which_data, "' file: ", selected_data_file, "\n")
+      } else {
+        message("Warning: No file matching '", pattern, "' found. Falling back to manual selection/default.\n")
+      }
     }
-    
-    # Get the selected file name
-    selected_data_file <- data_files[selected_index]
-    message("Loading:", selected_data_file, "\n")
-    
-  } else if (length(data_files) == 1) {
-    # If there is only one data file, use it directly
-    selected_data_file <- data_files[1]
-    message("Loading:", selected_data_file, "\n")
-  } else {
-    stop("No data files found in the BLS database directory.")
+  }
+  
+  # 2. Fallback to Prompt or Single File Logic if not auto-selected
+  if (is.null(selected_data_file)) {
+    if (length(data_files) > 1) {
+      # If there are multiple data files and auto-select didn't find a match, prompt the user
+      message("Multiple data files found. Please select a file to load:\n")
+      for (i in seq_along(data_files)) {
+        message(i, ": ", data_files[i], "\n")
+      }
+      
+      # Get user input for file selection
+      selected_index <- as.integer(readline(prompt = "Enter the number of the file you want to load: "))
+      
+      # Validate the input
+      if (is.na(selected_index) || selected_index < 1 || selected_index > length(data_files)) {
+        stop("Invalid selection. Please run the function again and enter a valid number.")
+      }
+      
+      # Get the selected file name
+      selected_data_file <- data_files[selected_index]
+      message("Loading:", selected_data_file, "\n")
+      
+    } else if (length(data_files) == 1) {
+      # If there is only one data file, use it directly
+      selected_data_file <- data_files[1]
+      message("Loading:", selected_data_file, "\n")
+    } else {
+      stop("No data files found in the BLS database directory.")
+    }
   }
   
   # --- Logic for aspect file selection ---
@@ -241,7 +305,7 @@ load_bls_dataset <- function(database_code, return_full = FALSE, simplify_table 
   }
   
   # Download all files using the new system
-  downloads <- download_bls_files(urls, suppress_warnings = suppress_warnings)
+  downloads <- download_bls_files(urls, suppress_warnings = suppress_warnings, cache = cache)
   
   # Extract data from downloads
   data_dt <- get_bls_data(downloads[[selected_data_file]])

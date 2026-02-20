@@ -5,7 +5,7 @@
 #' bls_data class that can be used in the BLSloadR package.
 #'
 #' @param url Character string. URL to the BLS flat file
-#' @param verbose Logical. If TRUE, prints additional messages during file read and processing.  If FALSE (default), suppresses these messages.
+#' @param verbose Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.
 #' @param use_fallback Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.
 #' @return A named list with two elements:
 #'    \describe{
@@ -13,10 +13,7 @@
 #'     \item{diagnostics}{A named list of diagnostics run when reading the file including column names, empty columns, cleaning applied to the file, the url, the column names and original and final dimensions of the data.}
 #'   }
 #' @export
-#' @importFrom httr GET
-#' @importFrom httr stop_for_status
-#' @importFrom httr content
-#' @importFrom httr add_headers
+#' @importFrom httr GET stop_for_status content add_headers
 #' @importFrom data.table fread
 #' @importFrom utils download.file
 #' @examples
@@ -239,11 +236,11 @@ fread_bls <- function(url, verbose = FALSE, use_fallback = TRUE) {
     )
 
     if (n_data_cols > n_header_cols) {
-      # Add extra column names
-      extra_names <- paste0("EXTRA_COL_", 1:(n_data_cols - n_header_cols))
-      header_names <- c(header_names, extra_names)
-    } else if (n_header_cols > n_data_cols) {
-      # Truncate header names
+      header_names <- c(
+        header_names,
+        paste0("EXTRA_COL_", 1:(n_data_cols - n_header_cols))
+      )
+    } else {
       header_names <- header_names[1:n_data_cols]
     }
   }
@@ -258,7 +255,6 @@ fread_bls <- function(url, verbose = FALSE, use_fallback = TRUE) {
       message("Removing", sum(empty_cols), "remaining empty columns\n")
     }
     return_data <- return_data[, !empty_cols, with = FALSE]
-    header_names <- header_names[!empty_cols[1:length(header_names)]]
   }
 
   # Final column name assignment
@@ -299,8 +295,6 @@ fread_bls <- function(url, verbose = FALSE, use_fallback = TRUE) {
     },
     cleaning_applied = sum(phantom_cols) > 0,
     header_data_mismatch = n_header_cols != n_data_cols,
-    original_header_count = n_header_cols,
-    final_data_count = n_data_cols,
     empty_columns_removed = sum(empty_cols),
     final_column_names = names(return_data),
     warnings = character(0)
