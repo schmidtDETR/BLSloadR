@@ -3,8 +3,8 @@
 #' @description This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
 #'  of Labor Statistics. Due to the large size of some LAUS datasets (county and city
 #'  files are >300MB), users must specify which geographic level to download. The function
-#'  provides access to both seasonally adjusted and unadjusted data at various geographic levels. 
-#'  Additional datasets provide comprehensive non-seasonally-adjusted data for all areas broken out 
+#'  provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+#'  Additional datasets provide comprehensive non-seasonally-adjusted data for all areas broken out
 #'  in 5-year increments
 #'
 #' @param geography Character string specifying the geographic level and adjustment type.
@@ -64,7 +64,7 @@
 #'     \item Measure definitions (la.measure)
 #'   }
 #' @export
-#' 
+#'
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom dplyr left_join
@@ -72,12 +72,12 @@
 #' @importFrom dplyr if_else
 #' @importFrom stringr str_detect
 #' @importFrom lubridate ym
-#' 
+#'
 #' @examples
 #' \donttest{
 #' # Download state-level seasonally adjusted data (default operation)
 #' laus_states <- get_laus()
-#' 
+#'
 #' # View unemployment rates by state for latest period
 #' unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 #'
@@ -88,12 +88,17 @@
 #' laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
 #' print_bls_warnings(laus_with_diagnostics)
 #'
-#' 
+#'
 #' }
 
-get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transform = TRUE, 
-                     suppress_warnings = TRUE, return_diagnostics = FALSE, cache = check_bls_cache_env()) {
-  
+get_laus <- function(
+  geography = "state_adjusted",
+  monthly_only = TRUE,
+  transform = TRUE,
+  suppress_warnings = TRUE,
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
+) {
   # Define the URL mapping
   laus_urls <- list(
     "state_current_adjusted" = "https://download.bls.gov/pub/time.series/la/la.data.1.CurrentS",
@@ -168,18 +173,20 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
     'AK' = 'https://download.bls.gov/pub/time.series/la/la.data.8.Alaska',
     'AZ' = 'https://download.bls.gov/pub/time.series/la/la.data.9.Arizona'
   )
-  
+
   # Validate geography argument
   if (!geography %in% names(laus_urls)) {
-    stop("Invalid geography. Valid options are: ",
-         paste(names(laus_urls), collapse = ", "))
+    stop(
+      "Invalid geography. Valid options are: ",
+      paste(names(laus_urls), collapse = ", ")
+    )
   }
-  
+
   # Warn about large files
   if (geography %in% c("city", "county")) {
     message("Warning: ", geography, " data file is very large (>300MB).")
   }
-  
+
   # Define all URLs we need to download
   download_urls <- c(
     "data" = laus_urls[[geography]],
@@ -187,51 +194,77 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
     "area" = "https://download.bls.gov/pub/time.series/la/la.area",
     "measure" = "https://download.bls.gov/pub/time.series/la/la.measure"
   )
-  
+
   # Download all files
-  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
-  
+  downloads <- download_bls_files(
+    download_urls,
+    suppress_warnings = suppress_warnings,
+    cache = cache
+  )
+
   # Extract data from downloads
   laus_import <- get_bls_data(downloads$data)
   laus_series <- get_bls_data(downloads$series)
   laus_area <- get_bls_data(downloads$area)
   laus_measure <- get_bls_data(downloads$measure)
-  
+
   # Join all the data together
   laus <- laus_import |>
     dplyr::select(-footnote_codes) |>
-    dplyr::left_join(laus_series |> dplyr::select(-footnote_codes), by = c("series_id")) |>
+    dplyr::left_join(
+      laus_series |> dplyr::select(-footnote_codes),
+      by = c("series_id")
+    ) |>
     dplyr::left_join(laus_area, by = c("area_code", "area_type_code")) |>
     dplyr::left_join(laus_measure, by = "measure_code") |>
     dplyr::mutate(value = as.numeric(value)) |>
     dplyr::filter(!is.na(value)) |>
     dplyr::select(-c(display_level:sort_sequence)) |>
     dplyr::select(-c(series_title:end_period))
-  
+
   # Track processing steps
   processing_steps <- c(
     "Joined series, area, and measure metadata",
     "Converted values to numeric",
     "Removed rows with missing values"
   )
-  
+
   # Handle monthly filtering and date creation
   if (monthly_only) {
     laus <- laus |>
       dplyr::filter(period != "M13") |>
-      dplyr::mutate(date = lubridate::ym(paste(as.character(year), substr(period, 2, 3), sep = "-")))
-    
-    processing_steps <- c(processing_steps, "Filtered to monthly data only", "Created date column")
+      dplyr::mutate(
+        date = lubridate::ym(paste(
+          as.character(year),
+          substr(period, 2, 3),
+          sep = "-"
+        ))
+      )
+
+    processing_steps <- c(
+      processing_steps,
+      "Filtered to monthly data only",
+      "Created date column"
+    )
   }
-  
+
   # Handle transformation
   if (transform) {
     laus <- laus |>
-      dplyr::mutate(value = if_else(str_detect(measure_text, "rate")|str_detect(measure_text, "ratio"), value/100, value))
-    
-    processing_steps <- c(processing_steps, "Converted rates and ratios to proportions")
+      dplyr::mutate(
+        value = if_else(
+          str_detect(measure_text, "rate") | str_detect(measure_text, "ratio"),
+          value / 100,
+          value
+        )
+      )
+
+    processing_steps <- c(
+      processing_steps,
+      "Converted rates and ratios to proportions"
+    )
   }
-  
+
   # Create the BLS data collection object
   bls_collection <- create_bls_object(
     data = laus,
@@ -239,12 +272,12 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
     data_type = "LAUS",
     processing_steps = processing_steps
   )
-  
+
   # Show warnings if any issues were detected
   if (has_bls_issues(bls_collection) && !suppress_warnings) {
     print_bls_warnings(bls_collection)
   }
-  
+
   # Return either the collection object or just the data
   if (return_diagnostics) {
     return(bls_collection)

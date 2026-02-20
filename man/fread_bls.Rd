@@ -4,12 +4,19 @@
 \alias{fread_bls}
 \title{Download BLS Time Series Data}
 \usage{
-fread_bls(url, verbose = FALSE, use_fallback = TRUE)
+fread_bls(
+  url,
+  verbose = FALSE,
+  cache = check_bls_cache_env(),
+  use_fallback = TRUE
+)
 }
 \arguments{
 \item{url}{Character string. URL to the BLS flat file}
 
 \item{verbose}{Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.}
+
+\item{cache}{Logical. If TRUE, uses local persistent caching.}
 
 \item{use_fallback}{Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.}
 }

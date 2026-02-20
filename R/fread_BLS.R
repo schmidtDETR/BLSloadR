@@ -6,6 +6,7 @@
 #'
 #' @param url Character string. URL to the BLS flat file
 #' @param verbose Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.
+#' @param cache Logical. If TRUE, uses local persistent caching.
 #' @param use_fallback Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.
 #' @return A named list with two elements:
 #'    \describe{
@@ -21,98 +22,110 @@
 #' data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
 #' }
 
-fread_bls <- function(url, verbose = FALSE, use_fallback = TRUE) {
-  headers <- c(
-    "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    "Accept-Encoding" = "gzip, deflate, br",
-    "Accept-Language" = "en-US,en;q=0.9",
-    "Connection" = "keep-alive",
-    "Host" = "download.bls.gov",
-    "Referer" = "https://download.bls.gov/pub/time.series/",
-    "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-    "Sec-Ch-Ua-Mobile" = "?0",
-    "Sec-Ch-Ua-Platform" = '"Windows"',
-    "Sec-Fetch-Dest" = "document",
-    "Sec-Fetch-Mode" = "navigate",
-    "Sec-Fetch-Site" = "same-origin",
-    "Sec-Fetch-User" = "?1",
-    "Upgrade-Insecure-Requests" = "1",
-    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-  )
+fread_bls <- function(
+  url,
+  verbose = FALSE,
+  cache = check_bls_cache_env(),
+  use_fallback = TRUE
+) {
+  # --- 1. DATA ACQUISITION ---
+  if (cache) {
+    # Uses the smart download logic to check headers/mtime
+    temp_file <- smart_bls_download(url, verbose = verbose)
+  } else {
+    headers <- c(
+      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+      "Accept-Encoding" = "gzip, deflate, br",
+      "Accept-Language" = "en-US,en;q=0.9",
+      "Connection" = "keep-alive",
+      "Host" = "download.bls.gov",
+      "Referer" = "https://download.bls.gov/pub/time.series/",
+      "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+      "Sec-Ch-Ua-Mobile" = "?0",
+      "Sec-Ch-Ua-Platform" = '"Windows"',
+      "Sec-Fetch-Dest" = "document",
+      "Sec-Fetch-Mode" = "navigate",
+      "Sec-Fetch-Site" = "same-origin",
+      "Sec-Fetch-User" = "?1",
+      "Upgrade-Insecure-Requests" = "1",
+      "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    )
 
-  # Create temporary file for download
-  temp_file <- tempfile(fileext = ".txt")
+    # Create temporary file for download
+    temp_file <- tempfile(fileext = ".txt")
 
-  # Try httr::GET first, fallback to download.file for large files
-  download_successful <- FALSE
-  download_method <- "httr"
+    # Try httr::GET first, fallback to download.file for large files
+    download_successful <- FALSE
+    download_method <- "httr"
 
-  tryCatch(
-    {
-      response <- GET(url, add_headers(.headers = headers))
+    tryCatch(
+      {
+        response <- GET(url, add_headers(.headers = headers))
 
-      # Check for successful response
-      stop_for_status(response)
+        # Check for successful response
+        stop_for_status(response)
 
-      # Use binary mode to avoid building a giant character object
-      raw_data <- content(response, as = "raw")
+        # Use binary mode to avoid building a giant character object
+        raw_data <- content(response, as = "raw")
 
-      # Check if we got an HTML error page (Access Denied, etc.)
-      # HTML pages are typically much smaller than actual data files
-      if (length(raw_data) < 10000) {
-        # Check if it's HTML
-        raw_text <- rawToChar(raw_data[1:min(500, length(raw_data))])
-        if (grepl("<!DOCTYPE|<html", raw_text, ignore.case = TRUE)) {
-          if (use_fallback) {
-            if (verbose) {
-              message(
-                "Received HTML response, trying download.file() fallback..."
-              )
+        # Check if we got an HTML error page (Access Denied, etc.)
+        # HTML pages are typically much smaller than actual data files
+        if (length(raw_data) < 10000) {
+          # Check if it's HTML
+          raw_text <- rawToChar(raw_data[1:min(500, length(raw_data))])
+          if (grepl("<!DOCTYPE|<html", raw_text, ignore.case = TRUE)) {
+            if (use_fallback) {
+              if (verbose) {
+                message(
+                  "Received HTML response, trying download.file() fallback..."
+                )
+              }
+              stop("HTML response detected")
+            } else {
+              stop("Received HTML error page instead of data file")
             }
-            stop("HTML response detected")
-          } else {
-            stop("Received HTML error page instead of data file")
           }
         }
-      }
 
-      # Write raw data to temporary file first for analysis
-      writeBin(raw_data, temp_file)
-      download_successful <- TRUE
-    },
-    error = function(e) {
-      if (use_fallback) {
-        if (verbose) {
-          message("httr::GET failed, using download.file() fallback...")
-        }
-        download_method <<- "download.file"
-
-        tryCatch(
-          {
-            # Use download.file as fallback - more reliable for large files
-            download.file(
-              url = url,
-              destfile = temp_file,
-              mode = "wb",
-              quiet = !verbose,
-              headers = headers
-            )
-            download_successful <<- TRUE
-          },
-          error = function(e2) {
-            stop("Both httr::GET and download.file failed: ", e2$message)
+        # Write raw data to temporary file first for analysis
+        writeBin(raw_data, temp_file)
+        download_successful <- TRUE
+      },
+      error = function(e) {
+        if (use_fallback) {
+          if (verbose) {
+            message("httr::GET failed, using download.file() fallback...")
           }
-        )
-      } else {
-        stop("Download failed: ", e$message)
+          download_method <<- "download.file"
+
+          tryCatch(
+            {
+              # Use download.file as fallback - more reliable for large files
+              download.file(
+                url = url,
+                destfile = temp_file,
+                mode = "wb",
+                quiet = !verbose,
+                headers = headers
+              )
+              download_successful <<- TRUE
+            },
+            error = function(e2) {
+              stop("Both httr::GET and download.file failed: ", e2$message)
+            }
+          )
+        } else {
+          stop("Download failed: ", e$message)
+        }
       }
+    )
+
+    if (!download_successful) {
+      stop("Failed to download file from: ", url)
     }
-  )
-
-  if (!download_successful) {
-    stop("Failed to download file from: ", url)
   }
 
+  # --- 2. INITIAL DIAGNOSTIC PASS ---
   # First pass: Read data as-is to identify phantom columns
   initial_data <- data.table::fread(
     temp_file,
@@ -271,8 +284,10 @@ fread_bls <- function(url, verbose = FALSE, use_fallback = TRUE) {
     names(return_data) <- paste0("V", 1:ncol(return_data))
   }
 
-  # Clean up temp file
-  unlink(temp_file)
+  # --- 5. CLEANUP & DIAGNOSTICS ---
+  if (!cache) {
+    unlink(temp_file)
+  }
 
   if (verbose == TRUE) {
     message(

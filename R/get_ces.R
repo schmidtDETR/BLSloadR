@@ -89,11 +89,17 @@
 #'   print_bls_warnings(ces_result)
 #' }
 #' }
-get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = FALSE,
-                    transform = TRUE, monthly_only = TRUE, simplify_table = TRUE,
-                    suppress_warnings = TRUE, return_diagnostics = FALSE, cache = check_bls_cache_env()) {
-
-
+get_ces <- function(
+  states = NULL,
+  industry_filter = NULL,
+  current_year_only = FALSE,
+  transform = TRUE,
+  monthly_only = TRUE,
+  simplify_table = TRUE,
+  suppress_warnings = TRUE,
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
+) {
   # Define state-specific URLs mapping
   state_urls <- list(
     "AL" = "https://download.bls.gov/pub/time.series/sm/sm.data.1.Alabama",
@@ -184,23 +190,37 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
     states <- toupper(states)
     invalid_states <- states[!states %in% names(state_urls)]
     if (length(invalid_states) > 0) {
-      stop("Invalid state codes: ", paste(invalid_states, collapse = ", "),
-           ". Use standard two-letter abbreviations like 'MA', 'NY', 'CA'.")
+      stop(
+        "Invalid state codes: ",
+        paste(invalid_states, collapse = ", "),
+        ". Use standard two-letter abbreviations like 'MA', 'NY', 'CA'."
+      )
     }
   }
 
   if (!is.null(industry_filter)) {
     if (!industry_filter %in% names(industry_urls)) {
-      stop("Invalid industry_filter: '", industry_filter, "'. ",
-           "Valid options: ", paste(names(industry_urls), collapse = ", "))
+      stop(
+        "Invalid industry_filter: '",
+        industry_filter,
+        "'. ",
+        "Valid options: ",
+        paste(names(industry_urls), collapse = ", ")
+      )
     }
   }
 
   # Check for conflicting parameters (mutually exclusive)
-  param_count <- sum(!is.null(states), !is.null(industry_filter), current_year_only)
+  param_count <- sum(
+    !is.null(states),
+    !is.null(industry_filter),
+    current_year_only
+  )
   if (param_count > 1) {
-    stop("Parameters 'states', 'industry_filter', and 'current_year_only' are mutually exclusive. ",
-         "Choose only one filtering option.")
+    stop(
+      "Parameters 'states', 'industry_filter', and 'current_year_only' are mutually exclusive. ",
+      "Choose only one filtering option."
+    )
   }
 
   # Build data URLs based on filters (mutually exclusive)
@@ -209,34 +229,48 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
   if (current_year_only) {
     # Current year file contains all states/industries for current year
     data_urls <- c("Main Data" = industry_urls[["current_year"]])
-    if(!suppress_warnings){
-      message("Using current year data file (2006-present, all states and industries)")
+    if (!suppress_warnings) {
+      message(
+        "Using current year data file (2006-present, all states and industries)"
+      )
     }
   } else if (!is.null(industry_filter)) {
     # Use industry-specific file (all states for this industry)
     data_urls <- c("Main Data" = industry_urls[[industry_filter]])
-    if(!suppress_warnings){
-      message("Using industry filter: ", industry_filter, " (2007-present data, all states)")
+    if (!suppress_warnings) {
+      message(
+        "Using industry filter: ",
+        industry_filter,
+        " (2007-present data, all states)"
+      )
     }
   } else if (!is.null(states)) {
     # Use state-specific files (all industries for these states)
     state_data_urls <- state_urls[states]
     names(state_data_urls) <- paste("State Data -", names(state_data_urls))
     data_urls <- state_data_urls
-    if(!suppress_warnings){
-      message("Downloading data for states: ", paste(states, collapse = ", "), " (all industries)")
+    if (!suppress_warnings) {
+      message(
+        "Downloading data for states: ",
+        paste(states, collapse = ", "),
+        " (all industries)"
+      )
     }
   } else {
     # Use the large AllData file (original behavior)
-    data_urls <- c("Main Data" = "https://download.bls.gov/pub/time.series/sm/sm.data.1.AllData")
-    if(!suppress_warnings){
-      message("Downloading complete dataset (all states, all industries, all years - this may take several minutes)...")
+    data_urls <- c(
+      "Main Data" = "https://download.bls.gov/pub/time.series/sm/sm.data.1.AllData"
+    )
+    if (!suppress_warnings) {
+      message(
+        "Downloading complete dataset (all states, all industries, all years - this may take several minutes)..."
+      )
     }
   }
 
   # Define URLs for CES metadata files (always needed)
   ces_urls <- c(
-    data_urls,  # Add the data URLs we determined above
+    data_urls, # Add the data URLs we determined above
     "Series Metadata" = "https://download.bls.gov/pub/time.series/sm/sm.series",
     "Industry Codes" = "https://download.bls.gov/pub/time.series/sm/sm.industry",
     "State Codes" = "https://download.bls.gov/pub/time.series/sm/sm.state",
@@ -246,8 +280,14 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
   )
 
   # Download all files
-  if(!suppress_warnings){message("Starting CES data download...\n")}
-  downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings, cache = cache)
+  if (!suppress_warnings) {
+    message("Starting CES data download...\n")
+  }
+  downloads <- download_bls_files(
+    ces_urls,
+    suppress_warnings = suppress_warnings,
+    cache = cache
+  )
 
   # Extract data from downloads - handle multiple data files when downloading by states
   if (!is.null(states) && !current_year_only && is.null(industry_filter)) {
@@ -278,7 +318,9 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
   processing_steps <- character(0)
 
   # Combine all data
-  if(!suppress_warnings){message("Combining datasets...\n")}
+  if (!suppress_warnings) {
+    message("Combining datasets...\n")
+  }
   ces_data <- data_main |>
     dplyr::select(-footnote_codes) |>
     dplyr::left_join(data_series, by = "series_id") |>
@@ -288,18 +330,27 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
     dplyr::left_join(data_area, by = "area_code") |>
     dplyr::left_join(data_types, by = "data_type_code") |>
     dplyr::left_join(data_supersector, by = "supersector_code") |>
-    dplyr::mutate(value = as.numeric(value),
-                  industry_code = substr(series_id,11,18)) |>
+    dplyr::mutate(
+      value = as.numeric(value),
+      industry_code = substr(series_id, 11, 18)
+    ) |>
     dplyr::filter(!is.na(value))
 
-  processing_steps <- c(processing_steps, "joined_metadata", "converted_values", "removed_na")
+  processing_steps <- c(
+    processing_steps,
+    "joined_metadata",
+    "converted_values",
+    "removed_na"
+  )
 
-  if(transform){
-    if(!suppress_warnings){message("Applying value transformations...\n")}
+  if (transform) {
+    if (!suppress_warnings) {
+      message("Applying value transformations...\n")
+    }
     ces_data <- ces_data |>
       dplyr::mutate(
         value = if_else(
-          data_type_code %in% c("01","06","26"),
+          data_type_code %in% c("01", "06", "26"),
           value * 1000,
           value
         ),
@@ -308,20 +359,28 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
     processing_steps <- c(processing_steps, "transformed_values")
   }
 
-  if(monthly_only){
-    if(!suppress_warnings){message("Filtering to monthly data only...\n")}
+  if (monthly_only) {
+    if (!suppress_warnings) {
+      message("Filtering to monthly data only...\n")
+    }
     ces_data <- ces_data |>
       dplyr::filter(period != "M13")
     processing_steps <- c(processing_steps, "monthly_only")
   }
 
-  if(simplify_table){
-    if(!suppress_warnings){message("Simplifying table structure...\n")}
+  if (simplify_table) {
+    if (!suppress_warnings) {
+      message("Simplifying table structure...\n")
+    }
     ces_data <- ces_data |>
-      dplyr::mutate(date = lubridate::ym(paste0(year,period))) |>
-      dplyr::select(-c(benchmark_year:end_period,year,period)) |>
+      dplyr::mutate(date = lubridate::ym(paste0(year, period))) |>
+      dplyr::select(-c(benchmark_year:end_period, year, period)) |>
       dplyr::filter(state_code != "00")
-    processing_steps <- c(processing_steps, "simplified_table", "added_date_column")
+    processing_steps <- c(
+      processing_steps,
+      "simplified_table",
+      "added_date_column"
+    )
   }
 
   # Create BLS data object with diagnostics
@@ -333,9 +392,13 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
   )
 
   # Print summary
-  if(!suppress_warnings){
+  if (!suppress_warnings) {
     message("CES data download complete!\n")
-    message("Final dataset dimensions: ", paste(dim(ces_data), collapse = " x "), "\n")
+    message(
+      "Final dataset dimensions: ",
+      paste(dim(ces_data), collapse = " x "),
+      "\n"
+    )
 
     if (!is.null(states)) {
       message("States: ", paste(states, collapse = ", "), "\n")
@@ -344,10 +407,14 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
       message("Industry filter: ", industry_filter, "\n")
     }
     if (current_year_only) {
-      message("Dataset: Current year data (2006-present, all states and industries)\n")
+      message(
+        "Dataset: Current year data (2006-present, all states and industries)\n"
+      )
     }
     if (is.null(states) && is.null(industry_filter) && !current_year_only) {
-      message("Dataset: Complete CES data (all states, industries, and years)\n")
+      message(
+        "Dataset: Complete CES data (all states, industries, and years)\n"
+      )
     }
   }
 
@@ -355,8 +422,16 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
     if (!suppress_warnings) {
       message("\nDownload Issues Summary:\n")
       message("Total warnings:", result$summary$total_warnings, "\n")
-      message("Files with issues:", result$summary$files_with_issues, "of", result$summary$files_downloaded, "\n")
-      message("Run with return_diagnostics = TRUE and use print_bls_warnings() for details\n")
+      message(
+        "Files with issues:",
+        result$summary$files_with_issues,
+        "of",
+        result$summary$files_downloaded,
+        "\n"
+      )
+      message(
+        "Run with return_diagnostics = TRUE and use print_bls_warnings() for details\n"
+      )
     }
   } else {
     message("No download issues detected.\n")
