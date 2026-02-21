@@ -24,27 +24,32 @@ Encoding: UTF-8
 Depends: R (>= 4.1.0)
 Imports:
     data.table (>= 1.16),
-    httr (>= 1.4.7),
+    digest,
     dplyr (>= 1.1),
-    stringr (>= 1.5),
+    httr (>= 1.4.7),
+    htmltools,
     lubridate (>= 1.9),
-    rvest (>= 1.0.4),
     readxl (>= 1.4.5),
+    rlang,
+    rstudioapi,
+    rvest (>= 1.0.4),
     sf (>= 1.0),
+    stringr (>= 1.5),
     tidyselect (>= 1.2),
     tigris (>= 2.0),
-    zoo (>= 1.8),
-    htmltools,
-    rstudioapi
+    zoo (>= 1.8)
 RoxygenNote: 7.3.3
-Suggests: 
+Suggests:
     ggplot2,
+    gt,
     knitr,
     mapgl,
     rmarkdown,
-    tidyr,
-    gt
+    R.utils,
+    testthat (>= 3.0.0),
+    tidyr
 VignetteBuilder: knitr
 URL: https://schmidtdetr.github.io/BLSloadR/
 Config/Needs/website: rmarkdown
+Config/testthat/edition: 3
 LazyData: true

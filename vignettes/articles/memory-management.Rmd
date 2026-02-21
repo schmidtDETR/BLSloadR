@@ -1,0 +1,238 @@
+---
+title: "Memory Management and Large Files"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Memory Management and Large Files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+BLSloadR handles large datasets from the Bureau of Labor Statistics, some exceeding 500MB in compressed format. This vignette explains how the package manages memory efficiently and how users can avoid crashes when working with large files.
+
+## Memory Optimizations (Automatic)
+
+As of version 0.3.0, BLSloadR includes several automatic optimizations:
+
+### 1. Smart Data Type Detection
+
+Instead of reading all columns as character strings (memory-intensive), the package now:
+
+- Samples the first 10,000 rows of large files (>50MB)
+- Detects numeric columns automatically
+- Uses optimized `colClasses` to reduce memory usage by 50-70%
+
+**You don't need to do anything** - this happens automatically when you download data.
+
+### 2. Explicit Memory Cleanup
+
+After large operations (filtering, joining), the package:
+
+- Removes intermediate objects with `rm()`
+- Triggers garbage collection with `gc()`
+- Releases memory back to the operating system
+
+### 3. Improved Subset Caching
+
+Functions like `get_cps_subset()` now:
+
+- Check for valid cached subsets **before** downloading the master file
+- Avoid unnecessary 300-500MB downloads when cached results exist
+- Save filtered results separately for faster subsequent access
+
+### 4. File Size Warnings
+
+Before downloading files >200MB, you'll see warnings like:
+
+```
+Warning: Large file download: ln.data.1.AllData (458.3 MB)
+Estimated peak memory usage: ~1.6 GB
+Consider using state/industry filters if available to reduce file size.
+```
+
+## Reducing Memory Usage
+
+### Use Filters When Available
+
+Many functions support filtering to download only what you need:
+
+```{r eval=FALSE}
+# CES: Download only specific states (much smaller)
+ces_ma <- get_ces(states = "MA")
+
+# CES: Download only specific industry
+ces_manufacturing <- get_ces(industry_filter = "manufacturing")
+
+# LAUS: Download only state-level data
+laus_states <- get_laus(geography = "state_adjusted")
+```
+
+### Use Caching Strategically
+
+Enable persistent caching to avoid re-downloading large files:
+
+```{r eval=FALSE}
+# Set environment variable (in .Renviron)
+# USE_BLS_CACHE=TRUE
+
+# Or use cache_dir parameter
+get_cps_subset(
+  series_ids = "LNS14000000",
+  cache = TRUE,
+  cache_dir = "C:/my_bls_cache"  # Persistent location
+)
+```
+
+### Request Only Needed Series
+
+Instead of downloading the full dataset and filtering in R, use built-in filters:
+
+```{r eval=FALSE}
+# GOOD: Download only specific series
+unemployment <- get_cps_subset(
+  series_ids = c("LNS14000000", "LNS12000000"),
+  cache = TRUE
+)
+
+# LESS EFFICIENT: Download full file then filter
+# (Though the package optimizes this with subset caching)
+```
+
+## Environment Variables for Testing
+
+### Skip Memory-Intensive Tests
+
+If you're developing or running tests in a memory-constrained environment:
+
+```{r eval=FALSE}
+# Set in .Renviron or before running tests
+Sys.setenv(SKIP_MEMORY_TESTS = "TRUE")
+
+# Then run tests
+devtools::test()
+```
+
+This will skip tests that download the large `ln.data.1.AllData` file.
+
+### Control Cache Location
+
+```{r eval=FALSE}
+# Set custom cache directory
+Sys.setenv(BLS_CACHE_DIR = "D:/BLS_data_cache")
+
+# Enable caching globally
+Sys.setenv(USE_BLS_CACHE = "TRUE")
+```
+
+## Troubleshooting Memory Issues
+
+### Symptoms
+
+- R crashes during `devtools::test()`
+- R crashes when calling `get_cps_subset()` with characteristics
+- "Cannot allocate vector of size..." errors
+- Positron/RStudio becomes unresponsive
+
+### Solutions
+
+1. **Close other applications** to free RAM before downloading large files
+
+2. **Use caching** to avoid re-downloading during repeated operations:
+   ```{r eval=FALSE}
+   Sys.setenv(USE_BLS_CACHE = "TRUE")
+   ```
+
+3. **Use specific series IDs** instead of characteristic filters when possible:
+   ```{r eval=FALSE}
+   # Discover series first
+   explore_cps_series(
+     search = "unemployment",
+     characteristics = list(sexs_code = "1")
+   )
+
+   # Then download specific series
+   get_cps_subset(series_ids = c("LNS13000001", "LNS14000001"))
+   ```
+
+4. **Skip memory-intensive tests** during development:
+   ```{r eval=FALSE}
+   Sys.setenv(SKIP_MEMORY_TESTS = "TRUE")
+   ```
+
+5. **Increase R's memory limit** (Windows only):
+   ```{r eval=FALSE}
+   # Set to 8GB (if you have sufficient RAM)
+   memory.limit(size = 8000)
+   ```
+
+6. **Use 64-bit R** (not 32-bit) for accessing more memory
+
+## Understanding File Sizes
+
+Common BLS dataset sizes:
+
+| Dataset | Typical Size | In-Memory (Character) | In-Memory (Optimized) |
+|---------|--------------|----------------------|----------------------|
+| CES AllData | ~500 MB | ~2-3 GB | ~800 MB - 1.2 GB |
+| CPS (LN) AllData | ~400 MB | ~1.5-2 GB | ~600-800 MB |
+| LAUS County | ~350 MB | ~1.2-1.8 GB | ~500-700 MB |
+| CES Single State | ~10-30 MB | ~50-150 MB | ~20-60 MB |
+
+**Note:** "In-Memory (Optimized)" reflects the improvements in BLSloadR 0.3.0+.
+
+## Best Practices
+
+1. **Start small**: Test your code with specific states or series before downloading full datasets
+
+2. **Use persistent caching**: Set up a permanent cache directory to avoid re-downloading
+
+3. **Monitor memory**: Use `pryr::mem_used()` or Task Manager to track memory usage
+
+4. **Close and restart R**: Between large operations to ensure clean memory state
+
+5. **Leverage subset caching**: Functions like `get_cps_subset()` cache filtered results, making subsequent queries fast
+
+## Example Workflow
+
+```{r eval=FALSE}
+# 1. Set up persistent caching (one time)
+Sys.setenv(USE_BLS_CACHE = "TRUE")
+Sys.setenv(BLS_CACHE_DIR = "C:/BLS_cache")
+
+# 2. Explore available series
+cps_explore <- explore_cps_series(search = "unemployment rate")
+
+# 3. Download specific series (uses cache)
+unemployment <- get_cps_subset(
+  series_ids = c("LNS14000000", "LNS14000001", "LNS14000002"),
+  cache = TRUE
+)
+
+# 4. Subsequent calls use cached subset (very fast)
+unemployment_refresh <- get_cps_subset(
+  series_ids = c("LNS14000000", "LNS14000001", "LNS14000002"),
+  cache = TRUE
+)
+```
+
+## Getting Help
+
+If you continue to experience memory issues:
+
+1. Check your system's available RAM
+2. Review the file size warnings in the console
+3. Consider using more targeted queries
+4. Open an issue at https://github.com/schmidtDETR/BLSloadR/issues with:
+   - Your system RAM
+   - The specific function call that's failing
+   - Any error messages
+
+The BLSloadR package is designed to handle large files efficiently, but memory constraints are ultimately limited by your system's available RAM.

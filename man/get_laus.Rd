@@ -73,8 +73,8 @@ By default, returns a data.table with LAUS data. If return_diagnostics = TRUE,
 This function downloads Local Area Unemployment Statistics data from the U.S. Bureau
  of Labor Statistics. Due to the large size of some LAUS datasets (county and city
  files are >300MB), users must specify which geographic level to download. The function
- provides access to both seasonally adjusted and unadjusted data at various geographic levels. 
- Additional datasets provide comprehensive non-seasonally-adjusted data for all areas broken out 
+ provides access to both seasonally adjusted and unadjusted data at various geographic levels.
+ Additional datasets provide comprehensive non-seasonally-adjusted data for all areas broken out
  in 5-year increments
 }
 \details{

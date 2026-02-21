@@ -1,151 +1,395 @@
 #' Download BLS Time Series Data
 #'
-#' This function downloads a tab-delimited BLS flat file, incorporating 
+#' This function downloads a tab-delimited BLS flat file, incorporating
 #' diagnostic information about the file and returning an object with the
 #' bls_data class that can be used in the BLSloadR package.
 #'
 #' @param url Character string. URL to the BLS flat file
-#' @param verbose Logical. If TRUE, prints additional messages during file read and processing.
+#' @param verbose Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.
 #' @param cache Logical. If TRUE, uses local persistent caching.
-#' @return A named list with the data and diagnostics.
+#' @param use_fallback Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.
+#' @return A named list with two elements:
+#'    \describe{
+#'     \item{data}{A data.table with the results of passing the url contents to 'data.table::fread()' as a tab-delimited text file.}
+#'     \item{diagnostics}{A named list of diagnostics run when reading the file including column names, empty columns, cleaning applied to the file, the url, the column names and original and final dimensions of the data.}
+#'   }
 #' @export
 #' @importFrom httr GET stop_for_status content add_headers
 #' @importFrom data.table fread
-fread_bls <- function(url, verbose = FALSE, cache = check_bls_cache_env()) {
-  
+#' @importFrom utils download.file
+#' @examples
+#' \donttest{
+#' data <- fread_bls("https://download.bls.gov/pub/time.series/ec/ec.series")
+#' }
+
+fread_bls <- function(
+  url,
+  verbose = FALSE,
+  cache = check_bls_cache_env(),
+  use_fallback = TRUE
+) {
   # --- 1. DATA ACQUISITION ---
   if (cache) {
     # Uses the smart download logic to check headers/mtime
     temp_file <- smart_bls_download(url, verbose = verbose)
   } else {
-    headers <- c(
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-      "Accept-Encoding" = "gzip, deflate, br",
-      "Accept-Language" = "en-US,en;q=0.9",
-      "Connection" = "keep-alive",
-      "Host" = "download.bls.gov",
-      "Referer" = "https://download.bls.gov/pub/time.series/",
-      "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-      "Sec-Ch-Ua-Mobile" = "?0",
-      "Sec-Ch-Ua-Platform" = '"Windows"',
-      "Sec-Fetch-Dest" = "document",
-      "Sec-Fetch-Mode" = "navigate",
-      "Sec-Fetch-Site" = "same-origin",
-      "Sec-Fetch-User" = "?1",
-      "Upgrade-Insecure-Requests" = "1",
-      "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    )
-    
-    response <- httr::GET(url, httr::add_headers(.headers = headers))
-    httr::stop_for_status(response)
-    
-    raw_data <- httr::content(response, as = "raw")
+    headers <- get_bls_headers()
+
+    # Create temporary file for download
     temp_file <- tempfile(fileext = ".txt")
-    writeBin(raw_data, temp_file)
+
+    # Try httr::GET first, fallback to download.file for large files
+    download_successful <- FALSE
+    download_method <- "httr"
+
+    tryCatch(
+      {
+        response <- GET(url, add_headers(.headers = headers))
+
+        # Check for successful response
+        stop_for_status(response)
+
+        # Use binary mode to avoid building a giant character object
+        raw_data <- content(response, as = "raw")
+
+        # Check if we got an HTML error page (Access Denied, etc.)
+        # HTML pages are typically much smaller than actual data files
+        if (length(raw_data) < 10000) {
+          # Check if it's HTML
+          raw_text <- rawToChar(raw_data[1:min(500, length(raw_data))])
+          if (grepl("<!DOCTYPE|<html", raw_text, ignore.case = TRUE)) {
+            if (use_fallback) {
+              if (verbose) {
+                message(
+                  "Received HTML response, trying download.file() fallback..."
+                )
+              }
+              stop("HTML response detected")
+            } else {
+              stop("Received HTML error page instead of data file")
+            }
+          }
+        }
+
+        # Write raw data to temporary file first for analysis
+        writeBin(raw_data, temp_file)
+        download_successful <- TRUE
+      },
+      error = function(e) {
+        if (use_fallback) {
+          if (verbose) {
+            message("httr::GET in-memory failed, using write_disk fallback...")
+          }
+          download_method <<- "httr_disk"
+
+          tryCatch(
+            {
+              # Use httr::GET with write_disk for large files
+              # This avoids loading into memory while preserving headers
+              response <- GET(
+                url,
+                add_headers(.headers = headers),
+                write_disk(temp_file, overwrite = TRUE),
+                progress()
+              )
+              stop_for_status(response)
+              download_successful <<- TRUE
+            },
+            error = function(e2) {
+              stop(
+                "Both httr::GET in-memory and write_disk failed: ",
+                e2$message
+              )
+            }
+          )
+        } else {
+          stop("Download failed: ", e$message)
+        }
+      }
+    )
+
+    if (!download_successful) {
+      stop("Failed to download file from: ", url)
+    }
   }
-  
+
   # --- 2. INITIAL DIAGNOSTIC PASS ---
-  # Read as-is to check for phantom columns
-  initial_data <- data.table::fread(
-    temp_file, 
-    sep = "\t", 
-    colClasses = "character", 
-    header = TRUE, 
-    fill = TRUE, 
-    showProgress = FALSE
-  )
-  
+  # For large files, use a sample to detect phantom columns instead of reading entire file
+  file_size <- file.info(temp_file)$size
+  use_sampling <- file_size > 50 * 1024 * 1024 # 50MB threshold
+
+  if (use_sampling) {
+    # Read only first 10000 rows for phantom column detection
+    initial_data <- data.table::fread(
+      temp_file,
+      sep = "\t",
+      colClasses = "character",
+      header = TRUE,
+      fill = TRUE,
+      nrows = 10000
+    )
+  } else {
+    # Read full file for smaller files
+    initial_data <- data.table::fread(
+      temp_file,
+      sep = "\t",
+      colClasses = "character",
+      header = TRUE,
+      fill = TRUE
+    )
+  }
+
+  # Identify columns that are completely empty (phantom columns)
   phantom_cols <- sapply(initial_data, function(col) {
     all(is.na(col) | col == "" | grepl("^\\s*$", col))
   })
-  
-  has_phantoms <- sum(phantom_cols) > 0
-  
-  if (verbose) {
-    message("Initial data dimensions: ", nrow(initial_data), " x ", ncol(initial_data))
-    message("Phantom columns detected: ", sum(phantom_cols))
-  }
-  
-  # --- 3. VECTORIZED CLEANING (Only if needed) ---
-  if (has_phantoms) {
-    # Read file back as raw to perform vectorized string replacement
-    raw_bytes <- readBin(temp_file, "raw", n = file.info(temp_file)$size)
-    text_data <- rawToChar(raw_bytes)
-    
-    # VECTORIZED REPLACEMENT: Faster than row-by-row sapply
-    # Replaces tab + whitespace + tab with single tab across the entire file at once
-    cleaned_data <- gsub("\t\\s+\t", "\t", text_data, perl = TRUE)
-    
-    # Overwrite the file with cleaned data
-    writeLines(cleaned_data, temp_file, sep = "")
-    
-    if (verbose) message("Applied vectorized tab cleaning.")
-    
-    # Re-read the cleaned data (Necessary because the structure changed)
-    return_data <- data.table::fread(
-      temp_file, 
-      sep = "\t", 
-      colClasses = "character", 
-      header = TRUE, 
-      fill = TRUE,
-      showProgress = FALSE
+
+  if (verbose == TRUE) {
+    message(
+      "Initial data dimensions:",
+      nrow(initial_data),
+      "x",
+      ncol(initial_data),
+      if (use_sampling) " (sampled)" else "",
+      "\n"
     )
-  } else {
-    # If no cleaning was needed, return_data is just initial_data
-    return_data <- initial_data
+    message("Phantom columns detected:", sum(phantom_cols), "\n")
+    if (sum(phantom_cols) > 0) {
+      message(
+        "Phantom column names:",
+        paste(names(initial_data)[phantom_cols], collapse = ", "),
+        "\n"
+      )
+    }
   }
-  
-  # --- 4. HEADER & COLUMN MANAGEMENT ---
-  # Extract and clean header names from the file
+
+  # If phantom columns exist, apply selective cleaning using streaming approach
+  if (sum(phantom_cols) > 0) {
+    if (verbose == TRUE) {
+      message("Applied selective tab cleaning to remove phantom columns\n")
+    }
+
+    # For large files, use streaming line-by-line processing
+    temp_file_cleaned <- tempfile(fileext = ".txt")
+
+    con_in <- file(temp_file, "r")
+    con_out <- file(temp_file_cleaned, "w")
+
+    line_count <- 0
+    while (length(line <- readLines(con_in, n = 1000, warn = FALSE)) > 0) {
+      cleaned_lines <- sapply(
+        line,
+        function(l) {
+          if (grepl("\t\\s+\t", l)) {
+            gsub("\t\\s+\t", "\t", l, perl = TRUE)
+          } else {
+            l
+          }
+        },
+        USE.NAMES = FALSE
+      )
+      writeLines(cleaned_lines, con_out, sep = "\n")
+      line_count <- line_count + length(line)
+    }
+
+    close(con_in)
+    close(con_out)
+
+    # Replace original with cleaned
+    file.rename(temp_file_cleaned, temp_file)
+  } else {
+    if (verbose == TRUE) {
+      message("No phantom columns detected, using original data\n")
+    }
+  }
+
+  # Read the header row separately
   header_line <- readLines(temp_file, n = 1)
-  header_names <- trimws(strsplit(header_line, "\t", fixed = TRUE)[[1]])
-  
+
+  # Split header by tabs and clean whitespace
+  header_names <- strsplit(header_line, "\t", fixed = TRUE)[[1]]
+  header_names <- trimws(header_names)
+
+  if (verbose == TRUE) {
+    # Print diagnostic info
+    message("Header parsing debug:\n")
+    message("Raw header line length:", nchar(header_line), "\n")
+    message("Number of tab-separated fields:", length(header_names), "\n")
+    message(
+      "Header names:",
+      paste(sprintf("'%s'", header_names), collapse = ", "),
+      "\n"
+    )
+  }
+
+  # Optimize colClasses by detecting numeric columns during sampling
+  optimized_colClasses <- rep("character", length(header_names))
+
+  if (use_sampling) {
+    # Detect which columns are likely numeric (for memory optimization)
+    for (i in seq_along(initial_data)) {
+      col_sample <- initial_data[[i]]
+      # Check if >90% of non-empty values are numeric
+      non_empty <- col_sample[col_sample != ""]
+      if (length(non_empty) > 0) {
+        numeric_vals <- suppressWarnings(as.numeric(non_empty))
+        pct_numeric <- sum(!is.na(numeric_vals)) / length(non_empty)
+        if (pct_numeric > 0.9) {
+          optimized_colClasses[i] <- "numeric"
+        }
+      }
+    }
+
+    if (verbose == TRUE) {
+      n_numeric <- sum(optimized_colClasses == "numeric")
+      if (n_numeric > 0) {
+        message("Optimizing memory: detected ", n_numeric, " numeric columns\n")
+      }
+    }
+  }
+
+  # Read the final data without headers using fread with optimized column types
+  return_data <- data.table::fread(
+    temp_file,
+    sep = "\t",
+    colClasses = optimized_colClasses,
+    header = FALSE,
+    skip = 1,
+    fill = TRUE
+  )
+
+  if (verbose == TRUE) {
+    message(
+      "Final data dimensions:",
+      nrow(return_data),
+      "x",
+      ncol(return_data),
+      " in ",
+      url,
+      "\n"
+    )
+  }
+
+  # Handle column count mismatch
   n_header_cols <- length(header_names)
   n_data_cols <- ncol(return_data)
-  
+
   if (n_header_cols != n_data_cols) {
-    if (verbose) warning("Column count mismatch! Headers: ", n_header_cols, " Data: ", n_data_cols)
+    warning(
+      "Column count mismatch! Headers:",
+      n_header_cols,
+      "Data:",
+      n_data_cols,
+      "\n"
+    )
+
     if (n_data_cols > n_header_cols) {
-      header_names <- c(header_names, paste0("EXTRA_COL_", 1:(n_data_cols - n_header_cols)))
+      header_names <- c(
+        header_names,
+        paste0("EXTRA_COL_", 1:(n_data_cols - n_header_cols))
+      )
     } else {
       header_names <- header_names[1:n_data_cols]
     }
   }
-  
-  # Assign names
-  if (length(header_names) == ncol(return_data)) {
-    names(return_data) <- header_names
-  }
-  
-  # Final Empty Column Removal (Post-cleaning check)
+
+  # Only remove columns that are STILL completely empty after cleaning
   empty_cols <- sapply(return_data, function(col) {
     all(is.na(col) | col == "" | grepl("^\\s*$", col))
   })
-  
+
   if (any(empty_cols)) {
-    if (verbose) message("Removing ", sum(empty_cols), " remaining empty columns.")
+    if (verbose == TRUE) {
+      message("Removing", sum(empty_cols), "remaining empty columns\n")
+    }
     return_data <- return_data[, !empty_cols, with = FALSE]
+    # Also remove corresponding header names
+    header_names <- header_names[!empty_cols]
   }
-  
+
+  # Final column name assignment
+  if (length(header_names) == ncol(return_data)) {
+    names(return_data) <- header_names
+  } else {
+    warning(paste(
+      "Final header count (",
+      length(header_names),
+      ") doesn't match final column count (",
+      ncol(return_data),
+      "), using generic names"
+    ))
+    names(return_data) <- paste0("V", 1:ncol(return_data))
+  }
+
   # --- 5. CLEANUP & DIAGNOSTICS ---
   if (!cache) {
     unlink(temp_file)
   }
-  
+
+  if (verbose == TRUE) {
+    message(
+      "Final column names:",
+      paste(names(return_data), collapse = ", "),
+      "\n"
+    )
+  }
+
+  # Create diagnostic information
   diagnostics <- list(
     url = url,
     original_dimensions = c(nrow(initial_data), ncol(initial_data)),
+    sampled_for_detection = use_sampling,
     final_dimensions = c(nrow(return_data), ncol(return_data)),
     phantom_columns_detected = sum(phantom_cols),
-    cleaning_applied = has_phantoms,
+    phantom_column_names = if (sum(phantom_cols) > 0) {
+      names(initial_data)[phantom_cols]
+    } else {
+      character(0)
+    },
+    cleaning_applied = sum(phantom_cols) > 0,
     header_data_mismatch = n_header_cols != n_data_cols,
     empty_columns_removed = sum(empty_cols),
     final_column_names = names(return_data),
     warnings = character(0)
   )
-  
-  result <- list(data = return_data, diagnostics = diagnostics)
+
+  # Add specific warnings
+  if (diagnostics$header_data_mismatch) {
+    diagnostics$warnings <- c(
+      diagnostics$warnings,
+      paste(
+        "Header/data column count mismatch: Headers =",
+        n_header_cols,
+        ", Data =",
+        n_data_cols
+      )
+    )
+  }
+
+  if (diagnostics$phantom_columns_detected > 0) {
+    diagnostics$warnings <- c(
+      diagnostics$warnings,
+      paste(
+        "Phantom columns detected and cleaned:",
+        diagnostics$phantom_columns_detected
+      )
+    )
+  }
+
+  if (diagnostics$empty_columns_removed > 0) {
+    diagnostics$warnings <- c(
+      diagnostics$warnings,
+      paste("Empty columns removed:", diagnostics$empty_columns_removed)
+    )
+  }
+
+  # Return both data and diagnostics
+  result <- list(
+    data = return_data,
+    diagnostics = diagnostics
+  )
+
   class(result) <- c("bls_data", "list")
-  
+
   return(result)
 }

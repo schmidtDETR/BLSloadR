@@ -78,7 +78,7 @@ jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
 print_bls_warnings(jolts_with_diagnostics)
 
 # View job openings by state for latest period
-job_openings <- jolts_data[dataelement_text == "Job openings" & 
+job_openings <- jolts_data[dataelement_text == "Job openings" &
                           date == max(date)]
 }
 }
