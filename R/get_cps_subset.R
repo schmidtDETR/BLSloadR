@@ -131,7 +131,11 @@ get_cps_subset <- function(
   series_url <- paste0(base_url, "ln.series")
 
   # 2. Download series file using fread_bls
-  series_result <- fread_bls(series_url, verbose = !suppress_warnings)
+  if (suppress_warnings) {
+    series_result <- suppressWarnings(fread_bls(series_url, verbose = FALSE))
+  } else {
+    series_result <- fread_bls(series_url, verbose = TRUE)
+  }
   series_dt <- series_result$data
 
   # 3. Resolve characteristics into exact series IDs
@@ -167,7 +171,7 @@ get_cps_subset <- function(
 
   # 5. Get remote modification time for master file
   bls_headers <- httr::add_headers(
-    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
   )
 
   remote_mtime <- NULL
@@ -197,12 +201,15 @@ get_cps_subset <- function(
     remote_mtime <- Sys.time()
   }
 
-  # 6. Evaluate Subset Cache Validity
+  # 6. Evaluate Subset Cache Validity FIRST to avoid downloading large master file
   needs_extraction <- TRUE
   if (cache && file.exists(subset_cache_path)) {
     subset_info <- file.info(subset_cache_path)
     if (subset_info$mtime >= (remote_mtime - 1)) {
       needs_extraction <- FALSE
+      if (!suppress_warnings) {
+        message("Using cached subset (avoiding master file download)...")
+      }
     }
   }
 
@@ -215,15 +222,29 @@ get_cps_subset <- function(
     }
 
     # Download master file using fread_bls with fallback enabled
-    master_result <- fread_bls(
-      data_url,
-      use_fallback = TRUE,
-      verbose = !suppress_warnings
-    )
+    if (suppress_warnings) {
+      master_result <- suppressWarnings(
+        fread_bls(
+          data_url,
+          use_fallback = TRUE,
+          verbose = FALSE
+        )
+      )
+    } else {
+      master_result <- fread_bls(
+        data_url,
+        use_fallback = TRUE,
+        verbose = TRUE
+      )
+    }
     master_dt <- master_result$data
 
     # Filter to requested series
     raw_subset <- master_dt |> dplyr::filter(series_id %in% series_ids)
+
+    # Explicit memory cleanup: remove large master dataset and trigger garbage collection
+    rm(master_dt, master_result)
+    gc(verbose = FALSE)
 
     # Save the subset to cache and sync its modified time to the server's update time
     if (cache) {
@@ -268,7 +289,11 @@ get_cps_subset <- function(
     # Attempt to fetch mapping file if it exists on the BLS server
     tryCatch(
       {
-        map_result <- fread_bls(map_url, verbose = FALSE)
+        if (suppress_warnings) {
+          map_result <- suppressWarnings(fread_bls(map_url, verbose = FALSE))
+        } else {
+          map_result <- fread_bls(map_url, verbose = FALSE)
+        }
         map_dt <- map_result$data |>
           dplyr::select(-tidyselect::any_of(columns_to_remove))
 
@@ -290,24 +315,47 @@ get_cps_subset <- function(
 
   # 10. Format output
   if (simplify_table) {
-    full_dt <- full_dt |>
-      dplyr::mutate(
-        value = as.numeric(value),
-        period_type_code = substr(period, 1, 1),
-        date = dplyr::case_when(
-          period %in% c("M13", "Q05", "A01") ~ lubridate::ym(paste0(
-            year,
-            "-01"
-          )),
-          period_type_code == "Q" ~ lubridate::yq(paste(
-            year,
-            "Q",
-            substr(period, 3, 3)
-          )),
-          TRUE ~ lubridate::ym(paste0(year, period))
-        )
-      ) |>
-      dplyr::select(-tidyselect::contains("_code"))
+    if (suppress_warnings) {
+      full_dt <- suppressWarnings(
+        full_dt |>
+          dplyr::mutate(
+            value = as.numeric(value),
+            period_type_code = substr(period, 1, 1),
+            date = dplyr::case_when(
+              period %in% c("M13", "Q05", "A01") ~ lubridate::ym(paste0(
+                year,
+                "-01"
+              )),
+              period_type_code == "Q" ~ lubridate::yq(paste(
+                year,
+                "Q",
+                substr(period, 3, 3)
+              )),
+              TRUE ~ lubridate::ym(paste0(year, period))
+            )
+          ) |>
+          dplyr::select(-tidyselect::contains("_code"))
+      )
+    } else {
+      full_dt <- full_dt |>
+        dplyr::mutate(
+          value = as.numeric(value),
+          period_type_code = substr(period, 1, 1),
+          date = dplyr::case_when(
+            period %in% c("M13", "Q05", "A01") ~ lubridate::ym(paste0(
+              year,
+              "-01"
+            )),
+            period_type_code == "Q" ~ lubridate::yq(paste(
+              year,
+              "Q",
+              substr(period, 3, 3)
+            )),
+            TRUE ~ lubridate::ym(paste0(year, period))
+          )
+        ) |>
+        dplyr::select(-tidyselect::contains("_code"))
+    }
 
     processing_steps <- c(processing_steps, "simplified_table")
   }
