@@ -13,7 +13,7 @@ bls_overview(
 \arguments{
 \item{series_id}{Character string. The BLS series identifier (e.g., "ln", "cu", "ap")}
 
-\item{display_method}{Character string. How to display the overview: 
+\item{display_method}{Character string. How to display the overview:
 "viewer" (default), "console", or "popup"}
 
 \item{base_url}{Character string. Base URL for BLS data (default uses official BLS site)}
@@ -29,7 +29,7 @@ Fetches and displays the overview text file for a BLS dataset. This provides a c
 # Display Average Price Data overview
 bls_overview("ap")
 
-# Display consumer price index overview  
+# Display consumer price index overview
 bls_overview("cu")
 
 # Display in console instead of viewer

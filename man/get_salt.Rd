@@ -15,7 +15,7 @@ get_salt(
 \item{only_states}{Logical. If TRUE (default), includes only state-level data.
 If FALSE, includes sub-state areas like New York City where available.}
 
-\item{geometry}{Logical. If TRUE, uses tigris::states() to download shapefiles for the states 
+\item{geometry}{Logical. If TRUE, uses tigris::states() to download shapefiles for the states
 to include in the data. If FALSE (default), only returns data table.}
 
 \item{suppress_warnings}{Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
@@ -40,15 +40,15 @@ of labor market conditions beyond the standard unemployment rate (U-3).
 salt_data <- get_salt()
 
 # View top 10 highest U-6 rates by state in current data
-latest <- salt_data |> 
-  dplyr::filter(date == max(date)) |> 
-  dplyr::select(state, u6) |> 
+latest <- salt_data |>
+  dplyr::filter(date == max(date)) |>
+  dplyr::select(state, u6) |>
   dplyr::arrange(-u6)
 head(latest)
 
 # Include sub-state areas
 salt_all <- get_salt(only_states = FALSE)
- 
+
 # Download SALT with geometry included
 get_salt(geometry = TRUE)
 

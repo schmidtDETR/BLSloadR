@@ -11,7 +11,7 @@ download_bls_files(
 )
 }
 \arguments{
-\item{urls}{Named character vector of URLs to download}
+\item{urls}{Named or unnamed character vector of URLs to download. If unnamed, names will be auto-generated from basenames.}
 
 \item{suppress_warnings}{Logical. If TRUE, suppress individual download warnings}
 

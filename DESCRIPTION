@@ -41,12 +41,15 @@ Imports:
 RoxygenNote: 7.3.3
 Suggests:
     ggplot2,
+    gt,
     knitr,
     mapgl,
     rmarkdown,
-    tidyr,
-    gt
+    R.utils,
+    testthat (>= 3.0.0),
+    tidyr
 VignetteBuilder: knitr
 URL: https://schmidtdetr.github.io/BLSloadR/
 Config/Needs/website: rmarkdown
+Config/testthat/edition: 3
 LazyData: true
