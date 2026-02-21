@@ -378,9 +378,11 @@ load_bls_dataset <- function(
   full_dt <- left_join(data_dt, series_dt, by = "series_id")
   processing_steps <- c(processing_steps, "joined_data_to_series")
 
-  # Memory cleanup after initial large join
-  rm(data_dt, series_dt)
-  gc(verbose = FALSE)
+  # Memory cleanup after initial large join (skip if return_full=TRUE needs these)
+  if (!return_full) {
+    rm(data_dt, series_dt)
+    gc(verbose = FALSE)
+  }
 
   # STEP 2: Join aspect file if it exists (after series, before mapping files)
   if (
