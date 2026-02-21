@@ -1,3 +1,31 @@
+#' Get standard BLS HTTP headers
+#'
+#' Returns a named character vector of HTTP headers required for BLS API requests.
+#' These headers mimic a standard browser to ensure compatibility with BLS servers.
+#'
+#' @param host The host to use in the Host header (default: "download.bls.gov")
+#' @return A named character vector of HTTP headers
+#' @keywords internal
+get_bls_headers <- function(host = "download.bls.gov") {
+  c(
+    "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Encoding" = "gzip, deflate, br",
+    "Accept-Language" = "en-US,en;q=0.9",
+    "Connection" = "keep-alive",
+    "Host" = host,
+    "Referer" = "https://download.bls.gov/pub/time.series/",
+    "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+    "Sec-Ch-Ua-Mobile" = "?0",
+    "Sec-Ch-Ua-Platform" = '"Windows"',
+    "Sec-Fetch-Dest" = "document",
+    "Sec-Fetch-Mode" = "navigate",
+    "Sec-Fetch-Site" = "same-origin",
+    "Sec-Fetch-User" = "?1",
+    "Upgrade-Insecure-Requests" = "1",
+    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  )
+}
+
 #' Create a BLS data object with diagnostics
 #'
 #' This is a helper function to create a list with the additional class 'bls_data_collection' containing data downloaded form the U.S. Bureau of Labor Statistics as well as diagnostic details about the download. It is used invisibly in the package to bundle information about file downloads.
@@ -46,9 +74,19 @@ create_bls_object <- function(
     download_timestamp = Sys.time()
   )
 
+  # Create a consolidated diagnostics element for backwards compatibility
+  consolidated_diagnostics <- list(
+    data_type = data_type,
+    processing_steps = processing_steps,
+    download_diagnostics = download_diagnostics,
+    warnings = all_warnings,
+    summary = summary_info
+  )
+
   # Create result object
   result <- list(
     data = data,
+    diagnostics = consolidated_diagnostics,
     download_diagnostics = download_diagnostics,
     warnings = all_warnings,
     summary = summary_info
@@ -87,7 +125,7 @@ get_bls_data <- function(bls_obj) {
 #' @export
 get_bls_diagnostics <- function(bls_obj) {
   if (inherits(bls_obj, "bls_data_collection")) {
-    return(bls_obj$download_diagnostics)
+    return(bls_obj$diagnostics)
   } else if (inherits(bls_obj, "bls_data")) {
     return(bls_obj$diagnostics)
   } else {
@@ -127,25 +165,7 @@ get_bls_diagnostics <- function(bls_obj) {
 #' }
 smart_bls_download <- function(url, cache_dir = NULL, verbose = FALSE) {
   # 1. Define specific headers required by BLS servers
-  bls_headers <- httr::add_headers(
-    .headers = c(
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-      "Accept-Encoding" = "gzip, deflate, br",
-      "Accept-Language" = "en-US,en;q=0.9",
-      "Connection" = "keep-alive",
-      "Host" = "download.bls.gov",
-      "Referer" = "https://download.bls.gov/pub/time.series/",
-      "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-      "Sec-Ch-Ua-Mobile" = "?0",
-      "Sec-Ch-Ua-Platform" = '"Windows"',
-      "Sec-Fetch-Dest" = "document",
-      "Sec-Fetch-Mode" = "navigate",
-      "Sec-Fetch-Site" = "same-origin",
-      "Sec-Fetch-User" = "?1",
-      "Upgrade-Insecure-Requests" = "1",
-      "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    )
-  )
+  bls_headers <- httr::add_headers(.headers = get_bls_headers())
 
   # 2. Establish cache directory
   if (is.null(cache_dir)) {
@@ -185,6 +205,25 @@ smart_bls_download <- function(url, cache_dir = NULL, verbose = FALSE) {
   )
 
   remote_size <- as.numeric(res_headers[["content-length"]])
+
+  # Warn about large files (>200MB)
+  if (!is.na(remote_size) && remote_size > 200 * 1024 * 1024) {
+    size_mb <- round(remote_size / (1024 * 1024), 1)
+    # Estimate memory usage: compressed file size * 3-4x for decompression + parsing
+    est_memory_gb <- round((remote_size * 3.5) / (1024^3), 2)
+    warning(
+      "Large file download: ",
+      basename(url),
+      " (",
+      size_mb,
+      " MB)\n",
+      "Estimated peak memory usage: ~",
+      est_memory_gb,
+      " GB\n",
+      "Consider using state/industry filters if available to reduce file size.",
+      call. = FALSE
+    )
+  }
 
   # 4. Caching Logic
   needs_download <- TRUE
@@ -368,7 +407,7 @@ has_bls_issues <- function(bls_obj) {
 #'
 #' This function is used to pass multiple URLs at the Bureau of Labor Statistics into 'fread_bls()'
 #'
-#' @param urls Named character vector of URLs to download
+#' @param urls Named or unnamed character vector of URLs to download. If unnamed, names will be auto-generated from basenames.
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
 #' @param cache Logical. If TRUE, uses local persistent caching.
 #'
@@ -380,6 +419,11 @@ download_bls_files <- function(
   suppress_warnings = TRUE,
   cache = check_bls_cache_env()
 ) {
+  # Auto-generate names if URLs are unnamed
+  if (is.null(names(urls))) {
+    names(urls) <- basename(urls)
+  }
+
   results <- list()
 
   for (name in names(urls)) {
