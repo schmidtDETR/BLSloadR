@@ -28,6 +28,8 @@ will prompt for an input of which file to use."></head><body>
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/File-cache-guide.html">Using the BLSloadR File Cache</a></li>
+    <li><a class="dropdown-item" href="../articles/memory-management.html">Memory Management and Large Files</a></li>
+    <li><a class="dropdown-item" href="../articles/using_cps_data.html">Working with Current Population Survey (CPS) Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_oews.html">Working with OEWS Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_qcew.html">Working with QCEW Data</a></li>
@@ -127,32 +129,286 @@ and generates a date column from the year and period columns in the data.</p></d
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Auto-selected 'all' file: fm.data.1.AllData</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No aspect files found in the BLS database directory.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.data.1.AllData...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:35306x5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:57</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'series_id', 'year', 'period', 'value', 'footnote_codes'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:35306x5 in https://download.bls.gov/pub/time.series/fm/fm.data.1.AllData</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:series_id, year, period, value, footnote_codes</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.series...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:3144x32</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom column names:footnote_codes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Applied selective tab cleaning to remove phantom columns</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:348</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:32</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'series_id', 'seasonal', 'series_title', 'fchld_code', 'fdat_code', 'fhlf_code', 'fnmatwk_code', 'fnme_code', 'fnmlf_code', 'fnmu_code', 'fnmws_code', 'forig_code', 'frace_code', 'ftpt_code', 'ftyp_code', 'hhlf_code', 'misclf_code', 'mwlf_code', 'prlf_code', 'chld_code', 'lfst_code', 'mari_code', 'orig_code', 'race_code', 'sexs_code', 'tdat_code', 'wkst_code', 'footnote_codes', 'begin_year', 'begin_period', 'end_year', 'end_period'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:3144x32 in https://download.bls.gov/pub/time.series/fm/fm.series</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Removing1remaining empty columns</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:series_id, seasonal, series_title, fchld_code, fdat_code, fhlf_code, fnmatwk_code, fnme_code, fnmlf_code, fnmu_code, fnmws_code, forig_code, frace_code, ftpt_code, ftyp_code, hhlf_code, misclf_code, mwlf_code, prlf_code, chld_code, lfst_code, mari_code, orig_code, race_code, sexs_code, tdat_code, wkst_code, begin_year, begin_period, end_year, end_period</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Single FileData Download Warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ====================================</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. Phantom columns detected and cleaned: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. Empty columns removed: 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.chld...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:15x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'chld_code', 'chld_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:15x2 in https://download.bls.gov/pub/time.series/fm/fm.chld</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:chld_code, chld_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fchld...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:4x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:21</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fchld_code', 'fchld_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:4x2 in https://download.bls.gov/pub/time.series/fm/fm.fchld</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fchld_code, fchld_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fdat...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:3x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fdat_code', 'fdat_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:3x2 in https://download.bls.gov/pub/time.series/fm/fm.fdat</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fdat_code, fdat_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fhlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:7x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fhlf_code', 'fhlf_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:7x2 in https://download.bls.gov/pub/time.series/fm/fm.fhlf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fhlf_code, fhlf_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmatwk...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:8x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:25</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fnmatwk_code', 'fnmatwk_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:8x2 in https://download.bls.gov/pub/time.series/fm/fm.fnmatwk</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fnmatwk_code, fnmatwk_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnme...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:8x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fnme_code', 'fnme_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:8x2 in https://download.bls.gov/pub/time.series/fm/fm.fnme</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fnme_code, fnme_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:8x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:21</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fnmlf_code', 'fnmlf_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:8x2 in https://download.bls.gov/pub/time.series/fm/fm.fnmlf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fnmlf_code, fnmlf_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmu...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:2x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fnmu_code', 'fnmu_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:2x2 in https://download.bls.gov/pub/time.series/fm/fm.fnmu</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fnmu_code, fnmu_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.fnmws...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:4x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:21</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'fnmws_code', 'fnmws_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:4x2 in https://download.bls.gov/pub/time.series/fm/fm.fnmws</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:fnmws_code, fnmws_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.forig...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:2x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:21</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'forig_code', 'forig_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:2x2 in https://download.bls.gov/pub/time.series/fm/fm.forig</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:forig_code, forig_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.frace...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:4x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:21</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'frace_code', 'frace_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:4x2 in https://download.bls.gov/pub/time.series/fm/fm.frace</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:frace_code, frace_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.ftpt...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:3x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'ftpt_code', 'ftpt_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:3x2 in https://download.bls.gov/pub/time.series/fm/fm.ftpt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:ftpt_code, ftpt_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.ftyp...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:6x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'ftyp_code', 'ftyp_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:6x2 in https://download.bls.gov/pub/time.series/fm/fm.ftyp</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:ftyp_code, ftyp_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.hhlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:7x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'hhlf_code', 'hhlf_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:7x2 in https://download.bls.gov/pub/time.series/fm/fm.hhlf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:hhlf_code, hhlf_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.lfst...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:11x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'lfst_code', 'lfst_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:11x2 in https://download.bls.gov/pub/time.series/fm/fm.lfst</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:lfst_code, lfst_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.mari...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:3x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'mari_code', 'mari_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:3x2 in https://download.bls.gov/pub/time.series/fm/fm.mari</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:mari_code, mari_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.misclf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:2x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:23</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'misclf_code', 'misclf_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:2x2 in https://download.bls.gov/pub/time.series/fm/fm.misclf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:misclf_code, misclf_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.mwlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:7x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'mwlf_code', 'mwlf_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:7x2 in https://download.bls.gov/pub/time.series/fm/fm.mwlf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:mwlf_code, mwlf_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.orig...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:2x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'orig_code', 'orig_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:2x2 in https://download.bls.gov/pub/time.series/fm/fm.orig</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:orig_code, orig_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.prlf...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:5x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'prlf_code', 'prlf_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:5x2 in https://download.bls.gov/pub/time.series/fm/fm.prlf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:prlf_code, prlf_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.race...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:4x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'race_code', 'race_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:4x2 in https://download.bls.gov/pub/time.series/fm/fm.race</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:race_code, race_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.seasonal...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:2x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'seasonal_code', 'seasonal_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:2x2 in https://download.bls.gov/pub/time.series/fm/fm.seasonal</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:seasonal_code, seasonal_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.sexs...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:3x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'sexs_code', 'sexs_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:3x2 in https://download.bls.gov/pub/time.series/fm/fm.sexs</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:sexs_code, sexs_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.tdat...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:2x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'tdat_code', 'tdat_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:2x2 in https://download.bls.gov/pub/time.series/fm/fm.tdat</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:tdat_code, tdat_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingfm.wkst...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:3x2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'wkst_code', 'wkst_text'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:3x2 in https://download.bls.gov/pub/time.series/fm/fm.wkst</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:wkst_code, wkst_text</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining data to series file...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.chld on column: chld_code</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.fchld on column: fchld_code</span>
@@ -181,7 +437,20 @@ and generates a date column from the year and period columns in the data.</p></d
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining mapping file fm.wkst on column: wkst_code</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Simplifying table structure...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Download completed successfully with no issues detected.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> BLS-FMData Download Warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ===============================</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total files downloaded:27</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Files with issues:1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Total warnings:2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:35306 x 35</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Summary of warnings:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   1. fm.series : Phantom columns detected and cleaned: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   2. fm.series : Empty columns removed: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Use print_bls_warnings(result, detailed = TRUE) for detailed diagnostics</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get $data element</span></span></span>
 <span class="r-in"><span><span class="va">fm_data</span> <span class="op">&lt;-</span> <span class="va">fm_import</span><span class="op">$</span><span class="va">data</span></span></span>
@@ -189,8 +458,8 @@ and generates a date column from the year and period columns in the data.</p></d
 <span class="r-in"><span><span class="co"># Filter to a Series</span></span></span>
 <span class="r-in"><span><span class="co"># Families with Children Under 6 and No Employed Parent</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">u6_no_emp</span> <span class="op">&lt;-</span> <span class="va">fm_data</span> <span class="op">|&gt;</span> </span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">series_title</span> <span class="op">==</span> <span class="st">"Total families with children under 6 - with no parent employed"</span><span class="op">)</span> <span class="op">|&gt;</span> </span></span>
+<span class="r-in"><span><span class="va">u6_no_emp</span> <span class="op">&lt;-</span> <span class="va">fm_data</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">series_title</span> <span class="op">==</span> <span class="st">"Total families with children under 6 - with no parent employed"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">value</span>, <span class="va">fchld_text</span>, <span class="va">fhlf_text</span>, <span class="va">tdat_text</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>

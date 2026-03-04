@@ -6,14 +6,19 @@ Statistics into 'fread_bls()'
 ## Usage
 
 ``` r
-download_bls_files(urls, suppress_warnings = TRUE, cache = FALSE)
+download_bls_files(
+  urls,
+  suppress_warnings = TRUE,
+  cache = check_bls_cache_env()
+)
 ```
 
 ## Arguments
 
 - urls:
 
-  Named character vector of URLs to download
+  Named or unnamed character vector of URLs to download. If unnamed,
+  names will be auto-generated from basenames.
 
 - suppress_warnings:
 
@@ -21,7 +26,7 @@ download_bls_files(urls, suppress_warnings = TRUE, cache = FALSE)
 
 - cache:
 
-  Logical. If TRUE, download and cache local copy of files.
+  Logical. If TRUE, uses local persistent caching.
 
 ## Value
 

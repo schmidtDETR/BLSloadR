@@ -4,6 +4,8 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/BLSloadR-intro.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/File-cache-guide.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/index.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/articles/memory-management.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_cps_data.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_get_laus.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_get_oews.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/articles/using_get_qcew.html</loc></url>
@@ -20,11 +22,15 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/display_in_popup.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/display_in_viewer.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/download_bls_files.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_characteristics.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_series.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/fread_bls.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_data.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_diagnostics.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_headers.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_summary.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_ces.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_cps_subset.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_jolts.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_laus.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.html</loc></url>

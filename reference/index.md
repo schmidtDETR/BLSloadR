@@ -18,6 +18,10 @@
   : Display text content in Viewer window.
 - [`download_bls_files()`](https://schmidtdetr.github.io/BLSloadR/reference/download_bls_files.md)
   : Helper function for downloading and tracking BLS files
+- [`explore_cps_characteristics()`](https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_characteristics.md)
+  : Explore Available CPS (LN) Characteristics and Codes
+- [`explore_cps_series()`](https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_series.md)
+  : Search and Explore CPS (LN) Series IDs
 - [`fread_bls()`](https://schmidtdetr.github.io/BLSloadR/reference/fread_bls.md)
   : Download BLS Time Series Data
 - [`get_bls_data()`](https://schmidtdetr.github.io/BLSloadR/reference/get_bls_data.md)
@@ -28,6 +32,8 @@
   : Get summary information from BLS data object
 - [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
   : Download Current Employment Statistics (CES) Data
+- [`get_cps_subset()`](https://schmidtdetr.github.io/BLSloadR/reference/get_cps_subset.md)
+  : Efficiently Extract and Cache Subsets of CPS (LN) Data
 - [`get_jolts()`](https://schmidtdetr.github.io/BLSloadR/reference/get_jolts.md)
   : Download Job Openings and Labor Turnover Survey (JOLTS) Data
 - [`get_laus()`](https://schmidtdetr.github.io/BLSloadR/reference/get_laus.md)

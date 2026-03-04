@@ -43,7 +43,7 @@ argument.
 # Display Average Price Data overview
 bls_overview("ap")
 
-# Display consumer price index overview  
+# Display consumer price index overview
 bls_overview("cu")
 
 # Display in console instead of viewer

@@ -129,35 +129,32 @@ for a comprehensive overview of filtering options.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 # Fast download: Massachusetts and Connecticut data only (all industries)
 ces_states <- get_ces(states = c("MA", "CT"))
-#> No download issues detected.
 
 # Fast download: Manufacturing data for all states
 ces_manufacturing <- get_ces(industry_filter = "manufacturing")
-#> No download issues detected.
 
 # Fast download: Current year data for all states and industries
 ces_current <- get_ces(current_year_only = TRUE)
-#> No download issues detected.
-
-# Complete dataset (slower - all states, industries, and years)
-ces_all <- get_ces()
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
-#> No download issues detected.
 
 # Download with full diagnostics if needed
 ces_result <- get_ces(states = "MA", return_diagnostics = TRUE)
-#> No download issues detected.
 ces_data <- get_bls_data(ces_result)
 
 # Check for download issues
 if (has_bls_issues(ces_result)) {
   print_bls_warnings(ces_result)
 }
+} # }
+# \donttest{
+# Complete dataset (slower - all states, industries, and years)
+# WARNING: This downloads a very large file and requires significant memory
+ces_all <- get_ces()
+#> Warning: There was 1 warning in `dplyr::mutate()`.
+#> ℹ In argument: `value = as.numeric(value)`.
+#> Caused by warning:
+#> ! NAs introduced by coercion
 # }
 ```

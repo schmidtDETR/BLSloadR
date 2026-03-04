@@ -28,30 +28,6 @@ default, this will pull seasonally-adjusted data at the statewide level.
 bls_import <- get_laus()
 
 head(bls_import,10)
-#>                series_id   year period value area_type_code       area_code
-#>                   <char> <char> <char> <num>         <char>          <char>
-#>  1: LASST010000000000003   1976    M01 0.067              A ST0100000000000
-#>  2: LASST010000000000003   1976    M02 0.066              A ST0100000000000
-#>  3: LASST010000000000003   1976    M03 0.066              A ST0100000000000
-#>  4: LASST010000000000003   1976    M04 0.065              A ST0100000000000
-#>  5: LASST010000000000003   1976    M05 0.064              A ST0100000000000
-#>  6: LASST010000000000003   1976    M06 0.065              A ST0100000000000
-#>  7: LASST010000000000003   1976    M07 0.065              A ST0100000000000
-#>  8: LASST010000000000003   1976    M08 0.067              A ST0100000000000
-#>  9: LASST010000000000003   1976    M09 0.068              A ST0100000000000
-#> 10: LASST010000000000003   1976    M10 0.069              A ST0100000000000
-#>     measure_code seasonal srd_code area_text      measure_text       date
-#>           <char>   <char>   <char>    <char>            <char>     <Date>
-#>  1:           03        S       01   Alabama unemployment rate 1976-01-01
-#>  2:           03        S       01   Alabama unemployment rate 1976-02-01
-#>  3:           03        S       01   Alabama unemployment rate 1976-03-01
-#>  4:           03        S       01   Alabama unemployment rate 1976-04-01
-#>  5:           03        S       01   Alabama unemployment rate 1976-05-01
-#>  6:           03        S       01   Alabama unemployment rate 1976-06-01
-#>  7:           03        S       01   Alabama unemployment rate 1976-07-01
-#>  8:           03        S       01   Alabama unemployment rate 1976-08-01
-#>  9:           03        S       01   Alabama unemployment rate 1976-09-01
-#> 10:           03        S       01   Alabama unemployment rate 1976-10-01
 ```
 
 Here we can see that while we have a series of data, it has a number of
@@ -81,19 +57,6 @@ bls_state_table <- bls_import |>
          "lfpr" = "labor force participation rate")
 
 head(bls_state_table,10)
-#> # A tibble: 10 × 8
-#>    date       state      ur unemployment employment labor_force   epr  lfpr
-#>    <date>     <chr>   <dbl>        <dbl>      <dbl>       <dbl> <dbl> <dbl>
-#>  1 1976-01-01 Alabama 0.067        98903    1387606     1486509 0.533 0.571
-#>  2 1976-02-01 Alabama 0.066        98677    1387267     1485944 0.532 0.569
-#>  3 1976-03-01 Alabama 0.066        97869    1388303     1486172 0.531 0.568
-#>  4 1976-04-01 Alabama 0.065        96761    1392012     1488773 0.531 0.568
-#>  5 1976-05-01 Alabama 0.064        96242    1396244     1492486 0.532 0.568
-#>  6 1976-06-01 Alabama 0.065        96744    1400036     1496780 0.532 0.569
-#>  7 1976-07-01 Alabama 0.065        98225    1402922     1501147 0.532 0.569
-#>  8 1976-08-01 Alabama 0.067       100273    1405216     1505489 0.532 0.57 
-#>  9 1976-09-01 Alabama 0.068       102302    1407784     1510086 0.532 0.571
-#> 10 1976-10-01 Alabama 0.069       104185    1410640     1514825 0.532 0.572
 ```
 
 ### Step 3: Calculating Summary Statistics
@@ -113,23 +76,10 @@ bls_state_table <- bls_state_table |>
     pct_20 = quantile(value, 0.2, na.rm = TRUE),
     pct_80 = quantile(value, 0.8, na.rm = TRUE),
     median = median(value, na.rm = TRUE)
-  ) |> 
+  ) |>
   ungroup()
 
 head(bls_state_table,10)
-#> # A tibble: 10 × 7
-#>    date       state   measure            value     pct_20      pct_80     median
-#>    <date>     <chr>   <chr>              <dbl>      <dbl>       <dbl>      <dbl>
-#>  1 1976-01-01 Alabama ur                 0.067      0.058       0.092    6.7 e-2
-#>  2 1976-01-01 Alabama unemployment   98903      29410      187753        9.50e+4
-#>  3 1976-01-01 Alabama employment   1387606     364957     2426320        1.20e+6
-#>  4 1976-01-01 Alabama labor_force  1486509     390460     2595504        1.30e+6
-#>  5 1976-01-01 Alabama epr                0.533      0.554       0.618    5.84e-1
-#>  6 1976-01-01 Alabama lfpr               0.571      0.597       0.653    6.31e-1
-#>  7 1976-02-01 Alabama ur                 0.066      0.058       0.092    6.6 e-2
-#>  8 1976-02-01 Alabama unemployment   98677      29414      187838        9.50e+4
-#>  9 1976-02-01 Alabama employment   1387267     364611     2425263        1.20e+6
-#> 10 1976-02-01 Alabama labor_force  1485944     390099     2594800        1.30e+6
 ```
 
 ### Step 4: Narrowing the Data for Display
@@ -145,19 +95,19 @@ the state we are interested in highlighting.
 ``` r
 selected_state <- "Nevada"
 
-bls_current <- bls_state_table |> 
-  filter(date == max(date)) |> 
+bls_current <- bls_state_table |>
+  filter(date == max(date)) |>
   mutate(is_st = if_else(state == selected_state, TRUE, FALSE))
 
-bls_ts <- bls_state_table |> 
+bls_ts <- bls_state_table |>
   filter(state == selected_state)
 ```
 
 #### Unemployment Rate Chart
 
 ``` r
-bls_current |> 
-  filter(measure == "ur") |> 
+bls_current |>
+  filter(measure == "ur") |>
   ggplot() +
   geom_col(aes(x = value, y = reorder(state, value), fill = is_st)) +
   scale_fill_manual(values = c("navy","red")) +
@@ -167,14 +117,11 @@ bls_current |>
   theme(legend.position = "none")
 ```
 
-![A bar chart showing the ranking of unemployment rates by
-state.](using_get_laus_files/figure-html/ur-ranking-1.png)
-
 #### Labor Force Participation Rate Chart
 
 ``` r
-bls_current |> 
-  filter(measure == "lfpr") |> 
+bls_current |>
+  filter(measure == "lfpr") |>
   ggplot() +
   geom_col(aes(x = value, y = reorder(state, value), fill = is_st)) +
   scale_fill_manual(values = c("navy","red")) +
@@ -184,14 +131,11 @@ bls_current |>
   theme(legend.position = "none")
 ```
 
-![A bar chart showing the ranking of labor force participation rates by
-state.](using_get_laus_files/figure-html/lfpr-ranking-1.png)
-
 #### Unemployment Rate Over Time
 
 ``` r
 bls_ts |>
-  filter(measure == "ur") |> 
+  filter(measure == "ur") |>
   ggplot(aes(x = date)) +
   geom_ribbon(aes(ymin = pct_20, ymax = pct_80), fill = "lightgrey") +
   geom_line(aes(y = median), color = "black", linetype = "dashed", linewidth = 0.8) +
@@ -208,15 +152,11 @@ bls_ts |>
   )
 ```
 
-![A ribbon and line chart showing Nevada's unemployment rate compared to
-the central range of other
-states.](using_get_laus_files/figure-html/ur-ribbon-1.png)
-
 #### Labor Force Participation Rate Over Time
 
 ``` r
 bls_ts |>
-  filter(measure == "lfpr") |> 
+  filter(measure == "lfpr") |>
   ggplot(aes(x = date)) +
   geom_ribbon(aes(ymin = pct_20, ymax = pct_80), fill = "lightgrey") +
   geom_line(aes(y = median), color = "black", linetype = "dashed", linewidth = 0.8) +
@@ -232,7 +172,3 @@ bls_ts |>
     plot.subtitle = element_text(size = 15)
   )
 ```
-
-![A ribbon and line chart showing Nevada's labor force participation
-rate compared to the central range of other
-states.](using_get_laus_files/figure-html/lfpr-ribbon-1.png)

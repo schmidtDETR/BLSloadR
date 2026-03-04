@@ -24,6 +24,8 @@ bls_data class that can be used in the BLSloadR package."></head><body>
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/BLSloadR-intro.html">Introduction to BLSloadR</a></li>
     <li><a class="dropdown-item" href="../articles/File-cache-guide.html">Using the BLSloadR File Cache</a></li>
+    <li><a class="dropdown-item" href="../articles/memory-management.html">Memory Management and Large Files</a></li>
+    <li><a class="dropdown-item" href="../articles/using_cps_data.html">Working with Current Population Survey (CPS) Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_laus.html">Working with LAUS Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_oews.html">Working with OEWS Data</a></li>
     <li><a class="dropdown-item" href="../articles/using_get_qcew.html">Working with QCEW Data</a></li>
@@ -53,7 +55,12 @@ bls_data class that can be used in the BLSloadR package.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fread_bls</span><span class="op">(</span><span class="va">url</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fread_bls</span><span class="op">(</span></span>
+<span>  <span class="va">url</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  use_fallback <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,18 +72,35 @@ bls_data class that can be used in the BLSloadR package.</p>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical. If TRUE, prints additional messages during file read and processing.</p></dd>
+<dd><p>Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.</p></dd>
 
 
 <dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>
 <dd><p>Logical. If TRUE, uses local persistent caching.</p></dd>
 
+
+<dt id="arg-use-fallback">use_fallback<a class="anchor" aria-label="anchor" href="#arg-use-fallback"></a></dt>
+<dd><p>Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A named list with the data and diagnostics.</p>
-    </div>
+    <p>A named list with two elements:</p><dl><dt>data</dt>
+<dd><p>A data.table with the results of passing the url contents to 'data.table::fread()' as a tab-delimited text file.</p></dd>
 
+    <dt>diagnostics</dt>
+<dd><p>A named list of diagnostics run when reading the file including column names, empty columns, cleaning applied to the file, the url, the column names and original and final dimensions of the data.</p></dd>
+
+
+</dl></div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">fread_bls</span><span class="op">(</span><span class="st">"https://download.bls.gov/pub/time.series/ec/ec.series"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
