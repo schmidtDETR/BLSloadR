@@ -63,13 +63,18 @@
 #' print_bls_warnings(jolts_with_diagnostics)
 #'
 #' # View job openings by state for latest period
-#' job_openings <- jolts_data[dataelement_text == "Job openings" & 
+#' job_openings <- jolts_data[dataelement_text == "Job openings" &
 #'                           date == max(date)]
 #' }
 
-get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_national = TRUE, 
-                      suppress_warnings = TRUE, return_diagnostics = FALSE, cache = check_bls_cache_env()) {
-  
+get_jolts <- function(
+  monthly_only = TRUE,
+  remove_regions = TRUE,
+  remove_national = TRUE,
+  suppress_warnings = TRUE,
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
+) {
   # Define all URLs we need to download
   download_urls <- c(
     "data" = "https://download.bls.gov/pub/time.series/jt/jt.data.1.AllItems",
@@ -80,10 +85,14 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
     "sizeclass" = "https://download.bls.gov/pub/time.series/jt/jt.sizeclass",
     "industry" = "https://download.bls.gov/pub/time.series/jt/jt.industry"
   )
-  
+
   # Download all files
-  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
-  
+  downloads <- download_bls_files(
+    download_urls,
+    suppress_warnings = suppress_warnings,
+    cache = cache
+  )
+
   # Extract data from downloads
   jolts_import <- get_bls_data(downloads$data)
   jolts_series <- get_bls_data(downloads$series)
@@ -92,47 +101,64 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
   jolts_area <- get_bls_data(downloads$area)
   jolts_sizeclass <- get_bls_data(downloads$sizeclass)
   jolts_industry <- get_bls_data(downloads$industry)
-  
+
   # Join all the data together
   jolts <- jolts_import |>
     dplyr::select(-c(footnote_codes)) |>
     dplyr::left_join(jolts_series, by = "series_id") |>
-    dplyr::left_join(jolts_states |> dplyr::select(-c(display_level:sort_sequence)), by = "state_code") |>
-    dplyr::left_join(jolts_elements |> dplyr::select(-c(display_level:sort_sequence)), by = "dataelement_code") |>
-    dplyr::left_join(jolts_area |> dplyr::select(-c(display_level:sort_sequence)), by = "area_code") |>
-    dplyr::left_join(jolts_sizeclass |> dplyr::select(-c(display_level:sort_sequence)), by = "sizeclass_code") |>
-    dplyr::left_join(jolts_industry |> dplyr::select(-c(display_level:sort_sequence)), by = "industry_code")
-  
+    dplyr::left_join(
+      jolts_states |> dplyr::select(-c(display_level:sort_sequence)),
+      by = "state_code"
+    ) |>
+    dplyr::left_join(
+      jolts_elements |> dplyr::select(-c(display_level:sort_sequence)),
+      by = "dataelement_code"
+    ) |>
+    dplyr::left_join(
+      jolts_area |> dplyr::select(-c(display_level:sort_sequence)),
+      by = "area_code"
+    ) |>
+    dplyr::left_join(
+      jolts_sizeclass |> dplyr::select(-c(display_level:sort_sequence)),
+      by = "sizeclass_code"
+    ) |>
+    dplyr::left_join(
+      jolts_industry |> dplyr::select(-c(display_level:sort_sequence)),
+      by = "industry_code"
+    )
+
   # Track processing steps
   processing_steps <- c(
     "Joined series, states, elements, area, sizeclass, and industry metadata"
   )
-  
+
   # Apply filters
   if (monthly_only) {
     jolts <- jolts |>
       dplyr::filter(period != "M13")
-    
+
     processing_steps <- c(processing_steps, "Filtered to monthly data only")
   }
-  
+
   if (remove_regions) {
     jolts <- jolts |>
       dplyr::filter(!(state_code %in% c("MW", "NE", "SO", "WE")))
-    
+
     processing_steps <- c(processing_steps, "Removed regional aggregates")
   }
-  
+
   if (remove_national) {
     jolts <- jolts |>
       dplyr::filter(!(state_code %in% c("00")))
-    
+
     processing_steps <- c(processing_steps, "Removed national-level data")
   }
-  
+
   # Apply transformations
   jolts <- jolts |>
-    dplyr::mutate(date = ym(paste(year, stringr::str_remove(period, "M"), sep = "-"))) |>
+    dplyr::mutate(
+      date = ym(paste(year, stringr::str_remove(period, "M"), sep = "-"))
+    ) |>
     dplyr::mutate(
       value = as.numeric(value),
       ratelevel_code = case_when(
@@ -144,14 +170,16 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
       value = if_else(dataelement_code == "UO", value * 100, value),
       value = if_else(ratelevel_code == "Rate", value / 100, value * 1000)
     )
-  
-  processing_steps <- c(processing_steps, 
-                        "Created date column",
-                        "Converted values to numeric",
-                        "Transformed rate/level codes to text",
-                        "Added month names",
-                        "Applied value transformations (rates to proportions, levels to counts)")
-  
+
+  processing_steps <- c(
+    processing_steps,
+    "Created date column",
+    "Converted values to numeric",
+    "Transformed rate/level codes to text",
+    "Added month names",
+    "Applied value transformations (rates to proportions, levels to counts)"
+  )
+
   # Create the BLS data collection object
   bls_collection <- create_bls_object(
     data = jolts,
@@ -159,12 +187,12 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
     data_type = "JOLTS",
     processing_steps = processing_steps
   )
-  
+
   # Show warnings if any issues were detected
   if (has_bls_issues(bls_collection) && !suppress_warnings) {
     print_bls_warnings(bls_collection)
   }
-  
+
   # Return either the collection object or just the data
   if (return_diagnostics) {
     return(bls_collection)

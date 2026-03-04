@@ -44,7 +44,7 @@ By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,
     \item occupation_description - More detailed description of the tasks associated with the occupation.
     \item area_name - The text description of the area.
     \item datatype_name - The text description of the type of data represented by `value`.
-    
+
   }
 }
 \description{

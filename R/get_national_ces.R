@@ -99,15 +99,26 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr select
 #' @importFrom lubridate ym
-get_national_ces <- function(dataset_filter = "all_data", monthly_only = TRUE,
-                             simplify_table = TRUE, suppress_warnings = TRUE,
-                             return_diagnostics = FALSE, cache = check_bls_cache_env()) {
-
+get_national_ces <- function(
+  dataset_filter = "all_data",
+  monthly_only = TRUE,
+  simplify_table = TRUE,
+  suppress_warnings = TRUE,
+  return_diagnostics = FALSE,
+  cache = check_bls_cache_env()
+) {
   # Validate dataset_filter parameter
-  valid_filters <- c("all_data", "current_seasonally_adjusted",
-                     "real_earnings_all_employees", "real_earnings_production")
+  valid_filters <- c(
+    "all_data",
+    "current_seasonally_adjusted",
+    "real_earnings_all_employees",
+    "real_earnings_production"
+  )
   if (!dataset_filter %in% valid_filters) {
-    stop("Invalid dataset_filter. Must be one of: ", paste(valid_filters, collapse = ", "))
+    stop(
+      "Invalid dataset_filter. Must be one of: ",
+      paste(valid_filters, collapse = ", ")
+    )
   }
 
   # Define dataset-specific URLs
@@ -137,7 +148,11 @@ get_national_ces <- function(dataset_filter = "all_data", monthly_only = TRUE,
 
   # Download all files
   message("Downloading national CES datasets (", dataset_name, ")...")
-  downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings, cache = cache)
+  downloads <- download_bls_files(
+    ces_urls,
+    suppress_warnings = suppress_warnings,
+    cache = cache
+  )
 
   # Extract data from each download
   ces_data <- get_bls_data(downloads[["data"]])
@@ -173,10 +188,26 @@ get_national_ces <- function(dataset_filter = "all_data", monthly_only = TRUE,
   # Simplify table structure if requested
   if (simplify_table) {
     ces_full <- ces_full |>
-      dplyr::select(-c(series_title, begin_year, begin_period, end_year, end_period,
-                       naics_code, publishing_status, display_level, selectable, sort_sequence)) |>
+      dplyr::select(
+        -c(
+          series_title,
+          begin_year,
+          begin_period,
+          end_year,
+          end_period,
+          naics_code,
+          publishing_status,
+          display_level,
+          selectable,
+          sort_sequence
+        )
+      ) |>
       dplyr::mutate(date = lubridate::ym(paste0(year, period)))
-    processing_steps <- c(processing_steps, "simplified_table", "added_date_column")
+    processing_steps <- c(
+      processing_steps,
+      "simplified_table",
+      "added_date_column"
+    )
   }
 
   # Create the BLS data collection object

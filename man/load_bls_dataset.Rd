@@ -68,8 +68,8 @@ fm_data <- fm_import$data
 # Filter to a Series
 # Families with Children Under 6 and No Employed Parent
 
-u6_no_emp <- fm_data |> 
-  dplyr::filter(series_title == "Total families with children under 6 - with no parent employed") |> 
+u6_no_emp <- fm_data |>
+  dplyr::filter(series_title == "Total families with children under 6 - with no parent employed") |>
   dplyr:: select(year, value, fchld_text, fhlf_text, tdat_text)
 
 

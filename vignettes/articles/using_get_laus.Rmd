@@ -6,6 +6,7 @@ title: "Working with LAUS Data"
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
+  eval = FALSE,       # Don't execute code during pkgdown build
   message = FALSE,    # Hide download messages
   warning = FALSE,    # Hide coercion warnings
   fig.width = 9,
@@ -71,7 +72,7 @@ bls_state_table <- bls_state_table |>
     pct_20 = quantile(value, 0.2, na.rm = TRUE),
     pct_80 = quantile(value, 0.8, na.rm = TRUE),
     median = median(value, na.rm = TRUE)
-  ) |> 
+  ) |>
   ungroup()
 
 head(bls_state_table,10)
@@ -84,19 +85,19 @@ Since we now have comparative measures across the states, we can start looking a
 ```{r chart-data}
 selected_state <- "Nevada"
 
-bls_current <- bls_state_table |> 
-  filter(date == max(date)) |> 
+bls_current <- bls_state_table |>
+  filter(date == max(date)) |>
   mutate(is_st = if_else(state == selected_state, TRUE, FALSE))
 
-bls_ts <- bls_state_table |> 
+bls_ts <- bls_state_table |>
   filter(state == selected_state)
 ```
 
 #### Unemployment Rate Chart
 
 ```{r ur-ranking, fig.alt="A bar chart showing the ranking of unemployment rates by state."}
-bls_current |> 
-  filter(measure == "ur") |> 
+bls_current |>
+  filter(measure == "ur") |>
   ggplot() +
   geom_col(aes(x = value, y = reorder(state, value), fill = is_st)) +
   scale_fill_manual(values = c("navy","red")) +
@@ -110,8 +111,8 @@ bls_current |>
 #### Labor Force Participation Rate Chart
 
 ```{r lfpr-ranking, fig.alt="A bar chart showing the ranking of labor force participation rates by state."}
-bls_current |> 
-  filter(measure == "lfpr") |> 
+bls_current |>
+  filter(measure == "lfpr") |>
   ggplot() +
   geom_col(aes(x = value, y = reorder(state, value), fill = is_st)) +
   scale_fill_manual(values = c("navy","red")) +
@@ -125,7 +126,7 @@ bls_current |>
 
 ```{r ur-ribbon, fig.alt="A ribbon and line chart showing Nevada's unemployment rate compared to the central range of other states."}
 bls_ts |>
-  filter(measure == "ur") |> 
+  filter(measure == "ur") |>
   ggplot(aes(x = date)) +
   geom_ribbon(aes(ymin = pct_20, ymax = pct_80), fill = "lightgrey") +
   geom_line(aes(y = median), color = "black", linetype = "dashed", linewidth = 0.8) +
@@ -146,7 +147,7 @@ bls_ts |>
 
 ```{r lfpr-ribbon, fig.alt="A ribbon and line chart showing Nevada's labor force participation rate compared to the central range of other states."}
 bls_ts |>
-  filter(measure == "lfpr") |> 
+  filter(measure == "lfpr") |>
   ggplot(aes(x = date)) +
   geom_ribbon(aes(ymin = pct_20, ymax = pct_80), fill = "lightgrey") +
   geom_line(aes(y = median), color = "black", linetype = "dashed", linewidth = 0.8) +
