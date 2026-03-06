@@ -13,7 +13,7 @@ dataset with industry classifications, data types, and time period information."
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,7 +157,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7881789 x 14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7903531 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get only seasonally adjusted data (faster download)</span></span></span>
 <span class="r-in"><span><span class="va">ces_seasonal</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"current_seasonally_adjusted"</span><span class="op">)</span></span></span>
@@ -165,7 +165,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Seasonally adjusted all-employee series</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 395621 x 14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 396463 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get real earnings data for all employees</span></span></span>
 <span class="r-in"><span><span class="va">ces_real_earnings</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"real_earnings_all_employees"</span><span class="op">)</span></span></span>
@@ -173,7 +173,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Real earnings for all employees</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 522800 x 14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 524844 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get all data including annual averages with full metadata</span></span></span>
 <span class="r-in"><span><span class="va">ces_full</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"all_data"</span>,</span></span>
@@ -182,7 +182,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 8205648 x 23</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 8227392 x 23</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get data with warnings and diagnostic information displayed</span></span></span>
 <span class="r-in"><span><span class="va">ces_with_warnings</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
@@ -195,7 +195,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:57</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:5</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'series_id', 'year', 'period', 'value', 'footnote_codes'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:8205648x5 in https://download.bls.gov/pub/time.series/ce/ce.data.0.AllCESSeries</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:8227392x5 in https://download.bls.gov/pub/time.series/ce/ce.data.0.AllCESSeries</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:series_id, year, period, value, footnote_codes</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingseries...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:22049x11</span>
@@ -251,7 +251,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forNational CES: Complete national CES datasetdata download</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7881789 x 14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7903531 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get full diagnostic object if needed</span></span></span>
 <span class="r-in"><span><span class="va">data_with_diagnostics</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>return_diagnostics <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -259,7 +259,7 @@ and `create_bls_object()` helper functions must be available in your environment
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7881789 x 14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7903531 x 14</span>
 <span class="r-in"><span><span class="fu"><a href="print_bls_warnings.html">print_bls_warnings</a></span><span class="op">(</span><span class="va">data_with_diagnostics</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forNational CES: Complete national CES datasetdata download</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

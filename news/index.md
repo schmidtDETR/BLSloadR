@@ -1,5 +1,52 @@
 # Changelog
 
+## BLSloadR 0.5 patch notes
+
+### Functional Enhancements
+
+#### New Data Access Functions
+
+- This version incorporates new functions to help users work with the
+  national CPS database (“ln”). This is a particularly large database
+  and benefits from the streamlined function introduced in this release,
+  [`get_cps_subset()`](https://schmidtdetr.github.io/BLSloadR/reference/get_cps_subset.md) -
+  these allow users to pull slices of the full CPS database into a more
+  readable table
+
+#### New Helper Functions
+
+- To help users navigate the CPS dataset, functions are introduced to
+  help explore the CPS in two different ways - by the characteristics of
+  the data and by searching for specific series IDs.
+  [`explore_cps_characteristics()`](https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_characteristics.md)
+  and
+  [`explore_cps_series()`](https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_series.md)
+  provide console-based access to the CPS data to guide usage of
+  [`get_cps_subset()`](https://schmidtdetr.github.io/BLSloadR/reference/get_cps_subset.md)
+
+#### Under-the-hood Improvements
+
+- This release reflows significant sections of code to improve
+  readability, and also consolidates the creation of headers for sending
+  data requests to the BLS, laying the groundwork to improvement to
+  these headers in the future so they can be more responsive to a user’s
+  actual machine.
+
+- The package now includes explicit memory cleanup and notifications
+  about large data files and expected memory usage.
+
+- When working with large files, the data file pre-cleaning now samples
+  10,000 rows instead of the full file to improve performance.
+
+### Documentation Enhancements
+
+- Help documentation for the new functions has been added, as have help
+  articles to guide users in interacting with the CPS data.
+
+- A large test suite has been added to the package using `testthat` for
+  the major functions (both user-facing and background helpers) to
+  identify bugs.
+
 ## BLSloadR 0.4 patch notes
 
 CRAN release: 2026-02-13

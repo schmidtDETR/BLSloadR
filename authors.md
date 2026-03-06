@@ -12,13 +12,13 @@
 ## Citation
 
 Schmidt D, Rembert M (2026). *BLSloadR: Download Time Series Data from
-the U.S. Bureau of Labor Statistics*. R package version 0.4,
+the U.S. Bureau of Labor Statistics*. R package version 0.5,
 <https://schmidtdetr.github.io/BLSloadR/>.
 
     @Manual{,
       title = {BLSloadR: Download Time Series Data from the U.S. Bureau of Labor Statistics},
       author = {David Schmidt and Mark Rembert},
       year = {2026},
-      note = {R package version 0.4},
+      note = {R package version 0.5},
       url = {https://schmidtdetr.github.io/BLSloadR/},
     }
