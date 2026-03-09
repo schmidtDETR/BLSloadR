@@ -848,8 +848,8 @@ async function captureMapScreenshot(map, options) {
       hiddenElements.push({ element: el, display: el.style.display });
       el.style.display = 'none';
     });
-    // Also hide layers control and measurement box
-    container.querySelectorAll('.layers-control, .mapgl-measurement-box').forEach(el => {
+    // Also hide layers control, measurement box, and geocoder controls
+    container.querySelectorAll('.layers-control, .mapgl-measurement-box, .maplibregl-ctrl-geocoder, .mapboxgl-ctrl-geocoder, .maptiler-ctrl').forEach(el => {
       hiddenElements.push({ element: el, display: el.style.display });
       el.style.display = 'none';
     });
@@ -981,6 +981,29 @@ HTMLWidgets.widget({
           return;
         }
 
+        // Clean up existing map if present to prevent control stacking on re-render
+        if (map) {
+          // Remove all controls from the old map
+          if (map.controls && map.controls.length > 0) {
+            map.controls.forEach(function (controlObj) {
+              try {
+                if (controlObj.control) {
+                  map.removeControl(controlObj.control);
+                }
+              } catch (e) {
+                // Control may already be removed
+              }
+            });
+          }
+          // Remove the old map
+          try {
+            map.remove();
+          } catch (e) {
+            // Map may already be removed
+          }
+          map = null;
+        }
+
         let protocol = new pmtiles.Protocol({ metadata: true });
         maplibregl.addProtocol("pmtiles", protocol.tile);
 
@@ -997,7 +1020,7 @@ HTMLWidgets.widget({
         map.controls = [];
         map._initialStyleLoaded = false;
 
-        map.on("style.load", function () {
+        map.on("style.load", async function () {
           if (x.projection) {
             map.setProjection({ type: x.projection });
           }
@@ -1105,7 +1128,7 @@ HTMLWidgets.widget({
 
           // Add sources if provided
           if (x.sources) {
-            x.sources.forEach(function (source) {
+            for (const source of x.sources) {
               if (source.type === "vector") {
                 const sourceOptions = {
                   type: "vector",
@@ -1113,6 +1136,23 @@ HTMLWidgets.widget({
                 // Add url or tiles
                 if (source.url) {
                   sourceOptions.url = source.url;
+                  // Auto-detect MLT encoding for PMTiles sources
+                  if (
+                    source.url.startsWith("pmtiles://") &&
+                    typeof pmtiles !== "undefined" &&
+                    !source.encoding
+                  ) {
+                    try {
+                      const rawUrl = source.url.replace("pmtiles://", "");
+                      const p = new pmtiles.PMTiles(rawUrl);
+                      const header = await p.getHeader();
+                      if (header.tileType === pmtiles.TileType.Mlt) {
+                        sourceOptions.encoding = "mlt";
+                      }
+                    } catch (e) {
+                      console.warn("Failed to detect PMTiles tile type:", e);
+                    }
+                  }
                 }
                 if (source.tiles) {
                   sourceOptions.tiles = source.tiles;
@@ -1184,7 +1224,7 @@ HTMLWidgets.widget({
                   coordinates: source.coordinates,
                 });
               }
-            });
+            }
           }
 
           function add_my_layers(layer) {
@@ -2032,6 +2072,11 @@ HTMLWidgets.widget({
             });
           }
 
+          // Initialize draggable legends
+          if (typeof initializeDraggableLegends === "function") {
+            initializeDraggableLegends(el);
+          }
+
           // Add fullscreen control if enabled
           if (x.fullscreen_control && x.fullscreen_control.enabled) {
             const position = x.fullscreen_control.position || "top-right";
@@ -2116,25 +2161,8 @@ HTMLWidgets.widget({
               "maplibregl-ctrl-icon maplibregl-ctrl-reset";
             resetControl.type = "button";
             resetControl.setAttribute("aria-label", "Reset");
-            resetControl.innerHTML = "⟲";
-            resetControl.style.fontSize = "30px";
-            resetControl.style.fontWeight = "bold";
-            resetControl.style.backgroundColor = "white";
-            resetControl.style.border = "none";
-            resetControl.style.cursor = "pointer";
-            resetControl.style.padding = "0";
-            resetControl.style.width = "30px";
-            resetControl.style.height = "30px";
-            resetControl.style.display = "flex";
-            resetControl.style.justifyContent = "center";
-            resetControl.style.alignItems = "center";
-            resetControl.style.transition = "background-color 0.2s";
-            resetControl.addEventListener("mouseover", function () {
-              this.style.backgroundColor = "#f0f0f0";
-            });
-            resetControl.addEventListener("mouseout", function () {
-              this.style.backgroundColor = "white";
-            });
+            resetControl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>';
+            resetControl.style.cssText = "display:flex;justify-content:center;align-items:center;cursor:pointer;";
 
             const resetContainer = document.createElement("div");
             resetContainer.className = "maplibregl-ctrl maplibregl-ctrl-group";
@@ -2617,7 +2645,7 @@ HTMLWidgets.widget({
 });
 
 if (HTMLWidgets.shinyMode) {
-  Shiny.addCustomMessageHandler("maplibre-proxy", function (data) {
+  Shiny.addCustomMessageHandler("maplibre-proxy", async function (data) {
     var widget = HTMLWidgets.find("#" + data.id);
     if (!widget) return;
     var map = widget.getMap();
@@ -2670,6 +2698,23 @@ if (HTMLWidgets.shinyMode) {
           // Add url or tiles
           if (message.source.url) {
             sourceConfig.url = message.source.url;
+            // Auto-detect MLT encoding for PMTiles sources
+            if (
+              message.source.url.startsWith("pmtiles://") &&
+              typeof pmtiles !== "undefined" &&
+              !message.source.encoding
+            ) {
+              try {
+                const rawUrl = message.source.url.replace("pmtiles://", "");
+                const p = new pmtiles.PMTiles(rawUrl);
+                const header = await p.getHeader();
+                if (header.tileType === pmtiles.TileType.Mlt) {
+                  sourceConfig.encoding = "mlt";
+                }
+              } catch (e) {
+                console.warn("Failed to detect PMTiles tile type:", e);
+              }
+            }
           }
           if (message.source.tiles) {
             sourceConfig.tiles = message.source.tiles;
@@ -4986,25 +5031,8 @@ if (HTMLWidgets.shinyMode) {
         resetControl.className = "maplibregl-ctrl-icon maplibregl-ctrl-reset";
         resetControl.type = "button";
         resetControl.setAttribute("aria-label", "Reset");
-        resetControl.innerHTML = "⟲";
-        resetControl.style.fontSize = "30px";
-        resetControl.style.fontWeight = "bold";
-        resetControl.style.backgroundColor = "white";
-        resetControl.style.border = "none";
-        resetControl.style.cursor = "pointer";
-        resetControl.style.padding = "0";
-        resetControl.style.width = "30px";
-        resetControl.style.height = "30px";
-        resetControl.style.display = "flex";
-        resetControl.style.justifyContent = "center";
-        resetControl.style.alignItems = "center";
-        resetControl.style.transition = "background-color 0.2s";
-        resetControl.addEventListener("mouseover", function () {
-          this.style.backgroundColor = "#f0f0f0";
-        });
-        resetControl.addEventListener("mouseout", function () {
-          this.style.backgroundColor = "white";
-        });
+        resetControl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>';
+        resetControl.style.cssText = "display:flex;justify-content:center;align-items:center;cursor:pointer;";
 
         const resetContainer = document.createElement("div");
         resetContainer.className = "maplibregl-ctrl maplibregl-ctrl-group";

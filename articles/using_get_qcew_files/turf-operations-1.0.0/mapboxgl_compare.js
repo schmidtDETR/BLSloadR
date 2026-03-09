@@ -1287,25 +1287,8 @@ HTMLWidgets.widget({
                   "mapboxgl-ctrl-icon mapboxgl-ctrl-reset";
                 resetControl.type = "button";
                 resetControl.setAttribute("aria-label", "Reset");
-                resetControl.innerHTML = "⟲";
-                resetControl.style.fontSize = "30px";
-                resetControl.style.fontWeight = "bold";
-                resetControl.style.backgroundColor = "white";
-                resetControl.style.border = "none";
-                resetControl.style.cursor = "pointer";
-                resetControl.style.padding = "0";
-                resetControl.style.width = "30px";
-                resetControl.style.height = "30px";
-                resetControl.style.display = "flex";
-                resetControl.style.justifyContent = "center";
-                resetControl.style.alignItems = "center";
-                resetControl.style.transition = "background-color 0.2s";
-                resetControl.addEventListener("mouseover", function () {
-                  this.style.backgroundColor = "#f0f0f0";
-                });
-                resetControl.addEventListener("mouseout", function () {
-                  this.style.backgroundColor = "white";
-                });
+                resetControl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>';
+                resetControl.style.cssText = "display:flex;justify-content:center;align-items:center;cursor:pointer;";
 
                 const resetContainer = document.createElement("div");
                 resetContainer.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
@@ -1865,7 +1848,8 @@ HTMLWidgets.widget({
               } else if (message.type === "set_source") {
                 if (map.getLayer(message.layer)) {
                   const sourceId = map.getLayer(message.layer).source;
-                  map.getSource(sourceId).setData(JSON.parse(message.source));
+                  const newData = typeof message.source === "string" ? JSON.parse(message.source) : message.source;
+                  map.getSource(sourceId).setData(newData);
                 }
               } else if (message.type === "set_tooltip") {
                 // Track tooltip state
@@ -3153,25 +3137,8 @@ HTMLWidgets.widget({
             resetControl.className = "mapboxgl-ctrl-icon mapboxgl-ctrl-reset";
             resetControl.type = "button";
             resetControl.setAttribute("aria-label", "Reset");
-            resetControl.innerHTML = "⟲";
-            resetControl.style.fontSize = "30px";
-            resetControl.style.fontWeight = "bold";
-            resetControl.style.backgroundColor = "white";
-            resetControl.style.border = "none";
-            resetControl.style.cursor = "pointer";
-            resetControl.style.padding = "0";
-            resetControl.style.width = "30px";
-            resetControl.style.height = "30px";
-            resetControl.style.display = "flex";
-            resetControl.style.justifyContent = "center";
-            resetControl.style.alignItems = "center";
-            resetControl.style.transition = "background-color 0.2s";
-            resetControl.addEventListener("mouseover", function () {
-              this.style.backgroundColor = "#f0f0f0";
-            });
-            resetControl.addEventListener("mouseout", function () {
-              this.style.backgroundColor = "white";
-            });
+            resetControl.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>';
+            resetControl.style.cssText = "display:flex;justify-content:center;align-items:center;cursor:pointer;";
 
             const resetContainer = document.createElement("div");
             resetContainer.className = "mapboxgl-ctrl mapboxgl-ctrl-group";
