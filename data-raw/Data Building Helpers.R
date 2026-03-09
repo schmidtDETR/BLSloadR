@@ -73,6 +73,49 @@ area_lookup <- read_excel("data-raw/area-titles-xlsx.xlsx") |>
   ) |> 
   select(-match_index)
 
+# --- Process Area Lookup ---
+
+library(BLSloadR)
+library(tidyverse)
+
+national_cps_full <- load_bls_dataset("ln", simplify_table = FALSE)$data
+
+national_cps_code_cols <- national_cps_full |> 
+  select(contains("_code")) |> 
+  colnames()
+
+national_cps_all_colnames <- national_cps_full |> 
+  colnames()
+
+national_cps_codes <- data.frame(
+  codes = national_cps_code_cols
+) |> 
+  mutate(
+    labels = str_replace_all(codes, "_code", "_text"),
+    is_real_label = if_else(labels %in% national_cps_all_colnames, TRUE, FALSE)
+  )
+
+# 1. Filter for only the rows where a matching label column actually exists
+valid_mappings <- national_cps_codes |> 
+  filter(is_real_label == TRUE)
+
+# 2. Recursively (iteratively) extract unique pairs
+# We use map2 to iterate over the 'codes' and 'labels' column names
+national_cps_characteristics <- valid_mappings |> 
+  mutate(unique_pairs = map2(codes, labels, function(code_col, label_col) {
+    
+    national_cps_full |> 
+      select(code = all_of(code_col), label = all_of(label_col)) |> 
+      distinct() |> 
+      drop_na() # Optional: removes rows with missing mapping data
+    
+  }))
+
+rm(national_cps_full)
+
+
 # --- Save Data to Package ---
 # This automatically saves to data/ and creates the .rda files
 usethis::use_data(ind_lookup, area_lookup, overwrite = TRUE)
+
+usethis::use_data(national_cps_characteristics, overwrite = TRUE)

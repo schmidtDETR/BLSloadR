@@ -11,6 +11,7 @@
 #' @param cache_dir Optional character string specifying the directory for cached files.
 #'   If NULL, uses R's temporary directory via `tempdir()`.
 #' @param verbose Logical. If TRUE, print informative messages. Default is TRUE.
+#' @param static Logical. If TRUE, use built-in CPS data set to determine mapping codes. If FALSE, read BLS data set to determine potential codes.  Note: Not all potential codes have values in the current CPS data set. Defaults to FALSE.
 #'
 #' @return If `characteristic` is NULL, returns a data.frame with columns:
 #'   \itemize{
@@ -18,12 +19,14 @@
 #'     \item code_column: The column name used in filtering (with _code suffix)
 #'     \item description: Brief description of the characteristic
 #'   }
-#'
+#'   
 #'   If `characteristic` is specified, returns a data.frame showing all valid
 #'   codes and their text descriptions for that characteristic.
+#'   
+#'   
 #'
 #' @details
-#' This function downloads the ln.series file and associated mapping files
+#' When static = TRUE, this function uses a local data object, `national_cps_characteristics` to determine valid mapping codes.  When static = FALSE, this function downloads the ln.series file and associated mapping files
 #' from the BLS server to identify available characteristics. The results
 #' are cached locally to avoid repeated downloads.
 #'
@@ -57,15 +60,22 @@
 #'   )
 #' )
 #' }
-#'
+#' 
+#' # Get Static CPS Code lookups
+#' 
+#' vets_codes <- explore_cps_characteristics("vets", static = TRUE)
+#' job_search_codes <- explore_cps_characteristics("look", static = TRUE)
+#' 
 #' @export
 #' @importFrom data.table fread
-#' @importFrom dplyr select filter arrange distinct
+#' @importFrom dplyr select filter arrange distinct pull
+#' @importFrom stringr str_detect
 #' @importFrom tidyselect any_of
 explore_cps_characteristics <- function(
   characteristic = NULL,
   cache_dir = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  static = FALSE
 ) {
   # Set up cache directory
   if (is.null(cache_dir)) {
@@ -74,6 +84,89 @@ explore_cps_characteristics <- function(
     dir.create(cache_dir, recursive = TRUE)
   }
 
+  if (static == TRUE) {
+    
+    code_cols <- national_cps_characteristics$codes
+    char_descriptions <- data.frame(
+      characteristic = sub("_code$", "", code_cols),
+      code_column = code_cols,
+      description = c(
+        "Labor force status (employed, unemployed, not in labor force)",
+        "Data periodicity (monthly, quarterly, annual)",
+        "Absence from work categories",
+        "Activity status categories",
+        "Age groups",
+        "Certification status",
+        "Class of worker",
+        "Duration of unemployment",
+        "Educational attainment levels",
+        "Job entry categories",
+        "Work experience",
+        "Household header status",
+        "Hours of work categories",
+        "Industry classifications",
+        "Job description categories",
+        "Job search activities",
+        "Marital status",
+        "Multiple Job holder categories",
+        "Occupation classifications",
+        "Origin/ethnicity",
+        "Percent of poverty categories",
+        "Race categories",
+        "Reason for job search",
+        "Reason not in labor force",
+        "Reason for working part-time",
+        "Job seeking status",
+        "Sex/gender",
+        "Type of data (levels, rates, etc.)",
+        "Veteran status",
+        "Work status categories",
+        "Nativity/birthplace",
+        "Children presence",
+        "Disability status",
+        "Time lost from work"
+      )[1:length(code_cols)],
+      stringsAsFactors = FALSE
+    )
+    
+    
+    if(is.null(characteristic)) {
+
+      if (verbose) {
+        message("\nAvailable characteristics in CPS (LN) dataset:")
+        message("Use explore_cps_characteristics('name') to see valid codes\n")
+      }
+      
+      return(char_descriptions)
+    } else {
+      
+      if(characteristic %in% national_cps_characteristics$codes | paste0(characteristic, "_code") %in% national_cps_characteristics$codes ){
+      
+        # Extract the specific nested tibble
+        characteristic_filter <- characteristic
+        
+        if(!str_detect(characteristic, "_code")) {characteristic_filter <- paste0(characteristic, "_code")}
+        
+        pair_data <- national_cps_characteristics |> 
+          filter(codes == characteristic_filter) |> 
+          pull(unique_pairs) |> 
+          _[[1]] # Extract the first (and only) element of the list
+        
+        return(pair_data)
+        
+      } else {
+        
+        if(verbose) {
+          message("Provided characteristic is not in available list of codes.\nReturning list of available characteristic code types.")
+        
+        }
+          return(char_descriptions)
+      }
+      
+    }
+    
+  } else {
+  
   base_url <- "https://download.bls.gov/pub/time.series/ln/"
   series_url <- paste0(base_url, "ln.series")
 
@@ -111,7 +204,7 @@ explore_cps_characteristics <- function(
         "Job description categories",
         "Job search activities",
         "Marital status",
-        "Major job search categories",
+        "Multiple job holder categories",
         "Occupation classifications",
         "Origin/ethnicity",
         "Percent of poverty categories",
@@ -215,4 +308,5 @@ explore_cps_characteristics <- function(
       return(as.data.frame(unique_codes))
     }
   )
+  }
 }

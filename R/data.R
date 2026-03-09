@@ -73,3 +73,20 @@
 #' dplyr::filter(grepl("AR", specified_region) &
 #'  area_type == "Metropolitan Statistical Area")
 "area_lookup"
+
+#' National CPS Code and Label Mappings
+#'
+#' A dataset containing the unique code-label pairs extracted from the BLS CPS data.
+#' 
+#' @source This data was created by using `BLSloadR::load_bls_dataset("ln", simplify_table = FALSE)` and parsing the resulting data frame.
+#'
+#' @usage data(national_cps_characteristics) or by using `explore_cps_characteristics()` with argument `static = TRUE`
+#'
+#' @format A tibble with X rows and 4 variables:
+#' \describe{
+#'   \item{codes}{The column name of the code}
+#'   \item{labels}{The column name of the text label}
+#'   \item{is_real_label}{Logical indicator if there is at least one non-NA value for this combination of code and label.}
+#'   \item{unique_pairs}{A list-column containing tibbles of unique code/label values}
+#' }
+"national_cps_characteristics"
