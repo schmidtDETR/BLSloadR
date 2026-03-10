@@ -38,6 +38,9 @@
 #' dplyr::filter(sector == "31-33" & ind_level == "NAICS 3-digit")
 "ind_lookup"
 
+
+
+
 #' @title Area Lookup Tables (QCEW)
 #'
 #' @description
@@ -74,6 +77,9 @@
 #'  area_type == "Metropolitan Statistical Area")
 "area_lookup"
 
+
+
+
 #' National CPS Code and Label Mappings
 #'
 #' A dataset containing the unique code-label pairs extracted from the BLS CPS data.
@@ -90,3 +96,23 @@
 #'   \item{unique_pairs}{A list-column containing tibbles of unique code/label values}
 #' }
 "national_cps_characteristics"
+
+
+
+
+#' National CPS Code and Label Mappings with Crosstab of Available Data (1 layer deep)
+#'
+#' A dataset containing the unique code-label pairs extracted from the BLS CPS data. This also contains a cross-reference to other data characteristics to help identify where multiple data filters may be applied.
+#' 
+#' @source This data was created by using `BLSloadR::load_bls_dataset("ln", simplify_table = FALSE)` and parsing the resulting data frame.
+#'
+#' @usage data(national_cps_availability) or by using `explore_cps_characteristics()` with argument `static = TRUE`
+#'
+#' @format A tibble with X rows and 4 variables:
+#' \describe{
+#'   \item{codes}{The column name of the code}
+#'   \item{labels}{The column name of the text label}
+#'   \item{is_real_label}{Logical indicator if there is at least one non-NA value for this combination of code and label.}
+#'   \item{unique_pairs}{A data frame containing the code and label options for a given data set, and available_with, a comma-separated character string describing available cross-tab characteristics.}
+#' }
+"national_cps_availability"

@@ -111,11 +111,68 @@ national_cps_characteristics <- valid_mappings |>
     
   }))
 
-rm(national_cps_full)
+
+############
+### Cross-tabs of available data (SLOW)
+
+library(tidyverse)
+library(data.table)
+
+# Ensure the data.table version is ready
+dt_full <- as.data.table(national_cps_full)
+
+# 1. Define the missing variable explicitly
+all_code_cols <- colnames(dt_full)[grepl("_code$", colnames(dt_full))]
+
+# 2. Helper to check for "Total" codes (0, 00, 000, etc.)
+is_zero_code <- function(x) {
+  grepl("^0+$", as.character(x))
+}
+
+# 3. Main processing
+national_cps_availability <- national_cps_pairs |>
+  mutate(unique_pairs = map2(codes, unique_pairs, function(col_name, pairs_df) {
+    
+    # Filter out "Total" rows and "N/A" labels from the lookup table
+    target_pairs <- pairs_df |>
+      filter(!is_zero_code(code), 
+             label != "N/A")
+    
+    # Nuance: Sample high-cardinality columns to save hours of processing
+    if (col_name %in% c("indy_code", "occupation_code")) {
+      target_pairs <- target_pairs |> slice_sample(n = 1)
+    }
+    
+    # Iterate through the valid codes
+    target_pairs |>
+      mutate(available_with = map_chr(code, function(val) {
+        
+        # Fast subset: rows where this specific characteristic has data
+        subset_dt <- dt_full[get(col_name) == val & !is.na(value)]
+        
+        if (nrow(subset_dt) == 0) return("")
+        
+        # VECTORIZED CHECK: 
+        # Identify columns that have at least one non-NA and non-Zero entry
+        # We exclude the current 'col_name' from the check
+        peer_cols <- setdiff(all_code_cols, col_name)
+        
+        # Check presence across all peers at once
+        has_data <- sapply(subset_dt[, ..peer_cols], function(column_vec) {
+          any(!is.na(column_vec) & !is_zero_code(column_vec))
+        })
+        
+        # Return the clean names of the available peer variables
+        available_peers <- names(has_data)[has_data]
+        paste(sub("_code$", "", available_peers), collapse = ", ")
+      }))
+  }))
+
 
 
 # --- Save Data to Package ---
 # This automatically saves to data/ and creates the .rda files
 usethis::use_data(ind_lookup, area_lookup, overwrite = TRUE)
-
 usethis::use_data(national_cps_characteristics, overwrite = TRUE)
+usethis::use_data(national_cps_availability, overwrite = TRUE)
+
