@@ -78,41 +78,42 @@
 "area_lookup"
 
 
-
-
-#' National CPS Code and Label Mappings
+#' @title National CPS Code and Label Mappings with Crosstab of Available Data
 #'
-#' A dataset containing the unique code-label pairs extracted from the BLS CPS data.
+#' @description
+#' A dataset containing the unique code-label pairs extracted from the BLS CPS data. 
+#' This includes metadata descriptions and a cross-reference to 
+#' other data characteristics to identify valid cross-tabulation paths.
 #' 
-#' @source This data was created by using `BLSloadR::load_bls_dataset("ln", simplify_table = FALSE)` and parsing the resulting data frame.
+#' @source Generated from `BLSloadR::load_bls_dataset("ln", simplify_table = FALSE)`.
 #'
-#' @usage data(national_cps_characteristics) or by using `explore_cps_characteristics()` with argument `static = TRUE`
+#' @usage data(national_cps_availability)
 #'
-#' @format A tibble with X rows and 4 variables:
+#' @format A tibble with the following variables:
 #' \describe{
-#'   \item{codes}{The column name of the code}
-#'   \item{labels}{The column name of the text label}
-#'   \item{is_real_label}{Logical indicator if there is at least one non-NA value for this combination of code and label.}
-#'   \item{unique_pairs}{A list-column containing tibbles of unique code/label values}
+#'   \item{master_filter}{The base column name (e.g., "sexs", "ages") used for filtering.}
+#'   \item{master_description}{The human-readable description of the filter category (e.g., "Sex/gender").}
+#'   \item{available_codes}{A list-column of data frames, each containing:
+#'     \itemize{
+#'       \item \code{code}: The specific BLS numeric or alphanumeric code.
+#'       \item \code{label}: The text description of that code.
+#'       \item \code{original_filter}: The master filter name repeated for row-level identification.
+#'       \item \code{available_with}: A comma-separated string of other filters that have 
+#'             valid data when paired with this specific code. (Marked as "Skipped" for 
+#'             columns with many observations like industry and occupation).
+#'     }
+#'   }
 #' }
-"national_cps_characteristics"
-
-
-
-
-#' National CPS Code and Label Mappings with Crosstab of Available Data (1 layer deep)
-#'
-#' A dataset containing the unique code-label pairs extracted from the BLS CPS data. This also contains a cross-reference to other data characteristics to help identify where multiple data filters may be applied.
 #' 
-#' @source This data was created by using `BLSloadR::load_bls_dataset("ln", simplify_table = FALSE)` and parsing the resulting data frame.
+#' @details
+#' The rows in the top-level table contain various data filters available in the national Current Population Survey and the descriptions of these data types.  The `available_codes` column containes a data frame which includes the codes that are available within this data type.  For each code, the code, description, and other data filters available to further filter the CPS data are provided.
 #'
-#' @usage data(national_cps_availability) or by using `explore_cps_characteristics()` with argument `static = TRUE`
+#' @examples
+#' # Load the lookup table
+#' data(national_cps_availability)
 #'
-#' @format A tibble with X rows and 4 variables:
-#' \describe{
-#'   \item{codes}{The column name of the code}
-#'   \item{labels}{The column name of the text label}
-#'   \item{is_real_label}{Logical indicator if there is at least one non-NA value for this combination of code and label.}
-#'   \item{unique_pairs}{A data frame containing the code and label options for a given data set, and available_with, a comma-separated character string describing available cross-tab characteristics.}
-#' }
+#' # Find the code details for a specific example
+#' job_description_codes <- national_cps_availability[national_cps_availability$master_filter == "jdes","available_codes"]
+#' 
+#' 
 "national_cps_availability"
