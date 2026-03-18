@@ -15,6 +15,12 @@
 #'
 #' @return A data.frame of characteristics or specific code mappings.
 #' 
+#' @importFrom dplyr filter pull select left_join distinct arrange across
+#' @importFrom stringr str_detect fixed
+#' @importFrom tibble tribble
+#' @importFrom tidyselect any_of
+#' @importFrom stats setNames
+#' 
 #' @examples
 #' \dontrun{
 #' # List all available characteristics
@@ -126,7 +132,7 @@ explore_cps_characteristics <- function(
     
     if (is.null(characteristic)) {
       
-      cps_abbreviations <- tribble(
+      cps_abbreviations <- tibble::tribble(
         ~characteristic,     ~description,
         "lfst",        "Labor force status (employed, unemployed, not in labor force)",
         "periodicity", "Data periodicity (monthly, quarterly, annual)",
