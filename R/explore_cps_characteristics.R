@@ -117,20 +117,66 @@ explore_cps_characteristics <- function(
     base_url <- "https://download.bls.gov/pub/time.series/ln/"
     series_url <- paste0(base_url, "ln.series")
     
+    ## Define CPS lookups for live data
+ 
     if (verbose) message("Loading live CPS series metadata from BLS...")
     series_result <- fread_bls(series_url, verbose = FALSE, cache = cache)
     series_dt <- series_result$data
     code_cols <- names(series_dt)[grep("_code$", names(series_dt))]
     
     if (is.null(characteristic)) {
-      live_summary <- data.frame(
-        available_characteristics = sub("_code$", "", code_cols),
-        stringsAsFactors = FALSE
+      
+      cps_abbreviations <- tribble(
+        ~characteristic,     ~description,
+        "lfst",        "Labor force status (employed, unemployed, not in labor force)",
+        "periodicity", "Data periodicity (monthly, quarterly, annual)",
+        "absn",        "Absence from work categories",
+        "activity",    "Activity status categories",
+        "ages",        "Age groups",
+        "cert",        "Certification status",
+        "class",       "Class of worker",
+        "duration",    "Duration of unemployment",
+        "education",   "Educational attainment levels",
+        "entr",        "Job entry categories",
+        "expr",        "Work experience",
+        "hheader",     "Household header status",
+        "hour",        "Hours of work categories",
+        "indy",        "Industry classifications",
+        "jdes",        "Job description categories",
+        "look",        "Job search activities",
+        "mari",        "Marital status",
+        "mjhs",        "Multiple Job holder categories",
+        "occupation",  "Occupation classifications",
+        "orig",        "Origin/ethnicity",
+        "pcts",        "Percent of poverty categories",
+        "race",        "Race categories",
+        "rjnw",        "Reason for job search",
+        "rnlf",        "Reason not in labor force",
+        "rwns",        "Reason for working part-time",
+        "seek",        "Job seeking status",
+        "sexs",        "Sex/gender",
+        "tdat",        "Type of data (levels, rates, etc.)",
+        "vets",        "Veteran status",
+        "wkst",        "Work status categories",
+        "born",        "Nativity/birthplace",
+        "chld",        "Children presence",
+        "disa",        "Disability status",
+        "tlwk",        "Time lost from work"
       )
+      
+      live_summary <- data.frame(
+        characteristic = sub("_code$", "", code_cols),
+        code_column = code_cols,
+        stringsAsFactors = FALSE
+      ) |> 
+        dplyr::left_join(cps_abbreviations)
+
       
       if (!is.null(pattern)) {
         live_summary <- live_summary |> 
-          dplyr::filter(stringr::str_detect(available_characteristics, stringr::fixed(pattern, ignore_case = TRUE)))
+          dplyr::filter(stringr::str_detect(characteristic, stringr::fixed(pattern, ignore_case = TRUE)) |
+                        stringr::str_detect(description, stringr::fixed(pattern, ignore_case = TRUE))
+                        )
       }
       return(live_summary)
     }
