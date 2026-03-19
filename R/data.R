@@ -113,7 +113,7 @@
 #' data(national_cps_availability)
 #'
 #' # Find the code details for a specific example
-#' job_description_codes <- national_cps_availability[national_cps_availability$master_filter == "jdes","available_codes"]
+#' codes<-national_cps_availability[national_cps_availability$master_filter=="jdes","available_codes"]
 #' 
 #' 
 "national_cps_availability"
