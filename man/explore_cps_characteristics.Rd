@@ -38,9 +38,27 @@ and their valid codes in the BLS Current Population Survey (LN) dataset.
 }
 \examples{
 \dontrun{
+# List all available characteristics
+all_chars <- explore_cps_characteristics()
+
+# Explore specific characteristics
+age_codes <- explore_cps_characteristics("ages")
+sex_codes <- explore_cps_characteristics("sexs")
+education_codes <- explore_cps_characteristics("education")
+
+# Use the codes in get_cps_subset
+data <- get_cps_subset(
+  characteristics = list(
+    ages_code = "00",      # 16 years and over
+    sexs_code = "1"        # Men
+  )
+)
+# Get Static CPS Code lookups
 # Search for any characteristic related to "work"
 work_chars <- explore_cps_characteristics(pattern = "work", static = TRUE)
 
+vets_codes <- explore_cps_characteristics("vets", static = TRUE)
+job_search_codes <- explore_cps_characteristics("look", static = TRUE)
 # Get codes for the 'wkst' (Work Status) characteristic
 wkst_codes <- explore_cps_characteristics("wkst", static = TRUE)
 }

@@ -35,6 +35,7 @@ Imports:
     rvest (>= 1.0.4),
     sf (>= 1.0),
     stringr (>= 1.5),
+    tibble(>= 3.0),
     tidyselect (>= 1.2),
     tigris (>= 2.0),
     zoo (>= 1.8)
