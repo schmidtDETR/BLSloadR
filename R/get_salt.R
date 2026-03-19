@@ -8,6 +8,7 @@
 #'   If FALSE, includes sub-state areas like New York City where available.
 #' @param geometry Logical. If TRUE, uses tigris::states() to download shapefiles for the states
 #'   to include in the data. If FALSE (default), only returns data table.
+#' @param shift_geometry Logical.  If TRUE, uses `tigris::shift_geometry()` to reposition the shapefiles for the non-continental United States for more convenient image generation.  If FALSE (default) uses original shapefiles.
 #' @param suppress_warnings Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
 #'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
@@ -73,6 +74,7 @@
 get_salt <- function(
   only_states = TRUE,
   geometry = FALSE,
+  shift_geometry = FALSE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE
 ) {
@@ -211,8 +213,12 @@ get_salt <- function(
 
   if (geometry) {
     shapes <- tigris::states() |>
-      tigris::shift_geometry() |>
       select(NAME, geometry)
+    
+    if (shift_geometry) {
+      shapes <- shapes |> 
+        tigris::shift_geometry()
+    }
 
     salt_data <- salt_data |>
       dplyr::left_join(shapes, by = c("state" = "NAME")) |>
