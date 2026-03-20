@@ -195,7 +195,7 @@ ces_earnings <- get_national_ces(
 )
 
 print(paste("Real earnings data:", nrow(ces_earnings), "rows"))
-#> [1] "Real earnings data: 524844 rows"
+#> [1] "Real earnings data: 524996 rows"
 print("Sample of data types included:")
 #> [1] "Sample of data types included:"
 print(head(unique(ces_earnings$data_type_text), 5))

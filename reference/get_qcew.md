@@ -408,5 +408,7 @@ dt_year <- get_qcew(period_type = "year",
                     area_code = "32000",
                     add_lookups = FALSE,
                     silently = TRUE)
+#> Warning: 2023 Annual is not found (Status 404)
+#> Warning: No data was retrieved. Please check your parameters and internet connection.
 # }
 ```
