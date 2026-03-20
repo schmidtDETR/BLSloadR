@@ -1,7 +1,7 @@
 Package: BLSloadR
 Type: Package
 Title: Download Time Series Data from the U.S. Bureau of Labor Statistics
-Version: 0.5
+Version: 0.5.1
 Authors@R: c(
     person(
     given = "Nevada Department of Employment, Training, and Rehabilitation",
@@ -21,7 +21,7 @@ Authors@R: c(
 Description: These functions provide a convenient interface for downloading data from the U.S. Bureau of Labor Statistics <https://www.bls.gov>.  The functions in this package utilize flat files produced by the Bureau of Labor Statistics, which contain full series history.  These files include employment, unemployment, wages, prices, industry and occupational data at a national, state, and sub-state level, depending on the series.  Individual functions are included for those programs which have data available at the state level.  The core functions provide direct access to the Current Employment Statistics (CES) <https://www.bls.gov/ces/>, Local Area Unemployment Statistics (LAUS) <https://www.bls.gov/lau/>, Occupational Employment and Wage Statistics (OEWS) <https://www.bls.gov/oes/> and Alternative Measures of Labor Underutilization (SALT) <https://www.bls.gov/lau/stalt.htm> data produced by the Bureau of Labor Statistics.
 License: MIT + file LICENSE
 Encoding: UTF-8
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.3.0)
 Imports:
     data.table (>= 1.16),
     digest,
@@ -35,6 +35,7 @@ Imports:
     rvest (>= 1.0.4),
     sf (>= 1.0),
     stringr (>= 1.5),
+    tibble(>= 3.0),
     tidyselect (>= 1.2),
     tigris (>= 2.0),
     zoo (>= 1.8)
