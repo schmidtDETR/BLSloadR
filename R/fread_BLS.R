@@ -222,37 +222,11 @@ fread_bls <- function(
     )
   }
 
-  # Optimize colClasses by detecting numeric columns during sampling
-  optimized_colClasses <- rep("character", length(header_names))
-
-  if (use_sampling) {
-    # Detect which columns are likely numeric (for memory optimization)
-    for (i in seq_along(initial_data)) {
-      col_sample <- initial_data[[i]]
-      # Check if >90% of non-empty values are numeric
-      non_empty <- col_sample[col_sample != ""]
-      if (length(non_empty) > 0) {
-        numeric_vals <- suppressWarnings(as.numeric(non_empty))
-        pct_numeric <- sum(!is.na(numeric_vals)) / length(non_empty)
-        if (pct_numeric > 0.9) {
-          optimized_colClasses[i] <- "numeric"
-        }
-      }
-    }
-
-    if (verbose == TRUE) {
-      n_numeric <- sum(optimized_colClasses == "numeric")
-      if (n_numeric > 0) {
-        message("Optimizing memory: detected ", n_numeric, " numeric columns\n")
-      }
-    }
-  }
-
-  # Read the final data without headers using fread with optimized column types
+  # Read the final data without headers using fread with character column types
   return_data <- data.table::fread(
     temp_file,
     sep = "\t",
-    colClasses = optimized_colClasses,
+    colClasses = "character",
     header = FALSE,
     skip = 1,
     fill = TRUE
