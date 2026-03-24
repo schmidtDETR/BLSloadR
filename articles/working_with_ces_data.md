@@ -164,9 +164,9 @@ ces_current <- get_ces(
 )
 
 print(paste("Date range:", min(ces_current$date), "to", max(ces_current$date)))
-#> [1] "Date range: 2006-01-01 to 2025-12-01"
+#> [1] "Date range: 2024-12-01 to 2025-12-01"
 print(paste("Dataset size:", nrow(ces_current), "rows"))
-#> [1] "Dataset size: 5678709 rows"
+#> [1] "Dataset size: 310336 rows"
 ```
 
 ## National CES Data with `get_national_ces()`

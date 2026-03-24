@@ -28,11 +28,15 @@ listed below:
 This accesses data from the Current Employment Statistics (CES) program
 at the state and metropolitan area levels. This provides employer-based
 estimates of employment, wages, and hours worked. This is the “SM”
-database.
+database. **Includes enhanced filtering options** for specific `states`,
+`industry_filter`, or `current_year_only` data that dramatically improve
+download speed and reduce memory usage.
 
 \-[`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md) -
 This accesses national data from the CES program at the national level,
 which does not include state-level breakouts. This is the “CE” database.
+**Includes `dataset_filter` option** for seasonally adjusted series,
+real earnings data, and current year data.
 
 \-[`get_laus()`](https://schmidtdetr.github.io/BLSloadR/reference/get_laus.md) -
 This accesses data from the Local Area Unemployment Statistics (LAUS)
@@ -76,6 +80,53 @@ industry. This function iterates requesting single-quarter files via the
 BLS QCEW Data Slices tool at
 <https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm>.
 This function was included beginning in version 0.3.1.
+
+# Enhanced CES Filtering for Performance
+
+The
+[`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
+and
+[`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md)
+functions now include powerful filtering options that significantly
+improve performance:
+
+## CES State and Industry Filtering
+
+[`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)
+supports three filtering parameters that can be used individually or in
+combination: - `states = c("MA", "CT", "RI")` - Download only specific
+states, reducing download time by up to 90% -
+`industry_filter = "manufacturing"` - Focus on specific industries -
+`current_year_only = TRUE` - Download only recent data (2006-present)
+instead of the complete historical archive
+
+**Performance Impact:** - Complete CES download: 60+ seconds (~5.6M
+rows) - Single state download: ~3.5 seconds (~200K rows) - With
+current_year_only: Significantly faster for combined filters
+
+## National CES Dataset Options
+
+[`get_national_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_national_ces.md)
+includes the `dataset_filter` parameter for selecting specialized
+datasets: - `"all_data"` - Complete dataset with all series -
+`"current_seasonally_adjusted"` - Seasonally adjusted series only (~392K
+rows, ~3.7 seconds) - `"real_earnings_all_employees"` - Real earnings
+data for all employees - `"real_earnings_production"` - Real earnings
+data for production employees
+
+## Helper Functions for CES Data
+
+Discovery functions help identify available filtering options: -
+[`list_ces_states()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_states.md) -
+Lists available states and territories -
+[`list_ces_industries()`](https://schmidtdetr.github.io/BLSloadR/reference/list_ces_industries.md) -
+Lists available industry filters -
+[`show_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_ces_options.md) -
+Shows comprehensive CES filtering options -
+[`list_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/list_national_ces_options.md) -
+Lists national CES dataset options -
+[`show_national_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.md) -
+Shows detailed national CES options
 
 # General BLS Time Series Functions
 

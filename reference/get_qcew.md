@@ -397,7 +397,6 @@ dt_default <- get_qcew(industry_code = "10")
 #> Accessing: https://data.bls.gov/cew/data/api/2025/1/industry/10.csv
 #> Accessing: https://data.bls.gov/cew/data/api/2025/2/industry/10.csv
 #> Accessing: https://data.bls.gov/cew/data/api/2025/3/industry/10.csv
-#> Warning: 2025 Q3 is not found (Status 404)
 #> Accessing: https://data.bls.gov/cew/data/api/2025/4/industry/10.csv
 #> Warning: 2025 Q4 is not found (Status 404)
 
@@ -408,7 +407,5 @@ dt_year <- get_qcew(period_type = "year",
                     area_code = "32000",
                     add_lookups = FALSE,
                     silently = TRUE)
-#> Warning: 2023 Annual is not found (Status 404)
-#> Warning: No data was retrieved. Please check your parameters and internet connection.
 # }
 ```

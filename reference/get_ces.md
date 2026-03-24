@@ -27,23 +27,23 @@ get_ces(
 
   Character vector of state abbreviations to download (e.g., c("MA",
   "NY", "CA")). If specified, downloads only these states (all
-  industries, all years). Cannot be combined with industry_filter or
-  current_year_only. Use \`list_ces_states()\` to see all available
-  states.
+  industries, all years). Can be combined with current_year_only to
+  filter to specific states. Use \`list_ces_states()\` to see all
+  available states.
 
 - industry_filter:
 
   Character string specifying industry category to download. If
-  specified, downloads this industry for all states (2007-present).
-  Cannot be combined with states or current_year_only. Use
+  specified, downloads this industry for all states (2007-present). Can
+  be combined with current_year_only to filter to specific industry. Use
   \`list_ces_industries()\` to see all available industry filters.
 
 - current_year_only:
 
   Logical. If TRUE, downloads the current year file which contains all
-  states and industries for recent years (2006-present). Cannot be
-  combined with states or industry_filter. If FALSE (default), uses
-  other parameters.
+  states and industries for recent years, filtered to the past 12
+  months. Can be combined with states or industry_filter to apply
+  additional filtering. If FALSE (default), uses other parameters.
 
 - transform:
 
