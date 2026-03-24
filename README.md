@@ -23,6 +23,7 @@ The primary functions in this package all begin with get_ and are listed below:
 
 -`get_qcew()` - This accesses data from the Quarterly Census of Employment and Wages (QCEW).  This is a very large data set, so access is filtered by area or industry.  This function iterates requesting single-quarter files via the BLS QCEW Data Slices tool at https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm.  This function was included beginning in version 0.3.1.
 
+-`get_cps_subset()` - This accesses data from the National Current Population Survey (CPS) which determines the national unemployment rate.  Several demographic details are available here which are not available at the state or local levels.  This is the "LN" database. This function was introduced in BLSloadR version 0.5.
 # Enhanced CES Filtering for Performance
 
 The `get_ces()` and `get_national_ces()` functions now include powerful filtering options that significantly improve performance:
