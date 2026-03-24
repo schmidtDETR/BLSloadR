@@ -2,16 +2,17 @@
 
 This helper function allows users to discover available characteristics
 and their valid codes in the BLS Current Population Survey (LN) dataset.
-It can list all available characteristics or show the valid codes for
-specific characteristics.
 
 ## Usage
 
 ``` r
 explore_cps_characteristics(
   characteristic = NULL,
+  pattern = NULL,
   cache_dir = NULL,
-  verbose = TRUE
+  cache = check_bls_cache_env(),
+  verbose = TRUE,
+  static = FALSE
 )
 ```
 
@@ -20,54 +21,38 @@ explore_cps_characteristics(
 - characteristic:
 
   Optional character string specifying which characteristic to explore
-  (e.g., "ages", "sexs", "race", "education"). If NULL, returns a list
-  of all available characteristics. Do not include "\_code" suffix.
+  (e.g., "ages", "sexs"). If NULL, returns a list of all available
+  characteristics or matches based on the \`pattern\`.
+
+- pattern:
+
+  Optional character string. If provided, filters the available
+  characteristics by matching this pattern against names and
+  descriptions. Functions best when \`static=TRUE\`
 
 - cache_dir:
 
-  Optional character string specifying the directory for cached files.
-  If NULL, uses R's temporary directory via \`tempdir()\`.
+  Optional character string for cached files.
+
+- cache:
+
+  Logical. Optional parameter determining whether to use the BLSloadR
+  file cache folder. By default, checks status os USE_BLS_CACHE
+  environment variable, and otherwise is set to FALSE.
 
 - verbose:
 
   Logical. If TRUE, print informative messages. Default is TRUE.
 
+- static:
+
+  Logical. If TRUE, use built-in \`national_cps_availability\` to
+  populate the function output to ensure that only filter values
+  actually present in the data are included..
+
 ## Value
 
-If \`characteristic\` is NULL, returns a data.frame with columns:
-
-- characteristic: Name of the characteristic (without \_code suffix)
-
-- code_column: The column name used in filtering (with \_code suffix)
-
-- description: Brief description of the characteristic
-
-If \`characteristic\` is specified, returns a data.frame showing all
-valid codes and their text descriptions for that characteristic.
-
-## Details
-
-This function downloads the ln.series file and associated mapping files
-from the BLS server to identify available characteristics. The results
-are cached locally to avoid repeated downloads.
-
-Common characteristics include:
-
-- ages: Age groups (e.g., 16+ years, 20-24 years)
-
-- sexs: Sex/gender categories
-
-- race: Racial categories
-
-- education: Educational attainment levels
-
-- periodicity: Data frequency (monthly, quarterly, annual)
-
-- seasonal: Seasonal adjustment status
-
-- occupation: Occupation categories
-
-- indy: Industry categories
+A data.frame of characteristics or specific code mappings.
 
 ## Examples
 
@@ -88,5 +73,13 @@ data <- get_cps_subset(
     sexs_code = "1"        # Men
   )
 )
+# Get Static CPS Code lookups
+# Search for any characteristic related to "work"
+work_chars <- explore_cps_characteristics(pattern = "work", static = TRUE)
+
+vets_codes <- explore_cps_characteristics("vets", static = TRUE)
+job_search_codes <- explore_cps_characteristics("look", static = TRUE)
+# Get codes for the 'wkst' (Work Status) characteristic
+wkst_codes <- explore_cps_characteristics("wkst", static = TRUE)
 } # }
 ```

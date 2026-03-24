@@ -81,7 +81,12 @@ BLS QCEW Data Slices tool at
 <https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm>.
 This function was included beginning in version 0.3.1.
 
-# Enhanced CES Filtering for Performance
+\-[`get_cps_subset()`](https://schmidtdetr.github.io/BLSloadR/reference/get_cps_subset.md) -
+This accesses data from the National Current Population Survey (CPS)
+which determines the national unemployment rate. Several demographic
+details are available here which are not available at the state or local
+levels. This is the “LN” database. This function was introduced in
+BLSloadR version 0.5. \# Enhanced CES Filtering for Performance
 
 The
 [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)

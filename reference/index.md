@@ -60,6 +60,8 @@
   : List Available National CES Dataset Options
 - [`load_bls_dataset()`](https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.md)
   : Generic BLS Dataset Download
+- [`national_cps_availability`](https://schmidtdetr.github.io/BLSloadR/reference/national_cps_availability.md)
+  : National CPS Code and Label Mappings with Crosstab of Available Data
 - [`print_bls_warnings()`](https://schmidtdetr.github.io/BLSloadR/reference/print_bls_warnings.md)
   : Print warnings for BLS data object
 - [`show_ces_options()`](https://schmidtdetr.github.io/BLSloadR/reference/show_ces_options.md)

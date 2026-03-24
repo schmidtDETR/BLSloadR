@@ -1,5 +1,24 @@
 # Changelog
 
+## BLSloadR 0.5.1 patch notes
+
+### Functional Enhancements
+
+[`explore_cps_characteristics()`](https://schmidtdetr.github.io/BLSloadR/reference/explore_cps_characteristics.md)
+has been upgraded with a `static` argument. When set to TRUE it will use
+a built-in data lookup table to determine available CPS subset codes.
+Because the BLS mapping files contain codes not in use in the data, this
+lookup table was built from actual CPS data and will avoid filtering to
+CPS subsets that do not exist. If this argument is not set or is set to
+FALSE, this function will continue to infer potential mapping from the
+live BLS data.
+
+`national_cps_availability` is a new data table included in the package
+containing a list and description of filters by which a user may subset
+the CPS data. When a particular data element is specified it provides a
+list of data subsetting codes, their description, and other available
+codes by which this data may be subset further.
+
 ## BLSloadR 0.5 patch notes
 
 ### Functional Enhancements
