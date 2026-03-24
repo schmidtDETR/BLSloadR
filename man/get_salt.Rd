@@ -7,6 +7,7 @@
 get_salt(
   only_states = TRUE,
   geometry = FALSE,
+  shift_geometry = FALSE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE
 )
@@ -17,6 +18,8 @@ If FALSE, includes sub-state areas like New York City where available.}
 
 \item{geometry}{Logical. If TRUE, uses tigris::states() to download shapefiles for the states
 to include in the data. If FALSE (default), only returns data table.}
+
+\item{shift_geometry}{Logical.  If TRUE, uses `tigris::shift_geometry()` to reposition the shapefiles for the non-continental United States for more convenient image generation.  If FALSE (default) uses original shapefiles.}
 
 \item{suppress_warnings}{Logical. If TRUE (default), suppress individual download warnings and diagnostic messages
 for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.}

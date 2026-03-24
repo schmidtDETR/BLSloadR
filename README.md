@@ -9,9 +9,9 @@ BLSloadR can be installed from CRAN by running `install.packages("BLSloadR")`. T
 
 The primary functions in this package all begin with get_ and are listed below:
 
--`get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the "SM" database.
+-`get_ces()` - This accesses data from the Current Employment Statistics (CES) program at the state and metropolitan area levels. This provides employer-based estimates of employment, wages, and hours worked. This is the "SM" database. **Includes enhanced filtering options** for specific `states`, `industry_filter`, or `current_year_only` data that dramatically improve download speed and reduce memory usage.
 
--`get_national_ces()` - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the "CE" database.
+-`get_national_ces()` - This accesses national data from the CES program at the national level, which does not include state-level breakouts. This is the "CE" database. **Includes `dataset_filter` option** for seasonally adjusted series, real earnings data, and current year data.
 
 -`get_laus()` - This accesses data from the Local Area Unemployment Statistics (LAUS) program at a regional, state, and several sub-state levels. This is a localized version of the Current Population Survey (CPS) which is used to drive household-based estiamtes of employment and unemployment. This is the "LA" database. Note that because of the volume of data here, there are several different geographies that may be specified to pull the appropriate data file from BLS.
 
@@ -24,6 +24,35 @@ The primary functions in this package all begin with get_ and are listed below:
 -`get_qcew()` - This accesses data from the Quarterly Census of Employment and Wages (QCEW).  This is a very large data set, so access is filtered by area or industry.  This function iterates requesting single-quarter files via the BLS QCEW Data Slices tool at https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm.  This function was included beginning in version 0.3.1.
 
 -`get_cps_subset()` - This accesses data from the National Current Population Survey (CPS) which determines the national unemployment rate.  Several demographic details are available here which are not available at the state or local levels.  This is the "LN" database. This function was introduced in BLSloadR version 0.5.
+# Enhanced CES Filtering for Performance
+
+The `get_ces()` and `get_national_ces()` functions now include powerful filtering options that significantly improve performance:
+
+## CES State and Industry Filtering
+`get_ces()` supports three filtering parameters that can be used individually or in combination:
+- `states = c("MA", "CT", "RI")` - Download only specific states, reducing download time by up to 90%
+- `industry_filter = "manufacturing"` - Focus on specific industries
+- `current_year_only = TRUE` - Download only recent data (2006-present) instead of the complete historical archive
+
+**Performance Impact:**
+- Complete CES download: 60+ seconds (~5.6M rows)
+- Single state download: ~3.5 seconds (~200K rows)
+- With current_year_only: Significantly faster for combined filters
+
+## National CES Dataset Options
+`get_national_ces()` includes the `dataset_filter` parameter for selecting specialized datasets:
+- `"all_data"` - Complete dataset with all series
+- `"current_seasonally_adjusted"` - Seasonally adjusted series only (~392K rows, ~3.7 seconds)
+- `"real_earnings_all_employees"` - Real earnings data for all employees
+- `"real_earnings_production"` - Real earnings data for production employees
+
+## Helper Functions for CES Data
+Discovery functions help identify available filtering options:
+- `list_ces_states()` - Lists available states and territories
+- `list_ces_industries()` - Lists available industry filters
+- `show_ces_options()` - Shows comprehensive CES filtering options
+- `list_national_ces_options()` - Lists national CES dataset options
+- `show_national_ces_options()` - Shows detailed national CES options
 
 # General BLS Time Series Functions
 These optional helper functions can aid the user of this package by providing ways to summarize and explore all the time.series databases. These functions are a bit different than the specific functions above, as they implement a general way to merge and import BLS time.series databases, but do not manually specify the data, series, and lookup files to be joined.  As such, they return a bls_data_collection object which includes the joined data as well as diagnostic results including dropped columns, unexpected join results, and other tools to help review the data before use.  Further, when multiple data or series files are present, the user is prompted to choose one, so these tools are not suitable for a typical piped script.
