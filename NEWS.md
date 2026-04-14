@@ -1,3 +1,6 @@
+# BLSloadR 0.5.2 patch notes
+
+This patch includes a critical fix to resolve rate limit issues downloading data from the BLS.  It implements a `BLS_USER_AGENT` environment variable which is called to populate the file download requests to BLS.  Users encountering a 403 error on most requests will need to set this environment variable to ensure smooth downloads.  Additional documentation and warning messages will be implemented in a future patch.
 
 # BLSloadR 0.5.1 patch notes
 
