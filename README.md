@@ -24,6 +24,18 @@ The primary functions in this package all begin with get_ and are listed below:
 -`get_qcew()` - This accesses data from the Quarterly Census of Employment and Wages (QCEW).  This is a very large data set, so access is filtered by area or industry.  This function iterates requesting single-quarter files via the BLS QCEW Data Slices tool at https://www.bls.gov/cew/additional-resources/open-data/csv-data-slices.htm.  This function was included beginning in version 0.3.1.
 
 -`get_cps_subset()` - This accesses data from the National Current Population Survey (CPS) which determines the national unemployment rate.  Several demographic details are available here which are not available at the state or local levels.  This is the "LN" database. This function was introduced in BLSloadR version 0.5.
+
+# Configuring Your User Profile
+BLSloadR will typically work by default without any cusomization.  However, there are some options you can use that may improve your experience.  These options are managed with *environment variables* in your R session that enable the following:
+
+-`BLS_USER_AGENT` - setting this environment variable to your e-mail address will use your e-mail address when downloading data from the BLS. In case of errors with your downloads, this may help the BLS to identify you as an individual user. Setting this environment variable to a character string passes that character string to the BLS as the User-Agent HTML header.
+
+-`USE_BLS_CACHE` - Setting this environment variable to "TRUE" will enable a local file cache of your BLS downloads which will download new files for supported functions only when the underlying data has changed.
+
+-`BLS_CACHE_DIR` - If you want to use the file cache, you may wish to specify a location.  Setting this environment variable will specify a different path for the file cache than the default.
+
+To permanently set these environment variables, you can edit your .Renviron file (such as with `usethis::edit_r_environ()`). To do so for a single session, you can set your environment variables with `Sys.setenv(USE_BLS_CACHE="TRUE")`.
+
 # Enhanced CES Filtering for Performance
 
 The `get_ces()` and `get_national_ces()` functions now include powerful filtering options that significantly improve performance:

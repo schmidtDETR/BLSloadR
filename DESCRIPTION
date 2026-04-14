@@ -1,7 +1,7 @@
 Package: BLSloadR
 Type: Package
 Title: Download Time Series Data from the U.S. Bureau of Labor Statistics
-Version: 0.5.1
+Version: 0.5.2
 Authors@R: c(
     person(
     given = "Nevada Department of Employment, Training, and Rehabilitation",
@@ -48,7 +48,8 @@ Suggests:
     rmarkdown,
     R.utils,
     testthat (>= 3.0.0),
-    tidyr
+    tidyr,
+    usethis
 VignetteBuilder: knitr
 URL: https://schmidtdetr.github.io/BLSloadR/
 Config/Needs/website: rmarkdown
