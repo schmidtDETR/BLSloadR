@@ -2,7 +2,7 @@
 % Please edit documentation in R/download_helpers.R
 \name{get_bls_headers}
 \alias{get_bls_headers}
-\title{Get standard BLS HTTP headers}
+\title{Generate headers for BLS requests}
 \usage{
 get_bls_headers(host = "download.bls.gov")
 }
