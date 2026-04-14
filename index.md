@@ -86,7 +86,37 @@ This accesses data from the National Current Population Survey (CPS)
 which determines the national unemployment rate. Several demographic
 details are available here which are not available at the state or local
 levels. This is the “LN” database. This function was introduced in
-BLSloadR version 0.5. \# Enhanced CES Filtering for Performance
+BLSloadR version 0.5.
+
+# Configuring Your User Profile
+
+BLSloadR will typically work by default without any cusomization.
+However, there are some options you can use that may improve your
+experience. These options are managed with *environment variables* in
+your R session that enable the following:
+
+\-`BLS_USER_AGENT` - setting this environment variable to your e-mail
+address will use your e-mail address when downloading data from the BLS.
+In case of errors with your downloads, this may help the BLS to identify
+you as an individual user. Setting this environment variable to a
+character string passes that character string to the BLS as the
+User-Agent HTML header.
+
+\-`USE_BLS_CACHE` - Setting this environment variable to “TRUE” will
+enable a local file cache of your BLS downloads which will download new
+files for supported functions only when the underlying data has changed.
+
+\-`BLS_CACHE_DIR` - If you want to use the file cache, you may wish to
+specify a location. Setting this environment variable will specify a
+different path for the file cache than the default.
+
+To permanently set these environment variables, you can edit your
+.Renviron file (such as with
+[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html)).
+To do so for a single session, you can set your environment variables
+with `Sys.setenv(USE_BLS_CACHE="TRUE")`.
+
+# Enhanced CES Filtering for Performance
 
 The
 [`get_ces()`](https://schmidtdetr.github.io/BLSloadR/reference/get_ces.md)

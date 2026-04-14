@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -245,585 +245,6 @@ employment and hourly wages by state.</p>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span><span class="st">"area_name"</span> <span class="op">=</span> <span class="st">"State"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"OEWS Employment Statistics for All Occupations"</span>,</span>
 <span>             subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Western United States, "</span>,<span class="va">estimate_year</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwlefoodfi table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#mwlefoodfi thead, #mwlefoodfi tbody, #mwlefoodfi tfoot, #mwlefoodfi tr, #mwlefoodfi td, #mwlefoodfi th {
-  border-style: none;
-}
-
-#mwlefoodfi p {
-  margin: 0;
-  padding: 0;
-}
-
-#mwlefoodfi .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#mwlefoodfi .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#mwlefoodfi .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#mwlefoodfi .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#mwlefoodfi .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#mwlefoodfi .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#mwlefoodfi .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#mwlefoodfi .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#mwlefoodfi .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#mwlefoodfi .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#mwlefoodfi .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#mwlefoodfi .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#mwlefoodfi .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_left {
-  text-align: left;
-}
-
-#mwlefoodfi .gt_center {
-  text-align: center;
-}
-
-#mwlefoodfi .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#mwlefoodfi .gt_font_normal {
-  font-weight: normal;
-}
-
-#mwlefoodfi .gt_font_bold {
-  font-weight: bold;
-}
-
-#mwlefoodfi .gt_font_italic {
-  font-style: italic;
-}
-
-#mwlefoodfi .gt_super {
-  font-size: 65%;
-}
-
-#mwlefoodfi .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#mwlefoodfi .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#mwlefoodfi .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#mwlefoodfi .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#mwlefoodfi .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#mwlefoodfi .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#mwlefoodfi .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#mwlefoodfi .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#mwlefoodfi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="7" class="gt_heading gt_title gt_font_normal" style>OEWS Employment Statistics for All Occupations</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Western United States, 2024</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="area_name">State</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Employment">Employment</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-10th-percentile-wage">Hourly 10th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-25th-percentile-wage">Hourly 25th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-median-wage">Hourly median wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-75th-percentile-wage">Hourly 75th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-90th-percentile-wage">Hourly 90th percentile wage</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="area_name" class="gt_row gt_left">Arizona</td>
-<td headers="Employment" class="gt_row gt_right">3,196,750</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$15.66</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.96</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$23.47</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$36.60</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$54.48</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">California</td>
-<td headers="Employment" class="gt_row gt_right">18,057,850</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.95</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$18.87</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$27.38</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$46.31</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$75.58</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Colorado</td>
-<td headers="Employment" class="gt_row gt_right">2,891,210</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.94</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$19.91</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$27.99</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$42.45</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$64.45</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Idaho</td>
-<td headers="Employment" class="gt_row gt_right">844,910</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.60</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.05</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$22.34</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$31.71</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$48.18</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Montana</td>
-<td headers="Employment" class="gt_row gt_right">510,020</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.69</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.38</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$22.77</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$32.65</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$46.88</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Nevada</td>
-<td headers="Employment" class="gt_row gt_right">1,529,480</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.25</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$16.91</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$22.33</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$33.62</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$49.82</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">New Mexico</td>
-<td headers="Employment" class="gt_row gt_right">860,880</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.51</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$16.28</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$22.05</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$34.72</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$51.30</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Oregon</td>
-<td headers="Employment" class="gt_row gt_right">1,965,700</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.60</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$19.00</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$25.67</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$39.01</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$61.12</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Utah</td>
-<td headers="Employment" class="gt_row gt_right">1,709,790</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.06</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.61</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$23.36</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$36.43</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$53.67</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Washington</td>
-<td headers="Employment" class="gt_row gt_right">3,539,650</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$18.03</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$22.00</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$29.61</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$47.83</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$70.01</td>
-</tr>
-<tr>
-<td headers="area_name" class="gt_row gt_left">Wyoming</td>
-<td headers="Employment" class="gt_row gt_right">278,500</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.59</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.44</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$23.64</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$35.28</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$49.14</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Or, we could as easily look at more detailed occupations, as the
-Standard Occupational Classification code used by OEWS includes both
-major groups and detailed occupations.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">western_states</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">occupation_code</span>, <span class="va">occupation_name</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">occupation_code</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span> <span class="op">==</span> <span class="st">"35"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#eexombwkke table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1274,97 +695,135 @@ major groups and detailed occupations.</p>
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="occupation_code">occupation_code</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="occupation_name">occupation_name</th>
-    </tr></thead>
+<thead>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_title gt_font_normal" style>OEWS Employment Statistics for All Occupations</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Western United States, 2024</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="area_name">State</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Employment">Employment</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-10th-percentile-wage">Hourly 10th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-25th-percentile-wage">Hourly 25th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-median-wage">Hourly median wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-75th-percentile-wage">Hourly 75th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-90th-percentile-wage">Hourly 90th percentile wage</th>
+    </tr>
+</thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">350000</td>
-<td headers="occupation_name" class="gt_row gt_left">Food Preparation and Serving Related Occupations</td>
+<td headers="area_name" class="gt_row gt_left">Arizona</td>
+<td headers="Employment" class="gt_row gt_right">3,196,750</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$15.66</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.96</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$23.47</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$36.60</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$54.48</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">351011</td>
-<td headers="occupation_name" class="gt_row gt_left">Chefs and Head Cooks</td>
+<td headers="area_name" class="gt_row gt_left">California</td>
+<td headers="Employment" class="gt_row gt_right">18,057,850</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.95</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$18.87</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$27.38</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$46.31</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$75.58</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">351012</td>
-<td headers="occupation_name" class="gt_row gt_left">First-Line Supervisors of Food Preparation and Serving Workers</td>
+<td headers="area_name" class="gt_row gt_left">Colorado</td>
+<td headers="Employment" class="gt_row gt_right">2,891,210</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.94</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$19.91</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$27.99</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$42.45</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$64.45</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">352011</td>
-<td headers="occupation_name" class="gt_row gt_left">Cooks, Fast Food</td>
+<td headers="area_name" class="gt_row gt_left">Idaho</td>
+<td headers="Employment" class="gt_row gt_right">844,910</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.60</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.05</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$22.34</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$31.71</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$48.18</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">352012</td>
-<td headers="occupation_name" class="gt_row gt_left">Cooks, Institution and Cafeteria</td>
+<td headers="area_name" class="gt_row gt_left">Montana</td>
+<td headers="Employment" class="gt_row gt_right">510,020</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.69</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.38</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$22.77</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$32.65</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$46.88</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">352014</td>
-<td headers="occupation_name" class="gt_row gt_left">Cooks, Restaurant</td>
+<td headers="area_name" class="gt_row gt_left">Nevada</td>
+<td headers="Employment" class="gt_row gt_right">1,529,480</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.25</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$16.91</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$22.33</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$33.62</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$49.82</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">352015</td>
-<td headers="occupation_name" class="gt_row gt_left">Cooks, Short Order</td>
+<td headers="area_name" class="gt_row gt_left">New Mexico</td>
+<td headers="Employment" class="gt_row gt_right">860,880</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.51</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$16.28</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$22.05</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$34.72</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$51.30</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">352019</td>
-<td headers="occupation_name" class="gt_row gt_left">Cooks, All Other</td>
+<td headers="area_name" class="gt_row gt_left">Oregon</td>
+<td headers="Employment" class="gt_row gt_right">1,965,700</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.60</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$19.00</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$25.67</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$39.01</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$61.12</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">352021</td>
-<td headers="occupation_name" class="gt_row gt_left">Food Preparation Workers</td>
+<td headers="area_name" class="gt_row gt_left">Utah</td>
+<td headers="Employment" class="gt_row gt_right">1,709,790</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.06</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.61</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$23.36</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$36.43</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$53.67</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">353011</td>
-<td headers="occupation_name" class="gt_row gt_left">Bartenders</td>
+<td headers="area_name" class="gt_row gt_left">Washington</td>
+<td headers="Employment" class="gt_row gt_right">3,539,650</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$18.03</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$22.00</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$29.61</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$47.83</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$70.01</td>
 </tr>
 <tr>
-<td headers="occupation_code" class="gt_row gt_right">353023</td>
-<td headers="occupation_name" class="gt_row gt_left">Fast Food and Counter Workers</td>
-</tr>
-<tr>
-<td headers="occupation_code" class="gt_row gt_right">353031</td>
-<td headers="occupation_name" class="gt_row gt_left">Waiters and Waitresses</td>
-</tr>
-<tr>
-<td headers="occupation_code" class="gt_row gt_right">353041</td>
-<td headers="occupation_name" class="gt_row gt_left">Food Servers, Nonrestaurant</td>
-</tr>
-<tr>
-<td headers="occupation_code" class="gt_row gt_right">359011</td>
-<td headers="occupation_name" class="gt_row gt_left">Dining Room and Cafeteria Attendants and Bartender Helpers</td>
-</tr>
-<tr>
-<td headers="occupation_code" class="gt_row gt_right">359021</td>
-<td headers="occupation_name" class="gt_row gt_left">Dishwashers</td>
-</tr>
-<tr>
-<td headers="occupation_code" class="gt_row gt_right">359031</td>
-<td headers="occupation_name" class="gt_row gt_left">Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop</td>
-</tr>
-<tr>
-<td headers="occupation_code" class="gt_row gt_right">359099</td>
-<td headers="occupation_name" class="gt_row gt_left">Food Preparation and Serving Related Workers, All Other</td>
+<td headers="area_name" class="gt_row gt_left">Wyoming</td>
+<td headers="Employment" class="gt_row gt_right">278,500</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.59</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.44</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$23.64</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$35.28</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$49.14</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Working from this list, we can filter our data set to a particular
-occupation to gain insights into employment and wage trends. We’ll also
-include the location quotient, to help us explore whether any states
-have an unusually high concentration of employment in this
-occupation.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Or, we could as easily look at more detailed occupations, as the
+Standard Occupational Classification code used by OEWS includes both
+major groups and detailed occupations.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">western_states</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">occupation_name</span> <span class="op">==</span> <span class="st">"Cooks, Fast Food"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">area_name</span>, <span class="va">Employment</span>, <span class="va">`Hourly 10th percentile wage`</span>, <span class="va">`Hourly 25th percentile wage`</span>, <span class="va">`Hourly median wage`</span>, <span class="va">`Hourly 75th percentile wage`</span>, <span class="va">`Hourly 90th percentile wage`</span>, <span class="va">`Location Quotient`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">Employment</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html" class="external-link">fmt_currency</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"Hourly"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span><span class="st">"area_name"</span> <span class="op">=</span> <span class="st">"State"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"OEWS Employment Statistics for Fast Food Cooks"</span>,</span>
-<span>             subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Western United States, "</span>,<span class="va">estimate_year</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">occupation_code</span>, <span class="va">occupation_name</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="va">occupation_code</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span> <span class="op">==</span> <span class="st">"35"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ulbfdpbcyv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1815,158 +1274,97 @@ occupation.</p>
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="8" class="gt_heading gt_title gt_font_normal" style>OEWS Employment Statistics for Fast Food Cooks</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Western United States, 2024</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="area_name">State</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Employment">Employment</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-10th-percentile-wage">Hourly 10th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-25th-percentile-wage">Hourly 25th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-median-wage">Hourly median wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-75th-percentile-wage">Hourly 75th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-90th-percentile-wage">Hourly 90th percentile wage</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Location-Quotient">Location Quotient</th>
-    </tr>
-</thead>
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="occupation_code">occupation_code</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="occupation_name">occupation_name</th>
+    </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="area_name" class="gt_row gt_left">Arizona</td>
-<td headers="Employment" class="gt_row gt_right">11,220</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.35</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$14.66</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$14.95</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$16.76</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$17.30</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.81</td>
+<td headers="occupation_code" class="gt_row gt_right">350000</td>
+<td headers="occupation_name" class="gt_row gt_left">Food Preparation and Serving Related Occupations</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">California</td>
-<td headers="Employment" class="gt_row gt_right">136,550</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.54</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.11</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$17.50</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$20.00</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$21.77</td>
-<td headers="Location Quotient" class="gt_row gt_right">1.74</td>
+<td headers="occupation_code" class="gt_row gt_right">351011</td>
+<td headers="occupation_name" class="gt_row gt_left">Chefs and Head Cooks</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Colorado</td>
-<td headers="Employment" class="gt_row gt_right">9,560</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.75</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$15.67</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$16.89</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$17.86</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$20.77</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.76</td>
+<td headers="occupation_code" class="gt_row gt_right">351012</td>
+<td headers="occupation_name" class="gt_row gt_left">First-Line Supervisors of Food Preparation and Serving Workers</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Idaho</td>
-<td headers="Employment" class="gt_row gt_right">2,090</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$8.59</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$10.52</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$12.56</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$14.91</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$16.91</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.57</td>
+<td headers="occupation_code" class="gt_row gt_right">352011</td>
+<td headers="occupation_name" class="gt_row gt_left">Cooks, Fast Food</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Montana</td>
-<td headers="Employment" class="gt_row gt_right">1,310</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$10.30</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$10.57</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$12.63</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$15.71</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$18.99</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.59</td>
+<td headers="occupation_code" class="gt_row gt_right">352012</td>
+<td headers="occupation_name" class="gt_row gt_left">Cooks, Institution and Cafeteria</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Nevada</td>
-<td headers="Employment" class="gt_row gt_right">6,610</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$11.00</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$14.27</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$15.72</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$18.21</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$21.03</td>
-<td headers="Location Quotient" class="gt_row gt_right">1.00</td>
+<td headers="occupation_code" class="gt_row gt_right">352014</td>
+<td headers="occupation_name" class="gt_row gt_left">Cooks, Restaurant</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">New Mexico</td>
-<td headers="Employment" class="gt_row gt_right">2,600</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.15</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$13.57</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$13.86</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$14.58</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$16.74</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.70</td>
+<td headers="occupation_code" class="gt_row gt_right">352015</td>
+<td headers="occupation_name" class="gt_row gt_left">Cooks, Short Order</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Oregon</td>
-<td headers="Employment" class="gt_row gt_right">4,360</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.70</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$15.11</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$17.80</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$21.11</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$28.00</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.51</td>
+<td headers="occupation_code" class="gt_row gt_right">352019</td>
+<td headers="occupation_name" class="gt_row gt_left">Cooks, All Other</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Utah</td>
-<td headers="Employment" class="gt_row gt_right">6,250</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$11.73</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$13.61</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$14.41</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$15.91</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$17.05</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.84</td>
+<td headers="occupation_code" class="gt_row gt_right">352021</td>
+<td headers="occupation_name" class="gt_row gt_left">Food Preparation Workers</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Washington</td>
-<td headers="Employment" class="gt_row gt_right">8,630</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.33</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$16.73</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$17.69</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$19.05</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$21.42</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.56</td>
+<td headers="occupation_code" class="gt_row gt_right">353011</td>
+<td headers="occupation_name" class="gt_row gt_left">Bartenders</td>
 </tr>
 <tr>
-<td headers="area_name" class="gt_row gt_left">Wyoming</td>
-<td headers="Employment" class="gt_row gt_right">440</td>
-<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.45</td>
-<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$15.27</td>
-<td headers="Hourly median wage" class="gt_row gt_right">$15.48</td>
-<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$16.51</td>
-<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$16.92</td>
-<td headers="Location Quotient" class="gt_row gt_right">0.36</td>
+<td headers="occupation_code" class="gt_row gt_right">353023</td>
+<td headers="occupation_name" class="gt_row gt_left">Fast Food and Counter Workers</td>
+</tr>
+<tr>
+<td headers="occupation_code" class="gt_row gt_right">353031</td>
+<td headers="occupation_name" class="gt_row gt_left">Waiters and Waitresses</td>
+</tr>
+<tr>
+<td headers="occupation_code" class="gt_row gt_right">353041</td>
+<td headers="occupation_name" class="gt_row gt_left">Food Servers, Nonrestaurant</td>
+</tr>
+<tr>
+<td headers="occupation_code" class="gt_row gt_right">359011</td>
+<td headers="occupation_name" class="gt_row gt_left">Dining Room and Cafeteria Attendants and Bartender Helpers</td>
+</tr>
+<tr>
+<td headers="occupation_code" class="gt_row gt_right">359021</td>
+<td headers="occupation_name" class="gt_row gt_left">Dishwashers</td>
+</tr>
+<tr>
+<td headers="occupation_code" class="gt_row gt_right">359031</td>
+<td headers="occupation_name" class="gt_row gt_left">Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop</td>
+</tr>
+<tr>
+<td headers="occupation_code" class="gt_row gt_right">359099</td>
+<td headers="occupation_name" class="gt_row gt_left">Food Preparation and Serving Related Workers, All Other</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>We can also explore the uniqueness of an occupation, by seeing how
-the concentration in an area varies compared to the concentration
-nationally using the location quotient. The <strong>location quotient
-(LQ)</strong> is defined as the ratio of employment in an occupation in
-an area to total employment in that area, divided by the ratio of
-employment in that occupation in the United States to total employment
-in the United States. This means that a higher LQ indicates a higher
-concentration of employment in an area compared to the concentration of
-employment in that occupation in the country.</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">LQ</mtext><mrow><mi>a</mi><mi>r</mi><mi>e</mi><mi>a</mi><mo>,</mo><mi>o</mi><mi>c</mi><mi>c</mi><mi>u</mi><mi>p</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></msub><mo>=</mo><mfrac><mfrac displaystyle="true"><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">occupation in area</mtext></msub></mrow><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">total in area</mtext></msub></mrow></mfrac><mfrac displaystyle="true"><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">occupation in U.S.</mtext></msub></mrow><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">total in U.S.</mtext></msub></mrow></mfrac></mfrac></mrow><annotation encoding="application/x-tex">
-\text{LQ}_{area,occupation} = 
-\frac{\dfrac{Employment_{\text{occupation in area}}}{Employment_{\text{total in area}}}}
-     {\dfrac{Employment_{\text{occupation in U.S.}}}{Employment_{\text{total in U.S.}}}}
-</annotation></semantics></math></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>Working from this list, we can filter our data set to a particular
+occupation to gain insights into employment and wage trends. We’ll also
+include the location quotient, to help us explore whether any states
+have an unusually high concentration of employment in this
+occupation.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">western_states</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">area_name</span>, <span class="va">occupation_name</span>, <span class="va">`Location Quotient`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">`Location Quotient`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">occupation_name</span> <span class="op">==</span> <span class="st">"Cooks, Fast Food"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">area_name</span>, <span class="va">Employment</span>, <span class="va">`Hourly 10th percentile wage`</span>, <span class="va">`Hourly 25th percentile wage`</span>, <span class="va">`Hourly median wage`</span>, <span class="va">`Hourly 75th percentile wage`</span>, <span class="va">`Hourly 90th percentile wage`</span>, <span class="va">`Location Quotient`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">Employment</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html" class="external-link">fmt_currency</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"Hourly"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span><span class="st">"area_name"</span> <span class="op">=</span> <span class="st">"State"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"OEWS Employment Statistics for Fast Food Cooks"</span>,</span>
+<span>             subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Western United States, "</span>,<span class="va">estimate_year</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#kgufivjubq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2413,6 +1811,608 @@ employment in that occupation in the country.</p>
 }
 
 #kgufivjubq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="8" class="gt_heading gt_title gt_font_normal" style>OEWS Employment Statistics for Fast Food Cooks</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Western United States, 2024</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="area_name">State</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Employment">Employment</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-10th-percentile-wage">Hourly 10th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-25th-percentile-wage">Hourly 25th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-median-wage">Hourly median wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-75th-percentile-wage">Hourly 75th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Hourly-90th-percentile-wage">Hourly 90th percentile wage</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Location-Quotient">Location Quotient</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="area_name" class="gt_row gt_left">Arizona</td>
+<td headers="Employment" class="gt_row gt_right">11,220</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.35</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$14.66</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$14.95</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$16.76</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$17.30</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.81</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">California</td>
+<td headers="Employment" class="gt_row gt_right">136,550</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.54</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$17.11</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$17.50</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$20.00</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$21.77</td>
+<td headers="Location Quotient" class="gt_row gt_right">1.74</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Colorado</td>
+<td headers="Employment" class="gt_row gt_right">9,560</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.75</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$15.67</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$16.89</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$17.86</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$20.77</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.76</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Idaho</td>
+<td headers="Employment" class="gt_row gt_right">2,090</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$8.59</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$10.52</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$12.56</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$14.91</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$16.91</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.57</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Montana</td>
+<td headers="Employment" class="gt_row gt_right">1,310</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$10.30</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$10.57</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$12.63</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$15.71</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$18.99</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.59</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Nevada</td>
+<td headers="Employment" class="gt_row gt_right">6,610</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$11.00</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$14.27</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$15.72</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$18.21</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$21.03</td>
+<td headers="Location Quotient" class="gt_row gt_right">1.00</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">New Mexico</td>
+<td headers="Employment" class="gt_row gt_right">2,600</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$13.15</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$13.57</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$13.86</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$14.58</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$16.74</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.70</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Oregon</td>
+<td headers="Employment" class="gt_row gt_right">4,360</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.70</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$15.11</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$17.80</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$21.11</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$28.00</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.51</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Utah</td>
+<td headers="Employment" class="gt_row gt_right">6,250</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$11.73</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$13.61</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$14.41</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$15.91</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$17.05</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.84</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Washington</td>
+<td headers="Employment" class="gt_row gt_right">8,630</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$16.33</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$16.73</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$17.69</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$19.05</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$21.42</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.56</td>
+</tr>
+<tr>
+<td headers="area_name" class="gt_row gt_left">Wyoming</td>
+<td headers="Employment" class="gt_row gt_right">440</td>
+<td headers="Hourly 10th percentile wage" class="gt_row gt_right">$14.45</td>
+<td headers="Hourly 25th percentile wage" class="gt_row gt_right">$15.27</td>
+<td headers="Hourly median wage" class="gt_row gt_right">$15.48</td>
+<td headers="Hourly 75th percentile wage" class="gt_row gt_right">$16.51</td>
+<td headers="Hourly 90th percentile wage" class="gt_row gt_right">$16.92</td>
+<td headers="Location Quotient" class="gt_row gt_right">0.36</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can also explore the uniqueness of an occupation, by seeing how
+the concentration in an area varies compared to the concentration
+nationally using the location quotient. The <strong>location quotient
+(LQ)</strong> is defined as the ratio of employment in an occupation in
+an area to total employment in that area, divided by the ratio of
+employment in that occupation in the United States to total employment
+in the United States. This means that a higher LQ indicates a higher
+concentration of employment in an area compared to the concentration of
+employment in that occupation in the country.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">LQ</mtext><mrow><mi>a</mi><mi>r</mi><mi>e</mi><mi>a</mi><mo>,</mo><mi>o</mi><mi>c</mi><mi>c</mi><mi>u</mi><mi>p</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow></msub><mo>=</mo><mfrac><mfrac displaystyle="true"><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">occupation in area</mtext></msub></mrow><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">total in area</mtext></msub></mrow></mfrac><mfrac displaystyle="true"><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">occupation in U.S.</mtext></msub></mrow><mrow><mi>E</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>o</mi><mi>y</mi><mi>m</mi><mi>e</mi><mi>n</mi><msub><mi>t</mi><mtext mathvariant="normal">total in U.S.</mtext></msub></mrow></mfrac></mfrac></mrow><annotation encoding="application/x-tex">
+\text{LQ}_{area,occupation} = 
+\frac{\dfrac{Employment_{\text{occupation in area}}}{Employment_{\text{total in area}}}}
+     {\dfrac{Employment_{\text{occupation in U.S.}}}{Employment_{\text{total in U.S.}}}}
+</annotation></semantics></math></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">western_states</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">area_name</span>, <span class="va">occupation_name</span>, <span class="va">`Location Quotient`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="op">-</span><span class="va">`Location Quotient`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="txvafbsnay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#txvafbsnay table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#txvafbsnay thead, #txvafbsnay tbody, #txvafbsnay tfoot, #txvafbsnay tr, #txvafbsnay td, #txvafbsnay th {
+  border-style: none;
+}
+
+#txvafbsnay p {
+  margin: 0;
+  padding: 0;
+}
+
+#txvafbsnay .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#txvafbsnay .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#txvafbsnay .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#txvafbsnay .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#txvafbsnay .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#txvafbsnay .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#txvafbsnay .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#txvafbsnay .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#txvafbsnay .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#txvafbsnay .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#txvafbsnay .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#txvafbsnay .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#txvafbsnay .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#txvafbsnay .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#txvafbsnay .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#txvafbsnay .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#txvafbsnay .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_left {
+  text-align: left;
+}
+
+#txvafbsnay .gt_center {
+  text-align: center;
+}
+
+#txvafbsnay .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#txvafbsnay .gt_font_normal {
+  font-weight: normal;
+}
+
+#txvafbsnay .gt_font_bold {
+  font-weight: bold;
+}
+
+#txvafbsnay .gt_font_italic {
+  font-style: italic;
+}
+
+#txvafbsnay .gt_super {
+  font-size: 65%;
+}
+
+#txvafbsnay .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#txvafbsnay .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#txvafbsnay .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#txvafbsnay .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#txvafbsnay .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#txvafbsnay .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#txvafbsnay .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#txvafbsnay .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#txvafbsnay div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

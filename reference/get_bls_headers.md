@@ -1,4 +1,4 @@
-# Get standard BLS HTTP headers
+# Generate headers for BLS requests
 
 Returns a named character vector of HTTP headers required for BLS API
 requests. These headers mimic a standard browser to ensure compatibility
