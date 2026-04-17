@@ -1,3 +1,13 @@
+# BLSloadR 0.4.5 patch notes
+
+## Hotfix Updates
+
+This patch updates BLSloadR to better address 403 and other download errors with to updates.
+
+- The download logic now returns NULL and fails gracefully when 400/500 status errors are returned using `fread_bls()`
+- This version incorporates logic from the development version of the package enabling the user to set a BLS_USER_AGENT environment variable. Using your email address as this will add it to the header request sent to the BLS, which will help to avoid 403 errors in the first place.
+- Documentation updates explaining the environment variables have been added to the README file.
+
 # BLSloadR 0.4 patch notes
 
 ## Functional Enhancements
