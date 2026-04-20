@@ -248,6 +248,11 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
   # Download all files
   if(!suppress_warnings){message("Starting CES data download...\n")}
   downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings, cache = cache)
+  
+  # Exit function if download failed.
+  if(is.null(downloads)){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages.")
+  }
 
   # Extract data from downloads - handle multiple data files when downloading by states
   if (!is.null(states) && !current_year_only && is.null(industry_filter)) {

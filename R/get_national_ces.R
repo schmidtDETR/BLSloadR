@@ -138,6 +138,11 @@ get_national_ces <- function(dataset_filter = "all_data", monthly_only = TRUE,
   # Download all files
   message("Downloading national CES datasets (", dataset_name, ")...")
   downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings, cache = cache)
+  
+  # Exit function if download failed.
+  if(is.null(downloads)){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages.")
+  }
 
   # Extract data from each download
   ces_data <- get_bls_data(downloads[["data"]])

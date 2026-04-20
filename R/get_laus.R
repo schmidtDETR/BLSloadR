@@ -191,6 +191,11 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
   # Download all files
   downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
   
+  # Exit function if download failed.
+  if(is.null(downloads)){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages.")
+  }
+  
   # Extract data from downloads
   laus_import <- get_bls_data(downloads$data)
   laus_series <- get_bls_data(downloads$series)

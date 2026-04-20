@@ -80,6 +80,11 @@ get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_dia
   # Download all files
   downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
   
+  # Exit function if download failed.
+  if(is.null(downloads)){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages.")
+  }
+  
   # Extract data from downloads
   oews_current <- get_bls_data(downloads$data)
   if(!fast_read){
