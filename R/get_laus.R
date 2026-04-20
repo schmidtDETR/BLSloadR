@@ -74,7 +74,7 @@
 #' @importFrom lubridate ym
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download state-level seasonally adjusted data (default operation)
 #' laus_states <- get_laus()
 #' 

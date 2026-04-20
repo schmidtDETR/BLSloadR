@@ -51,7 +51,7 @@
 #' @importFrom dplyr case_when
 #' @importFrom lubridate ym
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download state-level JOLTS data (default - returns data directly)
 #' jolts_data <- get_jolts()
 #'

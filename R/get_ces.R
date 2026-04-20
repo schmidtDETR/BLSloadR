@@ -67,7 +67,7 @@
 #' @importFrom stringr str_remove
 #' @importFrom lubridate ym
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Fast download: Massachusetts and Connecticut data only (all industries)
 #' ces_states <- get_ces(states = c("MA", "CT"))
 #'

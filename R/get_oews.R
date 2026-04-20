@@ -39,7 +39,7 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr select
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download current OEWS data
 #' oews_data <- get_oews()
 #'
@@ -203,7 +203,7 @@ get_oews <- function(simplify_table = TRUE, suppress_warnings = TRUE, return_dia
 #' @importFrom dplyr summarize
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'  # Get OEWS area definitions without shapefiles and with processing messages.
 #'  test <- get_oews_areas(ref_year = 2024, geometry = FALSE, silent = FALSE)
 #'  
