@@ -86,7 +86,7 @@ get_jolts <- function(monthly_only = TRUE, remove_regions = TRUE, remove_nationa
   
   # Exit function if download failed.
   if(is.null(downloads)){
-    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages.")
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
   }
   
   # Extract data from downloads

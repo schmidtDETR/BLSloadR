@@ -193,7 +193,7 @@ get_laus <- function(geography = "state_adjusted", monthly_only = TRUE, transfor
   
   # Exit function if download failed.
   if(is.null(downloads)){
-    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages.")
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
   }
   
   # Extract data from downloads
