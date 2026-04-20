@@ -81,7 +81,7 @@ Puerto Rico = "PR", Virgin Islands = "VI", District of Columbia = "DC".
 }
 }
 \examples{
-\donttest{
+\dontrun{
 # Fast download: Massachusetts and Connecticut data only (all industries)
 ces_states <- get_ces(states = c("MA", "CT"))
 

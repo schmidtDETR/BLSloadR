@@ -74,7 +74,8 @@ get_salt <- function(only_states = TRUE, geometry = FALSE, suppress_warnings = T
   
   salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
   
-  headers <- get_ls_headers()
+  headers <- get_bls_excel_headers()
+  
   
   # Download Excel file
   message("Downloading SALT data from BLS...\n")

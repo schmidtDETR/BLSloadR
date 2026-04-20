@@ -3,10 +3,11 @@
 #' Returns a named character vector of HTTP headers required for BLS API requests.
 #' These headers mimic a standard browser to ensure compatibility with BLS servers.
 #' 
-#' @param host The host to use in the Host header (default: "download.bls.gov")
+#' @param host The URL to use in the Host header (default: "download.bls.gov")
 #' @return A named character vector of HTTP headers
 #' @keywords internal
-get_bls_headers <- function(host = "download.bls.gov") {
+get_bls_headers <- function(host = "download.bls.gov"
+                            ) {
   # 1. Check for a local environment variable first
   # This allows users to set their email/identity via .Renviron or Sys.setenv()
   ua <- Sys.getenv("BLS_USER_AGENT")
@@ -32,7 +33,7 @@ get_bls_headers <- function(host = "download.bls.gov") {
     "Accept-Language" = "en-US,en;q=0.9",
     "Connection" = "keep-alive",
     "Host" = host,
-    "Referer" = "https://download.bls.gov/pub/time.series/",
+    "Referer" = refer,
     "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
     "Sec-Ch-Ua-Mobile" = "?0",
     "Sec-Ch-Ua-Platform" = '"Windows"',
@@ -40,6 +41,44 @@ get_bls_headers <- function(host = "download.bls.gov") {
     "Sec-Fetch-Mode" = "navigate",
     "Sec-Fetch-Site" = "same-origin",
     "Sec-Fetch-User" = "?1",
+    "Upgrade-Insecure-Requests" = "1",
+    "User-Agent" = ua
+  )
+}
+#' Generate headers for BLS requests to download Excel files
+#' 
+#' Returns a named character vector of HTTP headers required for BLS API requests.
+#' These headers mimic a standard browser to ensure compatibility with BLS servers.
+#' This function returns a more limited set of headers used to download an Ecel file.
+#' 
+#' @param refer The URL to use in the Referer header (default: "https://www.bls.gov/lau/stalt-archived.htm")
+#' @return A named character vector of HTTP headers
+#' @keywords internal
+get_bls_excel_headers <- function(refer = "https://www.bls.gov/lau/stalt-archived.htm") {
+  # 1. Check for a local environment variable first
+  # This allows users to set their email/identity via .Renviron or Sys.setenv()
+  ua <- Sys.getenv("BLS_USER_AGENT")
+  
+  # 2. If the variable is empty, use a list of plausible headers to rotate
+  if (ua == "") {
+    plausible_agents <- c(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
+      "Mozilla/5.0 (R; BLSloadR Package)"
+    )
+    # Select one at random for this session/call
+    ua <- sample(plausible_agents, 1)
+  }
+  
+  # 3. Generate dynamic headers
+  
+  c(
+    "Referer" = refer,
+    "Sec-Ch-Ua" = 'Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+    "Sec-Ch-Ua-Mobile" = "?0",
+    "Sec-Ch-Ua-Platform" = '"Windows"',
     "Upgrade-Insecure-Requests" = "1",
     "User-Agent" = ua
   )

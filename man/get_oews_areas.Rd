@@ -29,7 +29,7 @@ Data table which maps individual counties to OEWS area definitions.
 Download OEWS Area Definitions
 }
 \examples{
-\donttest{
+\dontrun{
  # Get OEWS area definitions without shapefiles and with processing messages.
  test <- get_oews_areas(ref_year = 2024, geometry = FALSE, silent = FALSE)
  
