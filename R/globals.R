@@ -79,7 +79,8 @@ utils::globalVariables(c(
   "quantile",
   
   # Placeholders within functions
-  "result"
+  "result",
+  "tf"
   
 ))
 

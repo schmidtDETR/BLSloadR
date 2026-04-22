@@ -35,16 +35,9 @@ including U-1 through U-6 measures. The data provides a more comprehensive view
 of labor market conditions beyond the standard unemployment rate (U-3).
 }
 \examples{
-\donttest{
+\dontrun{
 # Download state-level SALT data
 salt_data <- get_salt()
-
-# View top 10 highest U-6 rates by state in current data
-latest <- salt_data |> 
-  dplyr::filter(date == max(date)) |> 
-  dplyr::select(state, u6) |> 
-  dplyr::arrange(-u6)
-head(latest)
 
 # Include sub-state areas
 salt_all <- get_salt(only_states = FALSE)
@@ -54,7 +47,6 @@ get_salt(geometry = TRUE)
 
 # Get full diagnostic object if needed
 data_with_diagnostics <- get_salt(return_diagnostics = TRUE)
-print_bls_warnings(data_with_diagnostics)
 }
 
 }

@@ -186,3 +186,85 @@ fread_bls <- function(url, verbose = FALSE, cache = check_bls_cache_env()) {
   
   return(result)
 }
+
+#' Download BLS Excel Data
+#'
+#' @param url Character string. URL to the BLS .xlsx or .xls file.
+#' @param verbose Logical. If TRUE, prints diagnostic messages.
+#' @param ... Additional arguments passed to readxl::read_excel (e.g., sheet, range).
+#' @return A data.frame or NULL if the download or read fails.
+#' @export
+#' @importFrom httr GET add_headers status_code http_status content
+#' @importFrom readxl read_excel
+#' @examples
+#' \dontrun{
+#' # Download BLS Alternative MEasures History
+#' salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
+#' salt_data <- read_bls_excel(salt_url, skip = 1)
+#' 
+#' }
+#' 
+read_bls_excel <- function(url, verbose = FALSE, ...) {
+  # --- 1. DATA ACQUISITION ---
+  headers <- get_bls_excel_headers()
+  
+  # Perform request and catch transport-level failures (e.g., DNS, Connection Refused)
+  response <- tryCatch(
+    httr::GET(url, httr::add_headers(.headers = headers)),
+    error = function(e) {
+      message("Network error: ", conditionMessage(e))
+      return(NULL)
+    }
+  )
+  
+  if (is.null(response)) return(NULL)
+  
+  status <- httr::status_code(response)
+  
+  # --- 2. ERROR HANDLING (Always status, Detailed if Verbose) ---
+  if (status < 200 || status >= 300) {
+    hs <- httr::http_status(response)
+    
+    # Always print the basic failure status
+    message(sprintf("Download failed for %s\nStatus: %d (%s)", url, status, hs$reason))
+    
+    # Provide full response details only if verbose is TRUE
+    if (verbose) {
+      # Capture and clean server message
+      error_body <- tryCatch(httr::content(response, as = "text", encoding = "UTF-8"), error = function(e) "")
+      clean_error <- gsub("<.*?>", "", error_body)
+      clean_error <- substr(trimws(gsub("\\s+", " ", clean_error)), 1, 500)
+      
+      # Determine Hint
+      hint <- switch(as.character(status),
+                     "401" = "Unauthorized.",
+                     "403" = "Forbidden. Check User-Agent or API key.",
+                     "404" = "Not found.",
+                     "429" = "Rate limited.",
+                     if (status >= 500) "Server error. Consider retrying later." else "Client error.")
+      
+      message(sprintf("Hint: %s", hint))
+      if (nzchar(clean_error)) message(sprintf("Server Message: %s", clean_error))
+    }
+    
+    return(NULL)
+  }
+  
+  # --- 3. FILE PROCESSING ---
+  raw_data <- httr::content(response, as = "raw")
+  temp_file <- tempfile(fileext = ".xlsx")
+  writeBin(raw_data, temp_file)
+  
+  # Wrap the read in tryCatch for a graceful exit if the file is unreadable
+  data_out <- tryCatch({
+    readxl::read_excel(temp_file, ...)
+  }, error = function(e) {
+    message("Failed to parse Excel content: ", conditionMessage(e))
+    return(NULL)
+  })
+  
+  # Cleanup temp file
+  if (file.exists(temp_file)) unlink(temp_file)
+  
+  return(data_out)
+}

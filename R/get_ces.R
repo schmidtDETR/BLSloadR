@@ -250,7 +250,7 @@ get_ces <- function(states = NULL, industry_filter = NULL, current_year_only = F
   downloads <- download_bls_files(ces_urls, suppress_warnings = suppress_warnings, cache = cache)
   
   # Exit function if download failed.
-  if(is.null(downloads)){
+  if(is.null(downloads) | length(downloads) == 0 | length(ces_urls) != length(downloads)){
     stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
   }
 

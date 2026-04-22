@@ -1,7 +1,8 @@
 ## R CMD check results
 
-BLSloadR 0.4 ────
-Duration: 5m 0.4s
+BLSloadR 0.4.5 ────
+
+Duration: 2m 42.6s
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 R CMD check succeeded
@@ -30,6 +31,8 @@ Corrected the underlying function logic to handle function downloads correctly. 
 
 - Updated functions which access data from internet servers.  These functions now check whether the download was successful.  If not (results NULL), then exits the function loop to prevent errors.
 - Changed donttest to dontrun in examples that typically require a User-Agent header to be set in the HTTP request to succeed,as this is handled with an environment variable, similar to an API key requirement.
+- Made changes to how headers are defined and applied across the package to streamline future changes.
+- Wrapped one funtion that called the Viewer in `if(interactive())` per NOTE in previous package submission.
 
 ### Major changes made since initial package version
 
