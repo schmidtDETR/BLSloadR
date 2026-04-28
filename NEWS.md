@@ -1,4 +1,4 @@
-# BLSloadR 0.4.5 patch notes
+# BLSloadR 0.4.3 patch notes
 
 ## Hotfix Updates
 
@@ -7,6 +7,44 @@ This patch updates BLSloadR to better address 403 and other download errors with
 - The download logic now returns NULL and fails gracefully when 400/500 status errors are returned using `fread_bls()`
 - This version incorporates logic from the development version of the package enabling the user to set a BLS_USER_AGENT environment variable. Using your email address as this will add it to the header request sent to the BLS, which will help to avoid 403 errors in the first place.
 - Documentation updates explaining the environment variables have been added to the README file.
+
+# BLSloadR 0.5.2 patch notes
+
+This patch includes a critical fix to resolve rate limit issues downloading data from the BLS.  It implements a `BLS_USER_AGENT` environment variable which is called to populate the file download requests to BLS.  Users encountering a 403 error on most requests will need to set this environment variable to ensure smooth downloads.  Additional documentation and warning messages will be implemented in a future patch.
+
+# BLSloadR 0.5.1 patch notes
+
+## Functional Enhancements
+
+`explore_cps_characteristics()` has been upgraded with a `static` argument.  When set to TRUE it will use a built-in data lookup table to determine available CPS subset codes.  Because the BLS mapping files contain codes not in use in the data, this lookup table was built from actual CPS data and will avoid filtering to CPS subsets that do not exist. If this argument is not set or is set to FALSE, this function will continue to infer potential mapping from the live BLS data.
+
+`national_cps_availability` is a new data table included in the package containing a list and description of filters by which a user may subset the CPS data.  When a particular data element is specified it provides a list of data subsetting codes, their description, and other available codes by which this data may be subset further.
+
+# BLSloadR 0.5 patch notes
+
+## Functional Enhancements
+
+### New Data Access Functions
+
+-   This version incorporates new functions to help users work with the national CPS database ("ln"). This is a particularly large database and benefits from the streamlined function introduced in this release, `get_cps_subset()` - these allow users to pull slices of the full CPS database into a more readable table
+
+### New Helper Functions
+
+-   To help users navigate the CPS dataset, functions are introduced to help explore the CPS in two different ways - by the characteristics of the data and by searching for specific series IDs. `explore_cps_characteristics()` and `explore_cps_series()` provide console-based access to the CPS data to guide usage of `get_cps_subset()`
+
+### Under-the-hood Improvements
+
+-   This release reflows significant sections of code to improve readability, and also consolidates the creation of headers for sending data requests to the BLS, laying the groundwork to improvement to these headers in the future so they can be more responsive to a user's actual machine.
+
+-   The package now includes explicit memory cleanup and notifications about large data files and expected memory usage.
+
+-   When working with large files, the data file pre-cleaning now samples 10,000 rows instead of the full file to improve performance.
+
+## Documentation Enhancements
+
+-   Help documentation for the new functions has been added, as have help articles to guide users in interacting with the CPS data.
+
+-   A large test suite has been added to the package using `testthat` for the major functions (both user-facing and background helpers) to identify bugs.
 
 # BLSloadR 0.4 patch notes
 

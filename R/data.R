@@ -38,6 +38,9 @@
 #' dplyr::filter(sector == "31-33" & ind_level == "NAICS 3-digit")
 "ind_lookup"
 
+
+
+
 #' @title Area Lookup Tables (QCEW)
 #'
 #' @description
@@ -73,3 +76,44 @@
 #' dplyr::filter(grepl("AR", specified_region) &
 #'  area_type == "Metropolitan Statistical Area")
 "area_lookup"
+
+
+#' @title National CPS Code and Label Mappings with Crosstab of Available Data
+#'
+#' @description
+#' A dataset containing the unique code-label pairs extracted from the BLS CPS data. 
+#' This includes metadata descriptions and a cross-reference to 
+#' other data characteristics to identify valid cross-tabulation paths.
+#' 
+#' @source Generated from `BLSloadR::load_bls_dataset("ln", simplify_table = FALSE)`.
+#'
+#' @usage data(national_cps_availability)
+#'
+#' @format A tibble with the following variables:
+#' \describe{
+#'   \item{master_filter}{The base column name (e.g., "sexs", "ages") used for filtering.}
+#'   \item{master_description}{The human-readable description of the filter category (e.g., "Sex/gender").}
+#'   \item{available_codes}{A list-column of data frames, each containing:
+#'     \itemize{
+#'       \item \code{code}: The specific BLS numeric or alphanumeric code.
+#'       \item \code{label}: The text description of that code.
+#'       \item \code{original_filter}: The master filter name repeated for row-level identification.
+#'       \item \code{available_with}: A comma-separated string of other filters that have 
+#'             valid data when paired with this specific code. (Marked as "Skipped" for 
+#'             columns with many observations like industry and occupation).
+#'     }
+#'   }
+#' }
+#' 
+#' @details
+#' The rows in the top-level table contain various data filters available in the national Current Population Survey and the descriptions of these data types.  The `available_codes` column containes a data frame which includes the codes that are available within this data type.  For each code, the code, description, and other data filters available to further filter the CPS data are provided.
+#'
+#' @examples
+#' # Load the lookup table
+#' data(national_cps_availability)
+#'
+#' # Find the code details for a specific example
+#' codes<-national_cps_availability[national_cps_availability$master_filter=="jdes","available_codes"]
+#' 
+#' 
+"national_cps_availability"

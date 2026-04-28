@@ -19,17 +19,18 @@ get_ces(
 \arguments{
 \item{states}{Character vector of state abbreviations to download (e.g., c("MA", "NY", "CA")).
 If specified, downloads only these states (all industries, all years).
-Cannot be combined with industry_filter or current_year_only.
+Can be combined with current_year_only to filter to specific states.
 Use `list_ces_states()` to see all available states.}
 
 \item{industry_filter}{Character string specifying industry category to download.
 If specified, downloads this industry for all states (2007-present).
-Cannot be combined with states or current_year_only.
+Can be combined with current_year_only to filter to specific industry.
 Use `list_ces_industries()` to see all available industry filters.}
 
 \item{current_year_only}{Logical. If TRUE, downloads the current year file
-which contains all states and industries for recent years (2006-present).
-Cannot be combined with states or industry_filter. If FALSE (default), uses other parameters.}
+which contains all states and industries for recent years, filtered to the past 12 months.
+Can be combined with states or industry_filter to apply additional filtering.
+If FALSE (default), uses other parameters.}
 
 \item{transform}{Logical. If TRUE (default), converts employment values from thousands
 to actual counts by multiplying by 1000 for specific data types (codes 1, 6, 26)
@@ -91,9 +92,6 @@ ces_manufacturing <- get_ces(industry_filter = "manufacturing")
 # Fast download: Current year data for all states and industries
 ces_current <- get_ces(current_year_only = TRUE)
 
-# Complete dataset (slower - all states, industries, and years)
-ces_all <- get_ces()
-
 # Download with full diagnostics if needed
 ces_result <- get_ces(states = "MA", return_diagnostics = TRUE)
 ces_data <- get_bls_data(ces_result)
@@ -102,6 +100,11 @@ ces_data <- get_bls_data(ces_result)
 if (has_bls_issues(ces_result)) {
   print_bls_warnings(ces_result)
 }
+}
+\donttest{
+# Complete dataset (slower - all states, industries, and years)
+# WARNING: This downloads a very large file and requires significant memory
+ces_all <- get_ces()
 }
 }
 \seealso{

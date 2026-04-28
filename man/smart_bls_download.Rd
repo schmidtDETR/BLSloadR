@@ -18,16 +18,16 @@ Defaults to a persistent user data directory managed by \code{tools::R_user_dir}
 A character string containing the local path to the downloaded (or cached) file.
 }
 \description{
-This function manages the downloading of files from the BLS server with a 
-local caching layer. It uses HTTP HEAD requests to compare the server's 
-`Content-Length` and `Last-Modified` headers with local file attributes. 
-The file is only downloaded if it does not exist locally, or if the remote 
+This function manages the downloading of files from the BLS server with a
+local caching layer. It uses HTTP HEAD requests to compare the server's
+`Content-Length` and `Last-Modified` headers with local file attributes.
+The file is only downloaded if it does not exist locally, or if the remote
 version is newer or a different size.
 }
 \details{
-The function uses a specific set of browser-like headers to ensure compatibility 
-with BLS server security policies. Upon a successful download, the local file's 
-modification time is synchronized with the server's `Last-Modified` header using 
+The function uses a specific set of browser-like headers to ensure compatibility
+with BLS server security policies. Upon a successful download, the local file's
+modification time is synchronized with the server's `Last-Modified` header using
 \code{Sys.setFileTime} to ensure accurate future comparisons.
 }
 \examples{

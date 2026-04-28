@@ -73,6 +73,11 @@ utils::globalVariables(c(
   "ind_lookup",
   "area_lookup",
   "refer",
+  "available_codes",
+  "code_col",
+  "description",
+  "master_filter",
+  "national_cps_availability",
   
   # Statistical functions (base R)
   "median",
