@@ -86,8 +86,7 @@
 #' if (has_bls_issues(ces_result)) {
 #'   print_bls_warnings(ces_result)
 #' }
-#' }
-#' \donttest{
+#' 
 #' # Complete dataset (slower - all states, industries, and years)
 #' # WARNING: This downloads a very large file and requires significant memory
 #' ces_all <- get_ces()
