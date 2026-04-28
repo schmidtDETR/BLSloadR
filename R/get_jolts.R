@@ -51,7 +51,7 @@
 #' @importFrom dplyr case_when
 #' @importFrom lubridate ym
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download state-level JOLTS data (default - returns data directly)
 #' jolts_data <- get_jolts()
 #'
@@ -87,12 +87,13 @@ get_jolts <- function(
   )
 
   # Download all files
-  downloads <- download_bls_files(
-    download_urls,
-    suppress_warnings = suppress_warnings,
-    cache = cache
-  )
-
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
+  
+  # Exit function if download failed.
+  if(is.null(downloads) | length(downloads) == 0){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
+  }
+  
   # Extract data from downloads
   jolts_import <- get_bls_data(downloads$data)
   jolts_series <- get_bls_data(downloads$series)

@@ -53,7 +53,7 @@
 #' @importFrom utils head
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Import All Data
 #' fm_import <- load_bls_dataset("fm", which_data = "all")
 #'
@@ -119,38 +119,40 @@ load_bls_dataset <- function(
 
   # Function to scrape directory contents with proper headers
   get_directory_files <- function(url, prefix) {
-    tryCatch(
-      {
-        # Set up headers to avoid 403 errors
-        headers <- get_bls_headers()
-
-        # Make request with headers
-        response <- httr::GET(url, httr::add_headers(.headers = headers))
-        httr::stop_for_status(response)
-
-        # Parse HTML content
-        page <- rvest::read_html(httr::content(response, as = "text"))
-        links <- rvest::html_elements(page, "a")
-        hrefs <- rvest::html_attr(links, "href")
-
-        # Extract just the filename from the full path
-        # hrefs will be like "/pub/time.series/ce/ce.data.0.AllCESSeries"
-        filenames <- basename(hrefs)
-
-        # Filter for files that start with the prefix and exclude unwanted extensions
-        valid_files <- filenames[
-          grepl(paste0("^", prefix, "\\."), filenames) &
-            !grepl("\\.(contacts|txt|footnote)$", filenames) &
-            !is.na(filenames) &
-            filenames != ""
-        ]
-
-        return(valid_files)
-      },
-      error = function(e) {
-        stop("Could not access BLS directory: ", url, "\nError: ", e$message)
+    tryCatch({
+      # Set up headers to avoid 403 errors
+      headers <- get_bls_headers()
+      
+      # Make request with headers
+      response <- httr::GET(url, httr::add_headers(.headers = headers))
+      httr::stop_for_status(response)
+      
+      # Exit function if download failed.
+      if(is.null(downloads)){
+        stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
       }
-    )
+      
+      # Parse HTML content
+      page <- rvest::read_html(httr::content(response, as = "text"))
+      links <- rvest::html_elements(page, "a")
+      hrefs <- rvest::html_attr(links, "href")
+      
+      # Extract just the filename from the full path
+      # hrefs will be like "/pub/time.series/ce/ce.data.0.AllCESSeries"
+      filenames <- basename(hrefs)
+      
+      # Filter for files that start with the prefix and exclude unwanted extensions
+      valid_files <- filenames[
+        grepl(paste0("^", prefix, "\\."), filenames) & 
+          !grepl("\\.(contacts|txt|footnote)$", filenames) &
+          !is.na(filenames) &
+          filenames != ""
+      ]
+      
+      return(valid_files)
+    }, error = function(e) {
+      stop("Could not access BLS directory: ", url, "\nError: ", e$message)
+    })
   }
 
   # Get all valid files from the directory

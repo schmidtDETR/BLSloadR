@@ -26,6 +26,7 @@ Fetches and displays the overview text file for a BLS dataset. This provides a c
 }
 \examples{
 \donttest{
+if(interactive()){
 # Display Average Price Data overview
 bls_overview("ap")
 
@@ -34,5 +35,6 @@ bls_overview("cu")
 
 # Display in console instead of viewer
 bls_overview("ap", display_method = "console")
+}
 }
 }

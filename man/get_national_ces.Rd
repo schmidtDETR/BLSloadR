@@ -88,7 +88,7 @@ lubridate (for date formatting when simplify_table=TRUE). The `fread_bls()`
 and `create_bls_object()` helper functions must be available in your environment.
 }
 \examples{
-\donttest{
+\dontrun{
 # Get complete monthly CES data with simplified table structure (default)
 ces_monthly <- get_national_ces()
 
