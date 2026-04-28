@@ -48,6 +48,7 @@ Suggests:
     rmarkdown,
     R.utils,
     testthat (>= 3.0.0),
+    withr,
     tidyr,
     usethis
 VignetteBuilder: knitr
