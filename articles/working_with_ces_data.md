@@ -1,6 +1,7 @@
 # Working with CES Data: Enhanced Features and Performance
 
 ``` r
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -27,6 +28,7 @@ Before diving into data downloads, you can explore available options
 using helper functions:
 
 ``` r
+
 # Explore state-level CES options
 show_ces_options()
 #> === BLS Current Employment Statistics (CES) Filtering Options ===
@@ -82,6 +84,7 @@ show_ces_options()
 ```
 
 ``` r
+
 # Explore national CES options
 show_national_ces_options()
 #> === BLS National Current Employment Statistics (CES) Dataset Options ===
@@ -116,6 +119,7 @@ show_national_ces_options()
 The simplest way to get state CES data is with default settings:
 
 ``` r
+
 # Get all available state CES data (this can be quite large!)
 ces_all <- get_ces()
 ```
@@ -125,6 +129,7 @@ ces_all <- get_ces()
 For much faster downloads, use the filtering options:
 
 ``` r
+
 # Get data for specific states only (much faster!)
 ces_northeast <- get_ces(
   states = c("MA", "CT", "RI", "NH", "VT", "ME"),
@@ -132,12 +137,13 @@ ces_northeast <- get_ces(
 )
 
 print(paste("Downloaded", nrow(ces_northeast), "rows"))
-#> [1] "Downloaded 628883 rows"
+#> [1] "Downloaded 632073 rows"
 print(paste("Unique states:", length(unique(ces_northeast$area_text))))
 #> [1] "Unique states: 0"
 ```
 
 ``` r
+
 # Get data for specific industries only
 ces_retail <- get_ces(
   industry_filter = "retail_trade",
@@ -145,7 +151,7 @@ ces_retail <- get_ces(
 )
 
 print(paste("Downloaded", nrow(ces_retail), "rows"))
-#> [1] "Downloaded 284444 rows"
+#> [1] "Downloaded 286932 rows"
 print("Available industries in this dataset:")
 #> [1] "Available industries in this dataset:"
 print(head(unique(ces_retail$industry_text), 10))
@@ -157,6 +163,7 @@ print(head(unique(ces_retail$industry_text), 10))
 For the most recent data only:
 
 ``` r
+
 # Get recent data (2006 to present)
 ces_current <- get_ces(
   current_year_only = TRUE,
@@ -164,7 +171,7 @@ ces_current <- get_ces(
 )
 
 print(paste("Date range:", min(ces_current$date), "to", max(ces_current$date)))
-#> [1] "Date range: 2025-01-01 to 2026-01-01"
+#> [1] "Date range: 2025-03-01 to 2026-03-01"
 print(paste("Dataset size:", nrow(ces_current), "rows"))
 #> [1] "Dataset size: 297999 rows"
 ```
@@ -177,6 +184,7 @@ The national CES function offers four specialized datasets for optimal
 performance:
 
 ``` r
+
 # Get seasonally adjusted data only (fastest download)
 ces_seasonal <- get_national_ces(
   dataset_filter = "current_seasonally_adjusted",
@@ -188,6 +196,7 @@ print(paste("Seasonally adjusted data:", nrow(ces_seasonal), "rows"))
 ```
 
 ``` r
+
 # Get real earnings data for all employees
 ces_earnings <- get_national_ces(
   dataset_filter = "real_earnings_all_employees",
@@ -208,6 +217,7 @@ print(head(unique(ces_earnings$data_type_text), 5))
 Let’s create a simple analysis using the national data:
 
 ``` r
+
 # Get recent employment data
 recent_employment <- ces_seasonal |>
   filter(
@@ -245,18 +255,18 @@ recent_employment |>
 The enhanced filtering options provide significant performance
 improvements:
 
-| Download.Option                | Typical.Size   | Download.Time | Use.Case                     |
-|:-------------------------------|:---------------|:--------------|:-----------------------------|
-| All CES data (50+ states)      | ~5.6M rows     | 60+ seconds   | Comprehensive analysis       |
-| Single state (MA)              | ~210K rows     | 3.5 seconds   | State-specific research      |
-| Multiple states (6 states)     | ~608K rows     | 9.8 seconds   | Regional analysis            |
-| Single industry (Retail)       | ~317K rows     | 5.2 seconds   | Industry focus               |
-| Current year only              | ~5.6M rows     | 64+ seconds   | Recent trends only           |
-| National - Complete dataset    | Large (~340MB) | 60+ seconds   | Complete historical analysis |
-| National - Seasonally adjusted | ~392K rows     | 3.7 seconds   | Quick national overview      |
-| National - Real earnings       | ~514K rows     | 4.5 seconds   | Wage/earnings analysis       |
+| Download.Option | Typical.Size | Download.Time | Use.Case |
+|:---|:---|:---|:---|
+| All CES data (50+ states) | ~5.6M rows | 60+ seconds | Comprehensive analysis |
+| Single state (MA) | ~210K rows | 3.5 seconds | State-specific research |
+| Multiple states (6 states) | ~608K rows | 9.8 seconds | Regional analysis |
+| Single industry (Retail) | ~317K rows | 5.2 seconds | Industry focus |
+| Current year only | ~5.6M rows | 64+ seconds | Recent trends only |
+| National - Complete dataset | Large (~340MB) | 60+ seconds | Complete historical analysis |
+| National - Seasonally adjusted | ~392K rows | 3.7 seconds | Quick national overview |
+| National - Real earnings | ~514K rows | 4.5 seconds | Wage/earnings analysis |
 
-Performance Comparison of CES Download Options
+Performance Comparison of CES Download Options {.table}
 
 ## Best Practices
 
@@ -282,6 +292,7 @@ full_data <- get_ces(states = c("MA", "CT", "RI", "NH", "VT", "ME"))
 Discover available options before downloading:
 
 ``` r
+
 # See what states are available
 available_states <- list_ces_states()
 
@@ -294,6 +305,7 @@ available_industries <- list_ces_industries(show_descriptions = TRUE)
 Select the most appropriate dataset for your needs:
 
 ``` r
+
 # For quick national employment trends
 quick_national <- get_national_ces(dataset_filter = "current_seasonally_adjusted")
 
@@ -309,6 +321,7 @@ state_data <- get_ces(states = c("CA", "TX", "NY", "FL"))
 If you must download large datasets:
 
 ``` r
+
 # Use return_diagnostics to monitor the download
 large_data <- get_ces(
   current_year_only = TRUE,
@@ -330,6 +343,7 @@ final_data <- get_bls_data(large_data)
 Keep all BLS metadata columns for detailed analysis:
 
 ``` r
+
 detailed_data <- get_ces(
   states = "MA",
   simplify_table = FALSE  # Keeps all metadata columns
@@ -341,6 +355,7 @@ detailed_data <- get_ces(
 Include annual average data (M13 period):
 
 ``` r
+
 with_annual <- get_national_ces(
   monthly_only = FALSE  # Includes annual averages
 )
@@ -351,6 +366,7 @@ with_annual <- get_national_ces(
 Get data without transformations:
 
 ``` r
+
 raw_data <- get_ces(
   states = "MA",
   transform = FALSE  # No ratio/thousands conversions

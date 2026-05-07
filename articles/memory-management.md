@@ -58,6 +58,7 @@ Before downloading files \>200MB, you’ll see warnings like:
 Many functions support filtering to download only what you need:
 
 ``` r
+
 # CES: Download only specific states (much smaller)
 ces_ma <- get_ces(states = "MA")
 
@@ -73,6 +74,7 @@ laus_states <- get_laus(geography = "state_adjusted")
 Enable persistent caching to avoid re-downloading large files:
 
 ``` r
+
 # Set environment variable (in .Renviron)
 # USE_BLS_CACHE=TRUE
 
@@ -90,6 +92,7 @@ Instead of downloading the full dataset and filtering in R, use built-in
 filters:
 
 ``` r
+
 # GOOD: Download only specific series
 unemployment <- get_cps_subset(
   series_ids = c("LNS14000000", "LNS12000000"),
@@ -108,6 +111,7 @@ If you’re developing or running tests in a memory-constrained
 environment:
 
 ``` r
+
 # Set in .Renviron or before running tests
 Sys.setenv(SKIP_MEMORY_TESTS = "TRUE")
 
@@ -120,6 +124,7 @@ This will skip tests that download the large `ln.data.1.AllData` file.
 ### Control Cache Location
 
 ``` r
+
 # Set custom cache directory
 Sys.setenv(BLS_CACHE_DIR = "D:/BLS_data_cache")
 
@@ -146,6 +151,7 @@ Sys.setenv(USE_BLS_CACHE = "TRUE")
 2.  **Use caching** to avoid re-downloading during repeated operations:
 
     ``` r
+
     Sys.setenv(USE_BLS_CACHE = "TRUE")
     ```
 
@@ -153,6 +159,7 @@ Sys.setenv(USE_BLS_CACHE = "TRUE")
     possible:
 
     ``` r
+
     # Discover series first
     explore_cps_series(
       search = "unemployment",
@@ -166,12 +173,14 @@ Sys.setenv(USE_BLS_CACHE = "TRUE")
 4.  **Skip memory-intensive tests** during development:
 
     ``` r
+
     Sys.setenv(SKIP_MEMORY_TESTS = "TRUE")
     ```
 
 5.  **Increase R’s memory limit** (Windows only):
 
     ``` r
+
     # Set to 8GB (if you have sufficient RAM)
     memory.limit(size = 8000)
     ```
@@ -213,6 +222,7 @@ Common BLS dataset sizes:
 ## Example Workflow
 
 ``` r
+
 # 1. Set up persistent caching (one time)
 Sys.setenv(USE_BLS_CACHE = "TRUE")
 Sys.setenv(BLS_CACHE_DIR = "C:/BLS_cache")

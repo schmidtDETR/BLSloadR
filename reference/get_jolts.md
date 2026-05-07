@@ -125,43 +125,19 @@ The function performs several data transformations:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 # Download state-level JOLTS data (default - returns data directly)
 jolts_data <- get_jolts()
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
 
 # Include national data with industry breakdowns
 jolts_national <- get_jolts(remove_national = FALSE)
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
 
 # Get full diagnostic object if needed
 jolts_with_diagnostics <- get_jolts(return_diagnostics = TRUE)
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
 print_bls_warnings(jolts_with_diagnostics)
-#> JOLTSData Download Warnings:
-#> ==============================
-#> Total files downloaded:7
-#> Files with issues:1
-#> Total warnings:2
-#> Final data dimensions:322371 x 22
-#> 
-#> Summary of warnings:
-#>   1. series : Phantom columns detected and cleaned: 1
-#>   2. series : Empty columns removed: 1
-#> 
-#> Run with return_diagnostics=TRUE and print_bls_warnings(data, detailed = TRUE) for file-by-file details
 
 # View job openings by state for latest period
 job_openings <- jolts_data[dataelement_text == "Job openings" &
                           date == max(date)]
-# }
+} # }
 ```

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,6 +81,7 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># Display Average Price Data overview</span></span></span>
 <span class="r-in"><span><span class="fu">bls_overview</span><span class="op">(</span><span class="st">"ap"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -89,306 +90,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Display in console instead of viewer</span></span></span>
 <span class="r-in"><span><span class="fu">bls_overview</span><span class="op">(</span><span class="st">"ap"</span>, display_method <span class="op">=</span> <span class="st">"console"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> === BLS Dataset Overview: AP ===</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Source: https://download.bls.gov/pub/time.series/ap/ap.txt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ================================================== </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				Average Price Data (AP)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 					ap.txt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section Listing</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.  Survey Definition</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.  FTP files listed in the survey directory</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.  Time series, series file, data file, &amp; mapping file definitions and relationships</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.  Series file format and field definitions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.  Data file format and field definitions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6.  Mapping file formats and field definitions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7.  Data Element Dictionary</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ===================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ===================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The following is a definition of:  Average Price Data (AP)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Survey Description: Average consumer prices are calculated for household</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> fuel, motor fuel, and food items from prices collected for the Consumer</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Price Index (CPI). Average prices are best used to measure the price level</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> in a particular month, not to measure price change over time. It is more</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> appropriate to use CPI index values for the particular item categories to measure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> price change.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Prices, except for electricity, are collected monthly by BLS representatives</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> in the 75 urban areas priced for the CPI.  Electricity prices are collected</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> for the BLS for the same 75 areas on a monthly basis by the Department of</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Energy using mail questionnaires. All fuel prices include applicable</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Federal, State, and local taxes; prices for natural gas and electricity also</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> include fuel and purchased gas adjustments.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Summary Data Available: Average consumer prices for household fuel and</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> motor fuel are available for the U.S. city average, 23 urban areas, 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> regions, 12 region/size class groupings, and 9 divisions.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Average consumer prices for food are available for the U.S. city average, and</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> four regions. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Monthly data are available for up to 6 household fuel categories, 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> motor fuel categories, and around 100 food categories.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Frequency of Observations: All data are monthly; annual averages are not</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> available.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Data Characteristics: Average prices are stored to three decimal places.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Updating Schedule: Updates become available with the monthly release of new data, typically from the 10th to the  14th of the month</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> following the reference month.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ====================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ====================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The following Average Price Data files are on the BLS internet in the sub-directory </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pub/time.series/ap:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.data.0.Current		- All current year-to-date data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.data.1.HouseholdFuels	- All household fuels data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.data.2.Gasoline		- All gasoline data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.data.3.Food			- All food data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.area				- Area codes		mapping file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.contacts			- Contacts for ap survey  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.footnote			- Footnote codes	mapping file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.item				- Item codes		mapping file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.period			- Period codes		mapping file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.series			- All series and their beginning and end Dates</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	ap.txt				- General information</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> =================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> =================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The definition of a time series, its relationship to and the interrelationship</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> among series, data and mapping files is detailed below:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A time series refers to a set of data observed over an extended period of time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> over consistent time intervals (i.e. monthly, quarterly, semi-annually, annually).  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> BLS time series data are typically produced at monthly intervals and represent data </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ranging from a specific consumer item in a specific geographical area whose price </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is gathered monthly to a category of worker in a specific industry whose employment</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rate is being recorded monthly, etc.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The FTP files are organized such that data users are provided with the following</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> set of files to use in their efforts to interpret data files:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a)  a series file (only one series file per survey)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> b)  mapping files</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> c)  data files</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The series file contains a set of codes which, together, compose a series </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> identification code that serves to uniquely identify a single time series.  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Additionally, the series file also contains the following series-level information:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a) the period and year corresponding to the first data observation </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> b) the period and year corresponding to the most recent data observation </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The mapping files are definition files that contain explanatory text descriptions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> that correspond to each of the various codes contained within each series</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> identification code.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The data file contains one line of data for each observation period pertaining to a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> specific time series.  Each line contains a reference to the following:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a) a series identification code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> b) year in which data is observed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> c) period for which data is observed (M13, Q05, and S03 indicate annual averages)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d) value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> e) footnote code (if available)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> =================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> =================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Structure and Format: The following represents the file format used to define</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ap.series.  Note the Field Numbers are for reference only; they do not exist in the</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> database.  Data files are in ASCII text format.  Data elements are separated by </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> spaces; the first record of each file contains the column headers for the data </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> elements stored in each field.  Each record ends with a new line character. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Field #/Data Element	Length		Value(Example)		</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.  series_id		  17		APU0000701111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.  area_code		   4		S100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.  item_code		   7		712211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.  begin_year		   4		1980</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.  begin_period	   3		M01		</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6.  end_year		   4		2002		</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7.  end_period		   3		M02	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 					</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The series_id (APU0000701111) can be broken out into:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Code					Value(Example)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> survey abbreviation	=		AP</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> seasonal(code)		=		U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> area_code		=		0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> item_code		=		701111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ==================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ==================================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Structure and Format: The following represents the file format used to define</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> each data file. Note that the field numbers are for reference only; they do not </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> exist in the database.  Data files are in ASCII text format. Data elements are </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> separated by spaces; the first record of each file contains the column headers for </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the data elements stored in each field. Each record ends with a new line character.  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The ap.data file is partitioned into four separate files:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	1.  ap.data.0.Current		= All current year-to-date data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	2.  ap.data.1.HouseholdFuels	= All household fuel (fuel oil,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 					  utility gas, electricity) data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	3.  ap.data.2.Gasoline		= All gasoline data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	4.  ap.data.3.Food		= All food data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Both of the above data files have the following format:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Field #/Data Element	Length		Value(Example)		</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. series_id		  17		APU0000701111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. year			   4		1980	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3. period		   3		M01		</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4. value		  12      	0.238	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5. footnote_codes	  10		It varies</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The series_id (APU0000701111) can be broken out into:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Code					Value(Example)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> survey abbreviation	=		AP</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> seasonal(code)		=		U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> area_code		=		0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> item_code		=		701111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ============================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ============================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Structure and Format: The following represents the file format used to define</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> each mapping file. Note that the field numbers are for reference only; they do not</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> exist in the database. Mapping files are in ASCII text format. Data elements are</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> separated by tabs; the first record of each file contains the column headers for the</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data elements stored in each field. Each record ends with a new line character. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Name:  ap.area</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Field #/Data Element		Length		Value(Example)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. area_code			4		A100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. area_name			80		Text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Name:  ap.footnote</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Field #/Data Element		Length		Value(Example)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. footnote_code		1		C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. footnote_text		100		Text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Name:  ap.item</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Field #/Data Element		Length		Value(Example)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. item_code			7		712211</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. item_name			100		Text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> File Name:  ap.period</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Field #/Data Element		Length		Value(Example)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1. period			3		M01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2. period_abbr			5		JAN</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3. period_name			20		Text</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ==============================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Section 7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ==============================================================================</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AVERAGE PRICE DATA (AP) DATABASE ELEMENTS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Data Element	Length		Value(Example)			Description</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> area_code	4		A100			Unique code used to identify</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							a specific geographic area.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> area_name	80		Text			Name of specific geographic</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				Ex: MIAMI, FLA		area.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> begin_period	3		M02			Identifies first data observation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				Ex: M02=Feb		within the first year for which</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				(M=Monthly, M13= 	data is available for a given time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				Annual Avg)		series.					</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 						</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> begin_year	4		1990			Identifies first year for which</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  							data is available for a given time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							series.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 						</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> end_period	3		M06			Identifies last data observation </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  				Ex: M06=June		within the last year for which</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				(M=Monthly, M13=	data is available for a given time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				Annual Avg)		series.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 						</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> end_year	4		2000			Identifies last year for which data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  							is available for a given time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							series.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> footnote_code	1		C			Identifies footnote for the data </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							series.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> footnote_codes	10		It varies		Identifies footnotes for the data </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							series.	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 							</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> footnote_text	100		Text			Contains the text of the footnote.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> item_code	7		712211			Identifies item for which</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  							data observations pertain.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> item_name	100		Text			Full names of items.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 					</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> period_abbr	5		JAN			Abbreviation of period name.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  					</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> period		3		M01			Identifies period for which data </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  				Ex: M01=Jan		is observed.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				(M=Monthly, M13=	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				Annual Avg)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  				</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> period_name	20		Text			Full name of period to which</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  				Ex: January		the data observation refers.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> series_id	17		APU0000701111		Code identifying the specific </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  							series.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> value		12		10.124			Average price of item.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> year		4		1990			Identifies year of observation.        	</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 				</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

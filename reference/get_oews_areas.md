@@ -50,11 +50,9 @@ Data table which maps individual counties to OEWS area definitions.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
  # Get OEWS area definitions without shapefiles and with processing messages.
  test <- get_oews_areas(ref_year = 2024, geometry = FALSE, silent = FALSE)
-#> Downloading OEWS area definitions from BLS.
-#> Processing OEWS area definition Excel file for 2024.
 
-# }
+} # }
 ```

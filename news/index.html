@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,17 @@
 
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.3" id="blsloadr-043-patch-notes">BLSloadR 0.4.3 patch notes<a class="anchor" aria-label="anchor" href="#blsloadr-043-patch-notes"></a></h2>
+<div class="section level3">
+<h3 id="hotfix-updates-0-4-3">Hotfix Updates<a class="anchor" aria-label="anchor" href="#hotfix-updates-0-4-3"></a></h3>
+<p>This patch updates BLSloadR to better address 403 and other download errors with to updates.</p>
+<ul><li>The download logic now returns NULL and fails gracefully when 400/500 status errors are returned using <code><a href="../reference/fread_bls.html">fread_bls()</a></code>
+</li>
+<li>This version incorporates logic from the development version of the package enabling the user to set a BLS_USER_AGENT environment variable. Using your email address as this will add it to the header request sent to the BLS, which will help to avoid 403 errors in the first place.</li>
+<li>Documentation updates explaining the environment variables have been added to the README file.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.2" id="blsloadr-052-patch-notes">BLSloadR 0.5.2 patch notes<a class="anchor" aria-label="anchor" href="#blsloadr-052-patch-notes"></a></h2>
 <p>This patch includes a critical fix to resolve rate limit issues downloading data from the BLS. It implements a <code>BLS_USER_AGENT</code> environment variable which is called to populate the file download requests to BLS. Users encountering a 403 error on most requests will need to set this environment variable to ensure smooth downloads. Additional documentation and warning messages will be implemented in a future patch.</p>

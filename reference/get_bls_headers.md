@@ -14,7 +14,7 @@ get_bls_headers(host = "download.bls.gov")
 
 - host:
 
-  The host to use in the Host header (default: "download.bls.gov")
+  The URL to use in the Host header (default: "download.bls.gov")
 
 ## Value
 

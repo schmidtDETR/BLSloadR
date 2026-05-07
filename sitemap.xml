@@ -27,6 +27,7 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/fread_bls.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_data.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_diagnostics.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_excel_headers.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_headers.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_bls_summary.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/get_ces.html</loc></url>
@@ -47,6 +48,7 @@
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/load_bls_dataset.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/national_cps_availability.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/print_bls_warnings.html</loc></url>
+<url><loc>https://schmidtdetr.github.io/BLSloadR/reference/read_bls_excel.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/read_bls_text.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/show_ces_options.html</loc></url>
 <url><loc>https://schmidtdetr.github.io/BLSloadR/reference/show_national_ces_options.html</loc></url>

@@ -156,33 +156,20 @@ The function joins data from multiple BLS files:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 # Download state-level seasonally adjusted data (default operation)
 laus_states <- get_laus()
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
 
 # View unemployment rates by state for latest period
 unemployment <- laus_states[grepl("unemployment rate", measure_text) & date == max(date)]
 
 # Download unadjusted state data
 laus_states_unadjusted <- get_laus(geography = "state_unadjusted")
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
 
 # Get full diagnostic object if needed
 laus_with_diagnostics <- get_laus(return_diagnostics = TRUE)
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `value = as.numeric(value)`.
-#> Caused by warning:
-#> ! NAs introduced by coercion
 print_bls_warnings(laus_with_diagnostics)
-#> No warnings forLAUSdata download
 
 
-# }
+} # }
 ```

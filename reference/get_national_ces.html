@@ -13,7 +13,7 @@ dataset with industry classifications, data types, and time period information."
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,119 +150,27 @@ and `create_bls_object()` helper functions must be available in your environment
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Get complete monthly CES data with simplified table structure (default)</span></span></span>
 <span class="r-in"><span><span class="va">ces_monthly</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7925876 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get only seasonally adjusted data (faster download)</span></span></span>
 <span class="r-in"><span><span class="va">ces_seasonal</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"current_seasonally_adjusted"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Seasonally adjusted all-employee series)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Seasonally adjusted all-employee series</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 397305 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get real earnings data for all employees</span></span></span>
 <span class="r-in"><span><span class="va">ces_real_earnings</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"real_earnings_all_employees"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Real earnings for all employees)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Real earnings for all employees</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 527192 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get all data including annual averages with full metadata</span></span></span>
 <span class="r-in"><span><span class="va">ces_full</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>dataset_filter <span class="op">=</span> <span class="st">"all_data"</span>,</span></span>
 <span class="r-in"><span>                             monthly_only <span class="op">=</span> <span class="cn">FALSE</span>, simplify_table <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 8249737 x 23</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get data with warnings and diagnostic information displayed</span></span></span>
 <span class="r-in"><span><span class="va">ces_with_warnings</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingdata...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:10000x5 (sampled)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:57</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'series_id', 'year', 'period', 'value', 'footnote_codes'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:8249737x5 in https://download.bls.gov/pub/time.series/ce/ce.data.0.AllCESSeries</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:series_id, year, period, value, footnote_codes</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingseries...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:22049x11</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:144</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:11</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'series_id', 'supersector_code', 'industry_code', 'data_type_code', 'seasonal', 'series_title', 'footnote_codes', 'begin_year', 'begin_period', 'end_year', 'end_period'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:22049x11 in https://download.bls.gov/pub/time.series/ce/ce.series</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:series_id, supersector_code, industry_code, data_type_code, seasonal, series_title, footnote_codes, begin_year, begin_period, end_year, end_period</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingindustry...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:850x7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:95</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'industry_code', 'naics_code', 'publishing_status', 'industry_name', 'display_level', 'selectable', 'sort_sequence'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:850x7 in https://download.bls.gov/pub/time.series/ce/ce.industry</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:industry_code, naics_code, publishing_status, industry_name, display_level, selectable, sort_sequence</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingperiod...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:13x3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:15</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'period', 'mm', 'month'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:13x3 in https://download.bls.gov/pub/time.series/ce/ce.period</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:period, mm, month</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingdatatype...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:41x2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:29</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'data_type_code', 'data_type_text'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:41x2 in https://download.bls.gov/pub/time.series/ce/ce.datatype</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:data_type_code, data_type_text</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloadingsupersector...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Initial data dimensions:22x2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Phantom columns detected:0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No phantom columns detected, using original data</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header parsing debug:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Raw header line length:33</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Number of tab-separated fields:2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Header names:'supersector_code', 'supersector_name'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final data dimensions:22x2 in https://download.bls.gov/pub/time.series/ce/ce.supersector</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final column names:supersector_code, supersector_name</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forNational CES: Complete national CES datasetdata download</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7925876 x 14</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get full diagnostic object if needed</span></span></span>
 <span class="r-in"><span><span class="va">data_with_diagnostics</span> <span class="op">&lt;-</span> <span class="fu">get_national_ces</span><span class="op">(</span>return_diagnostics <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Downloading national CES datasets (Complete national CES dataset)...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining CES datasets...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> National CES data download complete!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dataset: Complete national CES dataset</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Final dataset dimensions: 7925876 x 14</span>
 <span class="r-in"><span><span class="fu"><a href="print_bls_warnings.html">print_bls_warnings</a></span><span class="op">(</span><span class="va">data_with_diagnostics</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No warnings forNational CES: Complete national CES datasetdata download</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

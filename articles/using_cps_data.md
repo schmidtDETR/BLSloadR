@@ -1,6 +1,7 @@
 # Working with Current Population Survey (CPS) Data
 
 ``` r
+
 library(BLSloadR)
 library(dplyr)
 library(ggplot2)
@@ -34,6 +35,7 @@ Before filtering data, you need to know what characteristics are
 available and their valid codes.
 
 ``` r
+
 # List all available characteristics
 all_characteristics <- explore_cps_characteristics()
 head(all_characteristics, 10)
@@ -49,6 +51,7 @@ What the characteristic represents
 Once you identify a characteristic of interest, explore its valid codes:
 
 ``` r
+
 # See all valid sex/gender codes
 sex_codes <- explore_cps_characteristics("sexs")
 sex_codes
@@ -67,6 +70,7 @@ head(age_codes, 10)
 Use keywords and filters to find the specific series you need:
 
 ``` r
+
 # Simple keyword search
 unemployment_series <- explore_cps_series(
   search = "unemployment rate",
@@ -91,6 +95,7 @@ women_series[, c("series_id", "series_title")]
 Once you’ve identified the series ID(s) you need, retrieve the data:
 
 ``` r
+
 # Get data for a specific series
 data <- get_cps_subset(
   series_ids = "LNS14000002",  # Unemployment rate - Women
@@ -107,6 +112,7 @@ head(data$data)
 ### Example 1: Comparing Unemployment by Sex
 
 ``` r
+
 # Step 1: Find unemployment rate series by sex
 unemployment_by_sex <- explore_cps_series(
   search = "unemployment rate",
@@ -146,6 +152,7 @@ ggplot(recent_data, aes(x = date, y = value, color = sexs_text)) +
 ### Example 2: Education and Unemployment
 
 ``` r
+
 # Step 1: Explore education codes
 education_codes <- explore_cps_characteristics("education")
 
@@ -184,6 +191,7 @@ latest_rates
 ### Example 3: Labor Force Participation Trends
 
 ``` r
+
 # Find labor force participation rate for women aged 25-54
 lfpr_series <- explore_cps_series(
   search = "labor force participation rate",
@@ -220,6 +228,7 @@ ggplot(lfpr_data$data, aes(x = date, y = value)) +
 Analyze unemployment across multiple demographic dimensions:
 
 ``` r
+
 # Explore race codes
 race_codes <- explore_cps_characteristics("race")
 race_codes
@@ -260,6 +269,7 @@ race_data$data |>
 You can combine search terms with multiple characteristic filters:
 
 ``` r
+
 # Find unemployment data for Hispanic women with some college
 specific_series <- explore_cps_series(
   search = c("unemployment", "rate"),
@@ -277,6 +287,7 @@ specific_series <- explore_cps_series(
 Use a persistent cache directory to avoid re-downloading data:
 
 ``` r
+
 # Set up a permanent cache location
 cache_location <- "C:/BLS_data_cache"
 
@@ -291,6 +302,7 @@ data <- get_cps_subset(series_ids = series$series_id[1], cache_dir = cache_locat
 Retrieve data for many series at once:
 
 ``` r
+
 # Get data for multiple related series
 all_age_groups <- explore_cps_series(
   search = "unemployment rate",
@@ -318,6 +330,7 @@ The
 function returns a `bls_data_collection` object with several components:
 
 ``` r
+
 # Get sample data
 sample_data <- get_cps_subset(series_ids = "LNS14000000")
 

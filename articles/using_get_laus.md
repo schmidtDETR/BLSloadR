@@ -1,6 +1,7 @@
 # Working with LAUS Data
 
 ``` r
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -24,6 +25,7 @@ to pull up the Local Area Unemployment Statistics (LAUS) data. By
 default, this will pull seasonally-adjusted data at the statewide level.
 
 ``` r
+
 # Get the LAUS data using BLSloadR
 bls_import <- get_laus()
 
@@ -43,6 +45,7 @@ it easier to work with. This will allow us to pivot the data, allowing
 for easier manipulation of the columns.
 
 ``` r
+
 bls_state_table <- bls_import |>
   rename("state" = "area_text",
          "measure" = "measure_text") |>
@@ -69,6 +72,7 @@ across the nation. Here, we calculate the 20th, 50th (median), and 80th
 percentiles.
 
 ``` r
+
 bls_state_table <- bls_state_table |>
   pivot_longer(3:8, names_to = "measure", values_to = "value") |>
   group_by(date, measure) |>
@@ -93,6 +97,7 @@ each of those measures. We will also add a column to highlight Nevada,
 the state we are interested in highlighting.
 
 ``` r
+
 selected_state <- "Nevada"
 
 bls_current <- bls_state_table |>
@@ -106,6 +111,7 @@ bls_ts <- bls_state_table |>
 #### Unemployment Rate Chart
 
 ``` r
+
 bls_current |>
   filter(measure == "ur") |>
   ggplot() +
@@ -120,6 +126,7 @@ bls_current |>
 #### Labor Force Participation Rate Chart
 
 ``` r
+
 bls_current |>
   filter(measure == "lfpr") |>
   ggplot() +
@@ -134,6 +141,7 @@ bls_current |>
 #### Unemployment Rate Over Time
 
 ``` r
+
 bls_ts |>
   filter(measure == "ur") |>
   ggplot(aes(x = date)) +
@@ -155,6 +163,7 @@ bls_ts |>
 #### Labor Force Participation Rate Over Time
 
 ``` r
+
 bls_ts |>
   filter(measure == "lfpr") |>
   ggplot(aes(x = date)) +
