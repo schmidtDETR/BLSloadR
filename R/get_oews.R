@@ -39,7 +39,7 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr select
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download current OEWS data
 #' oews_data <- get_oews()
 #'
@@ -81,12 +81,13 @@ get_oews <- function(
   }
 
   # Download all files
-  downloads <- download_bls_files(
-    download_urls,
-    suppress_warnings = suppress_warnings,
-    cache = cache
-  )
-
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
+  
+  # Exit function if download failed.
+  if(is.null(downloads) | length(downloads) == 0){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
+  }
+  
   # Extract data from downloads
   oews_current <- get_bls_data(downloads$data)
   if (!fast_read) {
@@ -221,7 +222,7 @@ get_oews <- function(
 #' @importFrom dplyr summarize
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'  # Get OEWS area definitions without shapefiles and with processing messages.
 #'  test <- get_oews_areas(ref_year = 2024, geometry = FALSE, silent = FALSE)
 #'
@@ -248,12 +249,10 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE) {
   }
 
   # Create download URL
-  oews_url <- paste0(
-    "https://www.bls.gov/oes/",
-    dl_year,
-    "/may/area_definitions_m",
-    dl_year,
-    ".xlsx"
+  oews_url <- paste0("https://www.bls.gov/oes/",dl_year,"/may/area_definitions_m",dl_year,".xlsx")
+  
+  headers <- get_bls_excel_headers(
+    refer = "https://www.bls.gov/oes/"
   )
 
   headers <- get_bls_headers(host = "www.bls.gov")

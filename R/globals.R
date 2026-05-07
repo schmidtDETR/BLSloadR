@@ -72,6 +72,7 @@ utils::globalVariables(c(
   "temp_month",
   "ind_lookup",
   "area_lookup",
+  "refer",
   "available_codes",
   "code_col",
   "description",
@@ -83,7 +84,8 @@ utils::globalVariables(c(
   "quantile",
   
   # Placeholders within functions
-  "result"
+  "result",
+  "tf"
   
 ))
 

@@ -4,6 +4,8 @@ test_that("download_bls_files downloads multiple files", {
   skip_on_cran()
   skip_if_offline()
 
+  withr::with_envvar(new = c("BLS_USER_AGENT" = "DETRLMI@detr.nv.gov"),{
+    
   urls <- c(
     "State" = "https://download.bls.gov/pub/time.series/ce/ce.series",
     "Seasonal" = "https://download.bls.gov/pub/time.series/ce/ce.seasonal"
@@ -19,6 +21,9 @@ test_that("download_bls_files downloads multiple files", {
   # Each should be a bls_data object
   expect_s3_class(result$State, "bls_data")
   expect_s3_class(result$Seasonal, "bls_data")
+  
+  })
+  
 })
 
 test_that("download_bls_files preserves URL names", {

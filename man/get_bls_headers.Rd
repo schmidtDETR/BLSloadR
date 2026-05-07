@@ -7,7 +7,7 @@
 get_bls_headers(host = "download.bls.gov")
 }
 \arguments{
-\item{host}{The host to use in the Host header (default: "download.bls.gov")}
+\item{host}{The URL to use in the Host header (default: "download.bls.gov")}
 }
 \value{
 A named character vector of HTTP headers

@@ -58,7 +58,7 @@ function. When multiple potential data files exist (common in large data sets), 
 will prompt for an input of which file to use.
 }
 \examples{
-\donttest{
+\dontrun{
 # Import All Data
 fm_import <- load_bls_dataset("fm", which_data = "all")
 

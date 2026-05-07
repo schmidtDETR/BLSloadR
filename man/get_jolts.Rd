@@ -66,7 +66,7 @@ The function performs several data transformations:
   }
 }
 \examples{
-\donttest{
+\dontrun{
 # Download state-level JOLTS data (default - returns data directly)
 jolts_data <- get_jolts()
 

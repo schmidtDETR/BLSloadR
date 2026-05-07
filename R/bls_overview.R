@@ -18,6 +18,7 @@
 #'
 #' @examples
 #' \donttest{
+#' if(interactive()){
 #' # Display Average Price Data overview
 #' bls_overview("ap")
 #'
@@ -27,11 +28,11 @@
 #' # Display in console instead of viewer
 #' bls_overview("ap", display_method = "console")
 #' }
-bls_overview <- function(
-  series_id,
-  display_method = "viewer",
-  base_url = "https://download.bls.gov/pub/time.series"
-) {
+#' }
+bls_overview <- function(series_id, 
+                         display_method = "viewer",
+                         base_url = "https://download.bls.gov/pub/time.series") {
+  
   # Validate inputs
   if (!is.character(series_id) || length(series_id) != 1) {
     stop("series_id must be a single character string")
@@ -43,34 +44,27 @@ bls_overview <- function(
   url <- file.path(base_url, series_id, paste0(series_id, ".txt"))
 
   # Fetch content with proper headers (similar to fread_bls)
-  tryCatch(
-    {
-      headers <- get_bls_headers()
-
-      response <- httr::GET(url, httr::add_headers(.headers = headers))
-      httr::stop_for_status(response)
-
-      content_text <- httr::content(response, as = "text", encoding = "UTF-8")
-
-      # Display based on method
-      switch(
-        display_method,
-        "viewer" = display_in_viewer(content_text, series_id),
-        "console" = display_in_console(content_text, series_id),
-        "popup" = display_in_popup(content_text, series_id)
-      )
-
-      invisible(content_text)
-    },
-    error = function(e) {
-      stop(sprintf(
-        "Could not fetch overview for series '%s'. URL: %s\nError: %s",
-        series_id,
-        url,
-        e$message
-      ))
-    }
-  )
+  tryCatch({
+    headers <- get_bls_headers()
+    
+    response <- httr::GET(url, httr::add_headers(.headers = headers))
+    httr::stop_for_status(response)
+    
+    content_text <- httr::content(response, as = "text", encoding = "UTF-8")
+    
+    # Display based on method
+    switch(display_method,
+           "viewer" = display_in_viewer(content_text, series_id),
+           "console" = display_in_console(content_text, series_id),
+           "popup" = display_in_popup(content_text, series_id)
+    )
+    
+    invisible(content_text)
+    
+  }, error = function(e) {
+    stop(sprintf("Could not fetch overview for series '%s'. URL: %s\nError: %s", 
+                 series_id, url, e$message))
+  })
 }
 
 #' Display text content in Viewer window.

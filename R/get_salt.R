@@ -48,16 +48,9 @@
 #' @importFrom zoo as.yearqtr
 #' @importFrom readxl read_excel
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Download state-level SALT data
 #' salt_data <- get_salt()
-#'
-#' # View top 10 highest U-6 rates by state in current data
-#' latest <- salt_data |>
-#'   dplyr::filter(date == max(date)) |>
-#'   dplyr::select(state, u6) |>
-#'   dplyr::arrange(-u6)
-#' head(latest)
 #'
 #' # Include sub-state areas
 #' salt_all <- get_salt(only_states = FALSE)
@@ -67,7 +60,6 @@
 #'
 #' # Get full diagnostic object if needed
 #' data_with_diagnostics <- get_salt(return_diagnostics = TRUE)
-#' print_bls_warnings(data_with_diagnostics)
 #' }
 #'
 
@@ -79,26 +71,23 @@ get_salt <- function(
   return_diagnostics = FALSE
 ) {
   salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
-
-  headers <- get_bls_headers(host = "www.bls.gov")
-
-  # Download Excel file
-  message("Downloading SALT data from BLS...\n")
-  response <- httr::GET(
-    salt_url,
-    httr::write_disk(tf <- tempfile(fileext = ".xlsx")),
-    httr::add_headers(.headers = headers)
-  )
-
-  # Check for successful response
-  httr::stop_for_status(response)
+  
+  # Downloading BLS Alternative Measures file
+  if(!suppress_warnings){
+    message("Downloading Alternative Measures from Excel file from BLS...")
+  }
+  salt_data <- read_bls_excel(salt_url, verbose = !suppress_warnings, skip = 1)
 
   # Track processing steps
   processing_steps <- character(0)
-
+  
+  if(is.null(salt_data)){
+    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE to see status messages.")
+  }
+  
   # Read and process Excel file
   message("Processing SALT Excel file...\n")
-  salt_data <- readxl::read_excel(tf, skip = 1) |>
+  salt_data <- salt_data |> 
     dplyr::rename_with(.fn = stringr::str_to_lower) |>
     dplyr::mutate(date = lubridate::yq(paste0(`end year`, `end quarter`))) |>
     dplyr::select(

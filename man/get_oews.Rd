@@ -53,7 +53,7 @@ from the Bureau of Labor Statistics OEWS program. The data includes employment
 and wage estimates by occupation and geographic area. Note that OEWS is a large data set (over 6 million rows), so it will require longer to download.
 }
 \examples{
-\donttest{
+\dontrun{
 # Download current OEWS data
 oews_data <- get_oews()
 

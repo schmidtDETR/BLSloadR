@@ -87,7 +87,7 @@ The function joins data from multiple BLS files:
   }
 }
 \examples{
-\donttest{
+\dontrun{
 # Download state-level seasonally adjusted data (default operation)
 laus_states <- get_laus()
 
