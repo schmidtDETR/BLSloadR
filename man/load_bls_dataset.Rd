@@ -10,7 +10,8 @@ load_bls_dataset(
   simplify_table = TRUE,
   suppress_warnings = FALSE,
   which_data = NULL,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ and generates a date column from the year and period columns in the data.}
 If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.}
 
 \item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
+
+\item{user_agent}{Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.}
 }
 \value{
 This function will return either a bls_data_collection object (if return_full is FALSE or not provided)

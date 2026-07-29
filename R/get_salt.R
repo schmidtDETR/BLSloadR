@@ -13,6 +13,7 @@
 #'   for cleaner output during batch processing. If FALSE, returns the data and prints warnings and messages to the console.
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
+#'   @param user_agent Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.
 #'
 #' @return By default, returns a data.table with Alternative Measures of Labor Underutilization data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics.
@@ -68,7 +69,8 @@ get_salt <- function(
   geometry = FALSE,
   shift_geometry = FALSE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  user_agent = NULL
 ) {
   salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
   
@@ -76,7 +78,7 @@ get_salt <- function(
   if(!suppress_warnings){
     message("Downloading Alternative Measures from Excel file from BLS...")
   }
-  salt_data <- read_bls_excel(salt_url, verbose = !suppress_warnings, skip = 1)
+  salt_data <- read_bls_excel(salt_url, verbose = !suppress_warnings, skip = 1, user_agent = user_agent)
 
   # Track processing steps
   processing_steps <- character(0)

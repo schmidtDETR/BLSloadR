@@ -37,6 +37,8 @@
 #'   If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.
 #'
 #' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
+#' 
+#' @param user_agent Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.
 #'
 #' @returns This function will return either a bls_data_collection object (if return_full is FALSE or not provided)
 #'  or a named list of the returned data including the bls_data_collection object.
@@ -95,7 +97,8 @@ load_bls_dataset <- function(
   simplify_table = TRUE,
   suppress_warnings = FALSE,
   which_data = NULL,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 ) {
   # Validate inputs
   if (!is.character(database_code) || length(database_code) != 1) {
@@ -121,7 +124,7 @@ load_bls_dataset <- function(
   get_directory_files <- function(url, prefix) {
     tryCatch({
       # Set up headers to avoid 403 errors
-      headers <- get_bls_headers()
+      headers <- get_bls_headers(user_agent = user_agent)
       
       # Make request with headers
       response <- httr::GET(url, httr::add_headers(.headers = headers))

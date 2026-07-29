@@ -10,7 +10,8 @@ get_national_ces(
   simplify_table = TRUE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ and diagnostics. If FALSE, displays warning output and diagnostic information.}
 with full diagnostics. If FALSE (default), returns just the data table.}
 
 \item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
+
+\item{user_agent}{Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.}
 }
 \value{
 By default, returns a data.table with CES data. If return_diagnostics = TRUE,
