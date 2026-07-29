@@ -8,7 +8,10 @@ used to download an Ecel file.
 ## Usage
 
 ``` r
-get_bls_excel_headers(refer = "https://www.bls.gov/lau/stalt-archived.htm")
+get_bls_excel_headers(
+  refer = "https://www.bls.gov/lau/stalt-archived.htm",
+  user_agent = NULL
+)
 ```
 
 ## Arguments
@@ -17,6 +20,10 @@ get_bls_excel_headers(refer = "https://www.bls.gov/lau/stalt-archived.htm")
 
   The URL to use in the Referer header (default:
   "https://www.bls.gov/lau/stalt-archived.htm")
+
+- user_agent:
+
+  An optional character string to pass to the USER_AGENT header.
 
 ## Value
 

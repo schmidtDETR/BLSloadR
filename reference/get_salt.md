@@ -13,7 +13,8 @@ get_salt(
   geometry = FALSE,
   shift_geometry = FALSE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  user_agent = NULL
 )
 ```
 
@@ -47,6 +48,11 @@ get_salt(
 
   Logical. If TRUE, returns a bls_data_collection object with full
   diagnostics. If FALSE (default), returns just the data table.
+
+- user_agent:
+
+  Optional character string which provides a USER_AGENT value for the
+  HTTP request for data form BLS.
 
 ## Value
 

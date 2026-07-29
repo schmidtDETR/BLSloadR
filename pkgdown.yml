@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   BLSloadR-intro: BLSloadR-intro.html
@@ -10,7 +10,7 @@ articles:
   articles/using_get_oews: using_get_oews.html
   articles/using_get_qcew: using_get_qcew.html
   articles/working_with_ces_data: working_with_ces_data.html
-last_built: 2026-05-07T16:31Z
+last_built: 2026-07-29T20:54Z
 urls:
   reference: https://schmidtdetr.github.io/BLSloadR/reference
   article: https://schmidtdetr.github.io/BLSloadR/articles

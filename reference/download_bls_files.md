@@ -9,6 +9,7 @@ Statistics into 'fread_bls()'
 download_bls_files(
   urls,
   suppress_warnings = TRUE,
+  user_agent = NULL,
   cache = check_bls_cache_env()
 )
 ```
@@ -23,6 +24,10 @@ download_bls_files(
 - suppress_warnings:
 
   Logical. If TRUE, suppress individual download warnings
+
+- user_agent:
+
+  An optional character string to pass to the USER_AGENT HTML header
 
 - cache:
 

@@ -9,7 +9,7 @@ locally, or if the remote version is newer or a different size.
 ## Usage
 
 ``` r
-smart_bls_download(url, cache_dir = NULL, verbose = FALSE)
+smart_bls_download(url, cache_dir = NULL, verbose = FALSE, user_agent = NULL)
 ```
 
 ## Arguments
@@ -30,6 +30,10 @@ smart_bls_download(url, cache_dir = NULL, verbose = FALSE)
 
   Logical. Defaults to FALSE. If TRUE, returns status messages for
   download.
+
+- user_agent:
+
+  An optional character string to pass to the USER_AGENT HTML header.
 
 ## Value
 

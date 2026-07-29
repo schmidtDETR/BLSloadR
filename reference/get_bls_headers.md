@@ -7,7 +7,7 @@ with BLS servers.
 ## Usage
 
 ``` r
-get_bls_headers(host = "download.bls.gov")
+get_bls_headers(host = "download.bls.gov", user_agent = NULL)
 ```
 
 ## Arguments
@@ -15,6 +15,10 @@ get_bls_headers(host = "download.bls.gov")
 - host:
 
   The URL to use in the Host header (default: "download.bls.gov")
+
+- user_agent:
+
+  An optional character string to pass to the USER_AGENT header.
 
 ## Value
 

@@ -5,7 +5,7 @@ Download BLS Excel Data
 ## Usage
 
 ``` r
-read_bls_excel(url, verbose = FALSE, ...)
+read_bls_excel(url, user_agent = NULL, verbose = FALSE, ...)
 ```
 
 ## Arguments
@@ -13,6 +13,10 @@ read_bls_excel(url, verbose = FALSE, ...)
 - url:
 
   Character string. URL to the BLS .xlsx or .xls file.
+
+- user_agent:
+
+  An optional character string to pass to the USER_AGENT HTML header.
 
 - verbose:
 

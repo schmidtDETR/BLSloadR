@@ -137,7 +137,7 @@ ces_northeast <- get_ces(
 )
 
 print(paste("Downloaded", nrow(ces_northeast), "rows"))
-#> [1] "Downloaded 632073 rows"
+#> [1] "Downloaded 636858 rows"
 print(paste("Unique states:", length(unique(ces_northeast$area_text))))
 #> [1] "Unique states: 0"
 ```
@@ -151,7 +151,7 @@ ces_retail <- get_ces(
 )
 
 print(paste("Downloaded", nrow(ces_retail), "rows"))
-#> [1] "Downloaded 286932 rows"
+#> [1] "Downloaded 290664 rows"
 print("Available industries in this dataset:")
 #> [1] "Available industries in this dataset:"
 print(head(unique(ces_retail$industry_text), 10))
@@ -171,7 +171,7 @@ ces_current <- get_ces(
 )
 
 print(paste("Date range:", min(ces_current$date), "to", max(ces_current$date)))
-#> [1] "Date range: 2025-03-01 to 2026-03-01"
+#> [1] "Date range: 2025-06-01 to 2026-06-01"
 print(paste("Dataset size:", nrow(ces_current), "rows"))
 #> [1] "Dataset size: 297999 rows"
 ```
@@ -192,7 +192,7 @@ ces_seasonal <- get_national_ces(
 )
 
 print(paste("Seasonally adjusted data:", nrow(ces_seasonal), "rows"))
-#> [1] "Seasonally adjusted data: 397305 rows"
+#> [1] "Seasonally adjusted data: 399831 rows"
 ```
 
 ``` r
@@ -204,7 +204,7 @@ ces_earnings <- get_national_ces(
 )
 
 print(paste("Real earnings data:", nrow(ces_earnings), "rows"))
-#> [1] "Real earnings data: 527192 rows"
+#> [1] "Real earnings data: 533780 rows"
 print("Sample of data types included:")
 #> [1] "Sample of data types included:"
 print(head(unique(ces_earnings$data_type_text), 5))

@@ -11,6 +11,7 @@ fread_bls(
   url,
   verbose = FALSE,
   cache = check_bls_cache_env(),
+  user_agent = NULL,
   use_fallback = TRUE
 )
 ```
@@ -29,6 +30,11 @@ fread_bls(
 - cache:
 
   Logical. If TRUE, uses local persistent caching.
+
+- user_agent:
+
+  An optional character string to pass to the USER_AGENT header in the
+  request to BLS for data.
 
 - use_fallback:
 

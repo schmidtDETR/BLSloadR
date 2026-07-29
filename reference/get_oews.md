@@ -14,7 +14,8 @@ get_oews(
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
   fast_read = TRUE,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 )
 ```
 
@@ -50,6 +51,11 @@ get_oews(
   Logical. Uses USE_BLS_CACHE environment variable, or defaults to
   FALSE. If TRUE, will download a cached file from BLS server and update
   cache if BLS server indicates an updated file.
+
+- user_agent:
+
+  Optional character string which provides a USER_AGENT header for the
+  HTTP request for data from the BLS.
 
 ## Value
 

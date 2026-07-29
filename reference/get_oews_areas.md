@@ -5,7 +5,7 @@ Download OEWS Area Definitions
 ## Usage
 
 ``` r
-get_oews_areas(ref_year, silent = TRUE, geometry = TRUE)
+get_oews_areas(ref_year, silent = TRUE, geometry = TRUE, user_agent = NULL)
 ```
 
 ## Arguments
@@ -24,9 +24,11 @@ get_oews_areas(ref_year, silent = TRUE, geometry = TRUE)
 - geometry:
 
   Logical. If TRUE (default), downloads shapefiles for OEWS area
-  definitions using \`tigris::counties()\` and
-  \`tigris::shift_geometry()\` to render Alaska, Hawaii, and Puerto Rico
-  with a focus on the area of the continental United States.
+  definitions using \`tigris::counties()\`.
+
+- user_agent:
+
+  Optional character string to supply a USER_AGENT HTTP header.
 
 ## Value
 

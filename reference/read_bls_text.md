@@ -9,7 +9,7 @@ uses custom headers to ensure reliable access to BLS resources.
 ## Usage
 
 ``` r
-read_bls_text(url)
+read_bls_text(url, user_agent = NULL)
 ```
 
 ## Arguments
@@ -19,10 +19,16 @@ read_bls_text(url)
   A character string specifying the full URL to a text file on the BLS
   website (e.g., <https://download.bls.gov/pub/time.series/>).
 
+- user_agent:
+
+  An optional character string supplying a USER_AGENT header for the
+  HTML request from the BLS.
+
 ## Value
 
 A character vector where each element is one line from the text file.
-Lines are split on newline characters (`\n`).
+Lines are split on newline characters (`\n`). Returns `NULL` if the HTTP
+request fails.
 
 ## Details
 
@@ -31,8 +37,10 @@ as README files or database overview documents. It sends an HTTP GET
 request with browser-like headers to ensure compatibility with BLS
 server requirements.
 
-The function will stop with an error if the HTTP request fails (e.g., if
-the URL is invalid or the server is unavailable).
+If the HTTP request fails (e.g., if the URL is invalid, the server is
+unavailable, or a 403 Forbidden error is encountered during automated
+testing), the function will issue a warning and gracefully return `NULL`
+rather than stopping execution.
 
 ## See also
 
