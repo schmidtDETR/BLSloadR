@@ -4,14 +4,16 @@
 \alias{get_oews_areas}
 \title{Download OEWS Area Definitions}
 \usage{
-get_oews_areas(ref_year, silent = TRUE, geometry = TRUE)
+get_oews_areas(ref_year, silent = TRUE, geometry = TRUE, user_agent = NULL)
 }
 \arguments{
 \item{ref_year}{Four-digit year (converted to integer). The year for which to retrieve OEWS area definitions. Valid values are 2024 through current release year. Prior years included Township codes, which change the structure of the file.}
 
 \item{silent}{Logical. If TRUE (default), suppress console output}
 
-\item{geometry}{Logical.  If TRUE (default), downloads shapefiles for OEWS area definitions using `tigris::counties()` and `tigris::shift_geometry()` to render Alaska, Hawaii, and Puerto Rico with a focus on the area of the continental United States.}
+\item{geometry}{Logical.  If TRUE (default), downloads shapefiles for OEWS area definitions using `tigris::counties()`.}
+
+\item{user_agent}{Optional character string to supply a USER_AGENT HTTP header.}
 }
 \value{
 Data table which maps individual counties to OEWS area definitions.
@@ -34,5 +36,4 @@ Download OEWS Area Definitions
  test <- get_oews_areas(ref_year = 2024, geometry = FALSE, silent = FALSE)
 
 }
-
 }
