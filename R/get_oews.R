@@ -291,23 +291,31 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE, user_agent 
     refer = "https://www.bls.gov/oes/",
     user_agent = user_agent
   )
-
+  
   # Download Excel file
   if (!silent) {
     message("Downloading OEWS area definitions from BLS.")
   }
+  
   response <- httr::GET(
     oews_url,
     httr::write_disk(tf <- tempfile(fileext = file_ext)),
     httr::add_headers(.headers = headers)
   )
-
-  # Check for successful response
-  httr::stop_for_status(response)
-
+  
+  # Check for successful response and fail gracefully
+  if (httr::http_error(response)) {
+    warning(
+      sprintf("Failed to download OEWS area definitions from BLS. HTTP status code: %s. Returning NULL.", httr::status_code(response)),
+      call. = FALSE
+    )
+    unlink(tf) # Clean up the temp file created by write_disk
+    return(NULL)
+  }
+  
   # Track processing steps
   processing_steps <- character(0)
-
+  
   # Read and process Excel file
   if (!silent) {
     message(paste0(
@@ -316,6 +324,7 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE, user_agent 
       "."
     ))
   }
+  
   oews_areas <- readxl::read_excel(
     tf,
     skip = year_specs$skip,
@@ -330,7 +339,7 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE, user_agent 
         pad = "0"
       )
     )
-
+  
   # Clean up temporary file
   unlink(tf)
 
