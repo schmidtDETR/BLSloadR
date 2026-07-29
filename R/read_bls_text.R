@@ -7,6 +7,7 @@
 #'
 #' @param url A character string specifying the full URL to a text file on the
 #'   BLS website (e.g., \url{https://download.bls.gov/pub/time.series/}).
+#' @param user_agent An optional character string supplying a USER_AGENT header for the HTML request from the BLS.   
 #'
 #' @return A character vector where each element is one line from the text file.
 #'   Lines are split on newline characters (\code{\\n}).
@@ -25,7 +26,8 @@
 #' \donttest{
 #' # Read the overview file for Current Employment Statistics
 #' ces_overview <- read_bls_text(
-#'   "https://download.bls.gov/pub/time.series/ce/ce.txt"
+#'   "https://download.bls.gov/pub/time.series/ce/ce.txt",
+#'   user_agent = "Testing"
 #' )
 #'
 #' # Display the first few lines
@@ -37,8 +39,8 @@
 #' \code{\link{load_bls_dataset}} for loading complete datasets
 #'
 #' @keywords internal
-read_bls_text <- function(url) {
-  headers <- get_bls_headers()
+read_bls_text <- function(url, user_agent = NULL) {
+  headers <- get_bls_headers(user_agent = user_agent)
 
   response <- httr::GET(url, httr::add_headers(.headers = headers))
   httr::stop_for_status(response)

@@ -4,11 +4,13 @@
 \alias{read_bls_text}
 \title{Read Plain Text Files from BLS Website}
 \usage{
-read_bls_text(url)
+read_bls_text(url, user_agent = NULL)
 }
 \arguments{
 \item{url}{A character string specifying the full URL to a text file on the
 BLS website (e.g., \url{https://download.bls.gov/pub/time.series/}).}
+
+\item{user_agent}{An optional character string supplying a USER_AGENT header for the HTML request from the BLS.}
 }
 \value{
 A character vector where each element is one line from the text file.
@@ -32,7 +34,8 @@ URL is invalid or the server is unavailable).
 \donttest{
 # Read the overview file for Current Employment Statistics
 ces_overview <- read_bls_text(
-  "https://download.bls.gov/pub/time.series/ce/ce.txt"
+  "https://download.bls.gov/pub/time.series/ce/ce.txt",
+  user_agent = "Testing"
 )
 
 # Display the first few lines
