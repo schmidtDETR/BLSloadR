@@ -4,10 +4,12 @@
 \alias{get_bls_headers}
 \title{Generate headers for BLS requests}
 \usage{
-get_bls_headers(host = "download.bls.gov")
+get_bls_headers(host = "download.bls.gov", user_agent = NULL)
 }
 \arguments{
 \item{host}{The URL to use in the Host header (default: "download.bls.gov")}
+
+\item{user_agent}{An optional character string to pass to the USER_AGENT header.}
 }
 \value{
 A named character vector of HTTP headers

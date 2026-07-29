@@ -4,10 +4,15 @@
 \alias{get_bls_excel_headers}
 \title{Generate headers for BLS requests to download Excel files}
 \usage{
-get_bls_excel_headers(refer = "https://www.bls.gov/lau/stalt-archived.htm")
+get_bls_excel_headers(
+  refer = "https://www.bls.gov/lau/stalt-archived.htm",
+  user_agent = NULL
+)
 }
 \arguments{
 \item{refer}{The URL to use in the Referer header (default: "https://www.bls.gov/lau/stalt-archived.htm")}
+
+\item{user_agent}{An optional character string to pass to the USER_AGENT header.}
 }
 \value{
 A named character vector of HTTP headers

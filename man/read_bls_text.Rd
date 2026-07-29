@@ -4,15 +4,18 @@
 \alias{read_bls_text}
 \title{Read Plain Text Files from BLS Website}
 \usage{
-read_bls_text(url)
+read_bls_text(url, user_agent = NULL)
 }
 \arguments{
 \item{url}{A character string specifying the full URL to a text file on the
 BLS website (e.g., \url{https://download.bls.gov/pub/time.series/}).}
+
+\item{user_agent}{An optional character string supplying a USER_AGENT header for the HTML request from the BLS.}
 }
 \value{
 A character vector where each element is one line from the text file.
-  Lines are split on newline characters (\code{\\n}).
+  Lines are split on newline characters (\code{\\n}). Returns \code{NULL} if 
+  the HTTP request fails.
 }
 \description{
 Downloads and reads plain text files from the Bureau of Labor Statistics (BLS)
@@ -25,8 +28,9 @@ This function is designed to read descriptive text files from BLS, such as
 README files or database overview documents. It sends an HTTP GET request
 with browser-like headers to ensure compatibility with BLS server requirements.
 
-The function will stop with an error if the HTTP request fails (e.g., if the
-URL is invalid or the server is unavailable).
+If the HTTP request fails (e.g., if the URL is invalid, the server is unavailable, 
+or a 403 Forbidden error is encountered during automated testing), the function 
+will issue a warning and gracefully return \code{NULL} rather than stopping execution.
 }
 \examples{
 \donttest{

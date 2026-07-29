@@ -17,6 +17,7 @@
 #' @param return_diagnostics Logical. If TRUE, returns a bls_data_collection object
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
+#' @param user_agent Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.
 #'
 #' @return By default, returns a data.table with JOLTS data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing JOLTS data with the following key columns:
@@ -73,7 +74,8 @@ get_jolts <- function(
   remove_national = TRUE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 ) {
   # Define all URLs we need to download
   download_urls <- c(
@@ -87,7 +89,7 @@ get_jolts <- function(
   )
 
   # Download all files
-  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache, user_agent = user_agent)
   
   # Exit function if download failed.
   if(is.null(downloads) | length(downloads) == 0){

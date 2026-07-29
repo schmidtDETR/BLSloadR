@@ -4,10 +4,12 @@
 \alias{read_bls_excel}
 \title{Download BLS Excel Data}
 \usage{
-read_bls_excel(url, verbose = FALSE, ...)
+read_bls_excel(url, user_agent = NULL, verbose = FALSE, ...)
 }
 \arguments{
 \item{url}{Character string. URL to the BLS .xlsx or .xls file.}
+
+\item{user_agent}{An optional character string to pass to the USER_AGENT HTML header.}
 
 \item{verbose}{Logical. If TRUE, prints diagnostic messages.}
 

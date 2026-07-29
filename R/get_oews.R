@@ -11,6 +11,7 @@
 #'   with full diagnostics. If FALSE (default), returns just the data table.
 #' @param fast_read Logical.  If TRUE (default), derives lookup values directly from series_id to avoid reading the series file, to speed download process. With fast_read, the data can download in 17 seconds (depending on bandwidth).  Without fast_read, the same download takes 57 seconds.
 #' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
+#' @param user_agent Optional character string which provides a USER_AGENT header for the HTTP request for data from the BLS.
 #'
 #' @return By default, returns a data.table with OEWS data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics. The columns in the returned data frame when `simplify_table = TRUE` are listed below.  Unless otherwise specified, all data is returned as a character string to preserve the value of leading and trailing zeroes.
@@ -60,7 +61,8 @@ get_oews <- function(
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
   fast_read = TRUE,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 ) {
   if (fast_read) {
     download_urls <- c(
@@ -81,7 +83,7 @@ get_oews <- function(
   }
 
   # Download all files
-  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache)
+  downloads <- download_bls_files(download_urls, suppress_warnings = suppress_warnings, cache = cache, user_agent = user_agent)
   
   # Exit function if download failed.
   if(is.null(downloads) | length(downloads) == 0){
@@ -191,11 +193,46 @@ get_oews <- function(
   return(result)
 }
 
+#' Get OEWS Year Specifications
+#' 
+#' Internal helper to retrieve file structure configurations by year for OEWS Area Definition downloads..
+#' @param year Integer year
+#' @return Internal function, returns a list of specifications for a given download year.
+#' @noRd
+get_year_specs <- function(year) {
+
+  specs <- list(
+    "2025" = list(
+      url = "https://www.bls.gov/oes/area_definitions_m2025.xlsx",
+      skip = 1,
+      col_names = c("fips_code", "state_name", "state_abb", "oews_area_code", "oews_area_name", "county_code", "geo_area_name")
+    ),
+    "2024" = list(
+      url = "https://www.bls.gov/oes/area_definitions_m2024.xlsx",
+      skip = 1,
+      col_names = c("fips_code", "state_name", "state_abb", "oews_area_code", "oews_area_name", "county_code", "geo_area_name")
+    ),
+    "2023" = list(
+      url = "https://www.bls.gov/oes/2023/may/area_definitions_m2023.xlsx",
+      skip = 1, 
+      col_names = c("fips_code", "state_name", "state_abb", "oews_area_code", "oews_area_name", "county_code", "township_code", "geo_area_name")
+    ),
+    "2022" = list(
+      url = "https://www.bls.gov/oes/2022/may/area_definitions_m2022.xlsx",
+      skip = 1,
+      col_names = c("fips_code", "state_name", "state_abb", "oews_area_code", "oews_area_name", "county_code", "township_code", "geo_area_name")
+    )
+  )
+  # Return the specs for the requested year
+  return(specs[[as.character(year)]])
+}
+
 #' Download OEWS Area Definitions
 #'
 #' @param ref_year Four-digit year (converted to integer). The year for which to retrieve OEWS area definitions. Valid values are 2024 through current release year. Prior years included Township codes, which change the structure of the file.
 #' @param silent Logical. If TRUE (default), suppress console output
-#' @param geometry Logical.  If TRUE (default), downloads shapefiles for OEWS area definitions using `tigris::counties()` and `tigris::shift_geometry()` to render Alaska, Hawaii, and Puerto Rico with a focus on the area of the continental United States.
+#' @param geometry Logical.  If TRUE (default), downloads shapefiles for OEWS area definitions using `tigris::counties()`.
+#' @param user_agent Optional character string to supply a USER_AGENT HTTP header.
 #'
 #' @return Data table which maps individual counties to OEWS area definitions.
 #'   \itemize{
@@ -227,52 +264,58 @@ get_oews <- function(
 #'  test <- get_oews_areas(ref_year = 2024, geometry = FALSE, silent = FALSE)
 #'
 #' }
-#'
-get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE) {
+get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE, user_agent = NULL) {
   # Validate ref_year input
-  current_year <- as.integer(format(Sys.Date(), "%Y"))
-  min_year <- 2024
-  max_year <- current_year - 1
-
-  if (is.na(as.integer(ref_year)) || length(ref_year) != 1) {
-    stop("`ref_year` must be coercable to a single integer value.")
-  }
-
   dl_year <- as.integer(ref_year)
-
-  if (dl_year < min_year || dl_year > max_year) {
-    stop(sprintf(
-      "`ref_year` must be between %d and %d. Estimates are generally released in April for the prior year.",
-      min_year,
-      max_year
+  supported_years <- c(2022, 2023, 2024, 2025) 
+  
+  if (!dl_year %in% supported_years) {
+    warning(sprintf(
+      "`ref_year` must be one of: %s. Estimates are generally released in April for the prior year.",
+      paste(supported_years, collapse = ", ")
     ))
+    
+    return(NULL)
   }
+  
+  if(!silent & ref_year < 2024) warning("Warning: data prior to 2024 in New England incorporates township codes for which current shapefiles do not apply.")
+  
+  # Fetch the specific parameters for this year
+  year_specs <- get_year_specs(dl_year)
 
   # Create download URL
-  oews_url <- paste0("https://www.bls.gov/oes/",dl_year,"/may/area_definitions_m",dl_year,".xlsx")
+  oews_url <- year_specs$url
+  file_ext <- if (grepl("\\.xlsx$", oews_url)) ".xlsx" else ".xls"
   
   headers <- get_bls_excel_headers(
-    refer = "https://www.bls.gov/oes/"
+    refer = "https://www.bls.gov/oes/",
+    user_agent = user_agent
   )
-
-  headers <- get_bls_headers(host = "www.bls.gov")
-
+  
   # Download Excel file
   if (!silent) {
     message("Downloading OEWS area definitions from BLS.")
   }
+  
   response <- httr::GET(
     oews_url,
-    httr::write_disk(tf <- tempfile(fileext = ".xlsx")),
+    httr::write_disk(tf <- tempfile(fileext = file_ext)),
     httr::add_headers(.headers = headers)
   )
-
-  # Check for successful response
-  httr::stop_for_status(response)
-
+  
+  # Check for successful response and fail gracefully
+  if (httr::http_error(response)) {
+    warning(
+      sprintf("Failed to download OEWS area definitions from BLS. HTTP status code: %s. Returning NULL.", httr::status_code(response)),
+      call. = FALSE
+    )
+    unlink(tf) # Clean up the temp file created by write_disk
+    return(NULL)
+  }
+  
   # Track processing steps
   processing_steps <- character(0)
-
+  
   # Read and process Excel file
   if (!silent) {
     message(paste0(
@@ -281,19 +324,12 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE) {
       "."
     ))
   }
+  
   oews_areas <- readxl::read_excel(
     tf,
-    skip = 1,
-    col_types = c("text", "text", "text", "text", "text", "text", "text"),
-    col_names = c(
-      "fips_code",
-      "state_name",
-      "state_abb",
-      "oews_area_code",
-      "oews_area_name",
-      "county_code",
-      "county_name"
-    )
+    skip = year_specs$skip,
+    col_types = "text",
+    col_names = year_specs$col_names
   ) |>
     dplyr::mutate(
       oews_area_code = stringr::str_pad(
@@ -303,7 +339,7 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE) {
         pad = "0"
       )
     )
-
+  
   # Clean up temporary file
   unlink(tf)
 
@@ -317,7 +353,6 @@ get_oews_areas <- function(ref_year, silent = TRUE, geometry = TRUE) {
       dplyr::select(GEOID, oews_area_code, oews_area_name)
 
     area_shapes <- tigris::counties(year = dl_year, progress_bar = FALSE) |>
-      tigris::shift_geometry() |>
       dplyr::select(GEOID, geometry)
 
     oews_areas <- area_shapes |>

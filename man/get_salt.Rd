@@ -9,7 +9,8 @@ get_salt(
   geometry = FALSE,
   shift_geometry = FALSE,
   suppress_warnings = TRUE,
-  return_diagnostics = FALSE
+  return_diagnostics = FALSE,
+  user_agent = NULL
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 
 \item{return_diagnostics}{Logical. If TRUE, returns a bls_data_collection object
 with full diagnostics. If FALSE (default), returns just the data table.}
+
+\item{user_agent}{Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.}
 }
 \value{
 By default, returns a data.table with Alternative Measures of Labor Underutilization data. If return_diagnostics = TRUE,

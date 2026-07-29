@@ -13,7 +13,8 @@ get_ces(
   simplify_table = TRUE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 )
 }
 \arguments{
@@ -48,6 +49,8 @@ for cleaner output during batch processing. If FALSE, returns the data and print
 returns the full bls_data_collection object with diagnostics.}
 
 \item{cache}{Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.}
+
+\item{user_agent}{Optional Character string to pass to the USER_AGENT HTML header of the request from BLS.  Supplying an e-mail address in this field helps avoid 403 errors when downloading from the BLS.  This value can also be set by using the BLS_USER_AGENT environment variable instead, but is provided here for convenience.}
 }
 \value{
 By default, returns a data.table with CES data. If return_diagnostics = TRUE,
@@ -100,8 +103,7 @@ ces_data <- get_bls_data(ces_result)
 if (has_bls_issues(ces_result)) {
   print_bls_warnings(ces_result)
 }
-}
-\donttest{
+
 # Complete dataset (slower - all states, industries, and years)
 # WARNING: This downloads a very large file and requires significant memory
 ces_all <- get_ces()
