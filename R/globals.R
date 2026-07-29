@@ -69,6 +69,8 @@ utils::globalVariables(c(
   "county_code",
   "GEOID",
   "oews_area_name",
+  "state_name",
+  "master_description",
   "temp_month",
   "ind_lookup",
   "area_lookup",

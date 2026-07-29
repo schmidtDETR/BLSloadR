@@ -7,6 +7,7 @@
 #' @param url Character string. URL to the BLS flat file
 #' @param verbose Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.
 #' @param cache Logical. If TRUE, uses local persistent caching.
+#' @param user_agent An optional character string to pass to the USER_AGENT header in the request to BLS for data.
 #' @param use_fallback Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.
 #' @return A named list with two elements:
 #'    \describe{
@@ -26,6 +27,7 @@ fread_bls <- function(
   url,
   verbose = FALSE,
   cache = check_bls_cache_env(),
+  user_agent = NULL,
   use_fallback = TRUE
 ) {
   # --- 1. DATA ACQUISITION ---
@@ -33,7 +35,7 @@ fread_bls <- function(
     # Uses the smart download logic to check headers/mtime
     temp_file <- smart_bls_download(url, verbose = verbose)
   } else {
-    headers <- get_bls_headers()
+    headers <- get_bls_headers(user_agent = user_agent)
     
     # Perform request and catch transport-level failures gracefully
     response <- tryCatch(
@@ -428,6 +430,7 @@ fread_bls <- function(
 #'
 #' @param url Character string. URL to the BLS .xlsx or .xls file.
 #' @param verbose Logical. If TRUE, prints diagnostic messages.
+#' @param user_agent An optional character string to pass to the USER_AGENT HTML header.
 #' @param ... Additional arguments passed to readxl::read_excel (e.g., sheet, range).
 #' @return A data.frame or NULL if the download or read fails.
 #' @export
@@ -441,9 +444,9 @@ fread_bls <- function(
 #' 
 #' }
 #' 
-read_bls_excel <- function(url, verbose = FALSE, ...) {
+read_bls_excel <- function(url, user_agent = NULL, verbose = FALSE, ...) {
   # --- 1. DATA ACQUISITION ---
-  headers <- get_bls_excel_headers()
+  headers <- get_bls_excel_headers(user_agent = user_agent)
   
   # Perform request and catch transport-level failures (e.g., DNS, Connection Refused)
   response <- tryCatch(

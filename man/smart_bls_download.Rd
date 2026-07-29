@@ -4,7 +4,7 @@
 \alias{smart_bls_download}
 \title{Check and Download BLS File with Local Caching}
 \usage{
-smart_bls_download(url, cache_dir = NULL, verbose = FALSE)
+smart_bls_download(url, cache_dir = NULL, verbose = FALSE, user_agent = NULL)
 }
 \arguments{
 \item{url}{A character string representing the URL of the BLS file (e.g., a `.txt` or `.gz` file from download.bls.gov).}
@@ -13,6 +13,8 @@ smart_bls_download(url, cache_dir = NULL, verbose = FALSE)
 Defaults to a persistent user data directory managed by \code{tools::R_user_dir}.}
 
 \item{verbose}{Logical. Defaults to FALSE.  If TRUE, returns status messages for download.}
+
+\item{user_agent}{An optional character string to pass to the USER_AGENT HTML header.}
 }
 \value{
 A character string containing the local path to the downloaded (or cached) file.

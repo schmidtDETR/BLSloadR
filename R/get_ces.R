@@ -27,6 +27,7 @@
 #' @param return_diagnostics Logical. If FALSE (default), returns only the data. If TRUE,
 #'   returns the full bls_data_collection object with diagnostics.
 #' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
+#' @param user_agent  Optional Character string to pass to the USER_AGENT HTML header of the request from BLS.  Supplying an e-mail address in this field helps avoid 403 errors when downloading from the BLS.  This value can also be set by using the BLS_USER_AGENT environment variable instead, but is provided here for convenience.
 #'
 #' @return By default, returns a data.table with CES data. If return_diagnostics = TRUE,
 #'   returns a bls_data_collection object containing data and comprehensive diagnostics.
@@ -100,7 +101,8 @@ get_ces <- function(
   simplify_table = TRUE,
   suppress_warnings = TRUE,
   return_diagnostics = FALSE,
-  cache = check_bls_cache_env()
+  cache = check_bls_cache_env(),
+  user_agent = NULL
 ) {
   # Define state-specific URLs mapping
   state_urls <- list(
@@ -284,7 +286,8 @@ get_ces <- function(
   downloads <- download_bls_files(
     ces_urls, 
     suppress_warnings = suppress_warnings,
-    cache = cache)
+    cache = cache,
+    user_agent = user_agent)
   
   # Exit function if download failed.
   if(is.null(downloads) | length(downloads) == 0 | length(ces_urls) != length(downloads)){

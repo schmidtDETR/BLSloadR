@@ -4,15 +4,21 @@
 #' These headers mimic a standard browser to ensure compatibility with BLS servers.
 #' 
 #' @param host The URL to use in the Host header (default: "download.bls.gov")
+#' @param user_agent An optional character string to pass to the USER_AGENT header.
 #' @return A named character vector of HTTP headers
 #' @keywords internal
-get_bls_headers <- function(host = "download.bls.gov"
-                            ) {
-  # 1. Check for a local environment variable first
-  # This allows users to set their email/identity via .Renviron or Sys.setenv()
-  ua <- Sys.getenv("BLS_USER_AGENT")
+get_bls_headers <- function(host = "download.bls.gov", 
+                            user_agent = NULL) {
   
-  # 2. If the variable is empty, use a list of plausible headers to rotate
+  # 1. Check for explicitly passed argument first
+  if (!is.null(user_agent) && user_agent != "") {
+    ua <- user_agent
+  } else {
+    # 2. Check for a local environment variable if argument is missing
+    ua <- Sys.getenv("BLS_USER_AGENT")
+  }
+  
+  # 2. If both are empty, use a list of plausible headers to rotate
   if (ua == "") {
     plausible_agents <- c(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
@@ -26,7 +32,6 @@ get_bls_headers <- function(host = "download.bls.gov"
   }
   
   # 3. Generate dynamic headers
-  
   c(
     "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "Accept-Encoding" = "gzip, deflate, br",
@@ -52,12 +57,19 @@ get_bls_headers <- function(host = "download.bls.gov"
 #' This function returns a more limited set of headers used to download an Ecel file.
 #' 
 #' @param refer The URL to use in the Referer header (default: "https://www.bls.gov/lau/stalt-archived.htm")
+#' @param user_agent An optional character string to pass to the USER_AGENT header.
 #' @return A named character vector of HTTP headers
 #' @keywords internal
-get_bls_excel_headers <- function(refer = "https://www.bls.gov/lau/stalt-archived.htm") {
-  # 1. Check for a local environment variable first
-  # This allows users to set their email/identity via .Renviron or Sys.setenv()
-  ua <- Sys.getenv("BLS_USER_AGENT")
+get_bls_excel_headers <- function(refer = "https://www.bls.gov/lau/stalt-archived.htm",
+                                  user_agent = NULL) {
+  
+  # 1. Check for explicitly passed argument first
+  if (!is.null(user_agent) && user_agent != "") {
+    ua <- user_agent
+  } else {
+    # 2. Check for a local environment variable if argument is missing
+    ua <- Sys.getenv("BLS_USER_AGENT")
+  }
   
   # 2. If the variable is empty, use a list of plausible headers to rotate
   if (ua == "") {
@@ -201,6 +213,7 @@ get_bls_diagnostics <- function(bls_obj) {
 #' @param cache_dir A character string specifying the local directory to store cached files. May also be set with the  enviroment variable `BLS_CACHE_DIR`
 #'   Defaults to a persistent user data directory managed by \code{tools::R_user_dir}.
 #' @param verbose Logical. Defaults to FALSE.  If TRUE, returns status messages for download.
+#' @param user_agent An optional character string to pass to the USER_AGENT HTML header.
 #'
 #' @return A character string containing the local path to the downloaded (or cached) file.
 #'
@@ -220,9 +233,12 @@ get_bls_diagnostics <- function(bls_obj) {
 #' local_path <- smart_bls_download(url)
 #' data <- data.table::fread(local_path)
 #' }
-smart_bls_download <- function(url, cache_dir = NULL, verbose = FALSE) {
+smart_bls_download <- function(url,
+                               cache_dir = NULL,
+                               verbose = FALSE,
+                               user_agent = NULL) {
   # 1. Define specific headers required by BLS servers
-  bls_headers <- httr::add_headers(.headers = get_bls_headers())
+  bls_headers <- httr::add_headers(.headers = get_bls_headers(user_agent = user_agent))
   
   # 2. Establish cache directory
   if (is.null(cache_dir)) {
@@ -466,6 +482,7 @@ has_bls_issues <- function(bls_obj) {
 #'
 #' @param urls Named or unnamed character vector of URLs to download. If unnamed, names will be auto-generated from basenames.
 #' @param suppress_warnings Logical. If TRUE, suppress individual download warnings
+#' @param user_agent An optional character string to pass to the USER_AGENT HTML header
 #' @param cache Logical. If TRUE, uses local persistent caching.
 #'
 #' @return Named list of bls_data objects
@@ -474,6 +491,7 @@ has_bls_issues <- function(bls_obj) {
 download_bls_files <- function(
   urls,
   suppress_warnings = TRUE,
+  user_agent = NULL,
   cache = check_bls_cache_env()
 ) {
   # Auto-generate names if URLs are unnamed
@@ -491,6 +509,7 @@ download_bls_files <- function(
     result <- fread_bls(
       urls[[name]],
       verbose = !suppress_warnings,
+      user_agent = user_agent,
       cache = cache
     )
 

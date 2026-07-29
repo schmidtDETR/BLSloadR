@@ -8,6 +8,7 @@ fread_bls(
   url,
   verbose = FALSE,
   cache = check_bls_cache_env(),
+  user_agent = NULL,
   use_fallback = TRUE
 )
 }
@@ -17,6 +18,8 @@ fread_bls(
 \item{verbose}{Logical. If TRUE, prints additional messages during file read and processing. If FALSE (default), suppresses these messages.}
 
 \item{cache}{Logical. If TRUE, uses local persistent caching.}
+
+\item{user_agent}{An optional character string to pass to the USER_AGENT header in the request to BLS for data.}
 
 \item{use_fallback}{Logical. If TRUE and httr download fails, fallback to download.file(). Default TRUE.}
 }
