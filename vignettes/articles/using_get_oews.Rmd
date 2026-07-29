@@ -8,6 +8,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,    # Hide download messages
   warning = FALSE,    # Hide coercion warnings
+  eval = FALSE,
   fig.width = 9,
   fig.height = 6
 )
