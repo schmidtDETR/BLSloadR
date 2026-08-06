@@ -6,6 +6,7 @@
 #'
 #' @param only_states Logical. If TRUE (default), includes only state-level data.
 #'   If FALSE, includes sub-state areas like New York City where available.
+#' @param add_analytics Logical.  If TRUE (default), adds additional analytic columns nased on the raw data in the table from BLS. If FALSE, only returns columns in original data.
 #' @param geometry Logical. If TRUE, uses tigris::states() to download shapefiles for the states
 #'   to include in the data. If FALSE (default), only returns data table.
 #' @param shift_geometry Logical.  If TRUE, uses `tigris::shift_geometry()` to reposition the shapefiles for the non-continental United States for more convenient image generation.  If FALSE (default) uses original shapefiles.
@@ -34,6 +35,7 @@
 #' @importFrom dplyr group_by
 #' @importFrom dplyr ungroup
 #' @importFrom dplyr arrange
+#' @importFrom dplyr bind_rows
 #' @importFrom sf st_as_sf
 #' @importFrom stringr str_remove
 #' @importFrom stringr str_length
@@ -65,36 +67,53 @@
 #'
 
 get_salt <- function(
-  only_states = TRUE,
-  geometry = FALSE,
-  shift_geometry = FALSE,
-  suppress_warnings = TRUE,
-  return_diagnostics = FALSE,
-  user_agent = NULL
+    only_states = TRUE,
+    add_analytics = TRUE,
+    geometry = FALSE,
+    shift_geometry = FALSE,
+    suppress_warnings = TRUE,
+    return_diagnostics = FALSE,
+    user_agent = NULL
 ) {
   salt_url <- "https://www.bls.gov/lau/stalt-moave.xlsx"
   
-  # Downloading BLS Alternative Measures file
+  # Downloading BLS Alternative Measures files (both sheets)
   if(!suppress_warnings){
-    message("Downloading Alternative Measures from Excel file from BLS...")
+    message("Downloading 12-month Alternative Measures from Excel file from BLS...")
   }
-  salt_data <- read_bls_excel(salt_url, verbose = !suppress_warnings, skip = 1, user_agent = user_agent)
-
+  salt_12 <- read_bls_excel(salt_url, verbose = !suppress_warnings, skip = 1, user_agent = user_agent, sheet = "stalt-moave")
+  
+  if(!suppress_warnings){
+    message("Downloading 11-month Alternative Measures from Excel file from BLS...")
+  }
+  salt_11 <- read_bls_excel(salt_url, verbose = !suppress_warnings, skip = 2, user_agent = user_agent, sheet = "11-month averages")
+  
+  if(is.null(salt_12) || is.null(salt_11)){
+    stop("Download of BLS data failed. Please run with suppress_warnings = FALSE to see status messages.")
+  }
+  
+  # Add column identifying the type of data
+  salt_12 <- salt_12 |> dplyr::mutate(data_type = "12-month average")
+  salt_11 <- salt_11 |> dplyr::mutate(data_type = "11-month average")
+  
+  # Remove the "Record" column
+  salt_12 <- salt_12 |> dplyr::select(-Record)
+  salt_11 <- salt_11 |> dplyr::select(-Record)
+  
+  # Merge the data
+  salt_data <- dplyr::bind_rows(salt_12, salt_11)
+  
   # Track processing steps
   processing_steps <- character(0)
-  
-  if(is.null(salt_data)){
-    stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE to see status messages.")
-  }
   
   # Read and process Excel file
   message("Processing SALT Excel file...\n")
   salt_data <- salt_data |> 
     dplyr::rename_with(.fn = stringr::str_to_lower) |>
+    dplyr::filter(!is.na(`end year`)) |> # Filters out footnote rows efficiently
     dplyr::mutate(date = lubridate::yq(paste0(`end year`, `end quarter`))) |>
     dplyr::select(
       -c(
-        record,
         `start year`,
         `start quarter`,
         `end year`,
@@ -115,36 +134,46 @@ get_salt <- function(
       .fn = stringr::str_replace_all,
       pattern = " ",
       replacement = "_"
-    ) |>
-    dplyr::mutate(
-      not_job_losers = unemployed - job_losers,
-      unemployed_under_14_weeks = unemployed - `unemployed_15+_weeks`,
-      losers_notlosers_ratio = job_losers / not_job_losers,
-      u1b = u3 - u1,
-      u2b = u3 - u2,
-      u4b = discouraged_workers / (civilian_labor_force + discouraged_workers),
-      u4c = u4 - u4b,
-      marginally_attached_not_discouraged = all_marginally_attached -
-        discouraged_workers,
-      u5b = marginally_attached_not_discouraged /
-        (civilian_labor_force + marginally_attached_not_discouraged),
-      u5c = u5 -
-        (discouraged_workers /
-          (civilian_labor_force +
-            discouraged_workers +
-            marginally_attached_not_discouraged)) -
-        u5b,
-      u6b = involuntary_part_time_employed / civilian_labor_force,
-      period_name = zoo::as.yearqtr(date)
     )
-
+  
   processing_steps <- c(
     processing_steps,
-    "read_excel",
-    "standardized_columns",
-    "calculated_derived_measures"
+    "read_excel_both_sheets",
+    "merged_sheets_and_added_data_type",
+    "removed_footnotes",
+    "standardized_columns"
   )
-
+  
+  if(add_analytics){
+    salt_data <- salt_data |> 
+      dplyr::mutate(
+        not_job_losers = unemployed - job_losers,
+        unemployed_under_14_weeks = unemployed - `unemployed_15+_weeks`,
+        losers_notlosers_ratio = job_losers / not_job_losers,
+        u1b = u3 - u1,
+        u2b = u3 - u2,
+        u4b = discouraged_workers / (civilian_labor_force + discouraged_workers),
+        u4c = u4 - u4b,
+        marginally_attached_not_discouraged = all_marginally_attached -
+          discouraged_workers,
+        u5b = marginally_attached_not_discouraged /
+          (civilian_labor_force + marginally_attached_not_discouraged),
+        u5c = u5 -
+          (discouraged_workers /
+             (civilian_labor_force +
+                discouraged_workers +
+                marginally_attached_not_discouraged)) -
+          u5b,
+        u6b = involuntary_part_time_employed / civilian_labor_force,
+        period_name = zoo::as.yearqtr(date)
+      )
+    
+    processing_steps <- c(
+      processing_steps,
+      "calculated_derived_measures"
+    )
+  }
+  
   # Filter to states only if requested
   if (only_states | geometry) {
     salt_data <- salt_data |>
@@ -153,74 +182,75 @@ get_salt <- function(
       dplyr::select(-fips_len)
     processing_steps <- c(processing_steps, "filtered_states_only")
   }
-
-  # Add quartile comparisons and lagged values
-  salt_data <- salt_data |>
-    dplyr::group_by(date) |>
-    dplyr::mutate(
-      u1_25 = quantile(u1, probs = c(0.25), na.rm = TRUE),
-      u1_50 = median(u1, na.rm = TRUE),
-      u1_75 = quantile(u1, probs = c(0.75), na.rm = TRUE),
-      u2_25 = quantile(u2, probs = c(0.25), na.rm = TRUE),
-      u2_50 = median(u2, na.rm = TRUE),
-      u2_75 = quantile(u2, probs = c(0.75), na.rm = TRUE),
-      u3_25 = quantile(u3, probs = c(0.25), na.rm = TRUE),
-      u3_50 = median(u3, na.rm = TRUE),
-      u3_75 = quantile(u3, probs = c(0.75), na.rm = TRUE),
-      u4b_25 = quantile(u4b, probs = c(0.25), na.rm = TRUE),
-      u4b_50 = median(u4b, na.rm = TRUE),
-      u4b_75 = quantile(u4b, probs = c(0.75), na.rm = TRUE),
-      u5b_25 = quantile(u5b, probs = c(0.25), na.rm = TRUE),
-      u5b_50 = median(u5b, na.rm = TRUE),
-      u5b_75 = quantile(u5b, probs = c(0.75), na.rm = TRUE)
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::group_by(state) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("^u[0-9]"),
-        .fns = function(x) {
-          dplyr::lag(x, 4)
-        },
-        .names = "py_{.col}"
-      )
-    ) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("^u[0-9]"),
-        .fns = function(x) {
-          dplyr::lag(x, 1)
-        },
-        .names = "pq_{.col}"
-      )
-    ) |>
-    dplyr::ungroup()
-
-  processing_steps <- c(
-    processing_steps,
-    "added_quartile_comparisons",
-    "added_lagged_values"
-  )
-
+  
+  
+  if(add_analytics){
+    # Add quartile comparisons and lagged values
+    salt_data <- salt_data |>
+      dplyr::group_by(date) |>
+      dplyr::mutate(
+        u1_25 = quantile(u1, probs = c(0.25), na.rm = TRUE),
+        u1_50 = median(u1, na.rm = TRUE),
+        u1_75 = quantile(u1, probs = c(0.75), na.rm = TRUE),
+        u2_25 = quantile(u2, probs = c(0.25), na.rm = TRUE),
+        u2_50 = median(u2, na.rm = TRUE),
+        u2_75 = quantile(u2, probs = c(0.75), na.rm = TRUE),
+        u3_25 = quantile(u3, probs = c(0.25), na.rm = TRUE),
+        u3_50 = median(u3, na.rm = TRUE),
+        u3_75 = quantile(u3, probs = c(0.75), na.rm = TRUE),
+        u4b_25 = quantile(u4b, probs = c(0.25), na.rm = TRUE),
+        u4b_50 = median(u4b, na.rm = TRUE),
+        u4b_75 = quantile(u4b, probs = c(0.75), na.rm = TRUE),
+        u5b_25 = quantile(u5b, probs = c(0.25), na.rm = TRUE),
+        u5b_50 = median(u5b, na.rm = TRUE),
+        u5b_75 = quantile(u5b, probs = c(0.75), na.rm = TRUE)
+      ) |>
+      dplyr::ungroup() |>
+      dplyr::arrange(state, date) |> # Explicit arrangement required for lagging across appended data files
+      dplyr::group_by(state) |>
+      dplyr::mutate(
+        dplyr::across(
+          tidyselect::matches("^u[0-9]"),
+          .fns = function(x) {
+            dplyr::lag(x, 4)
+          },
+          .names = "py_{.col}"
+        )
+      ) |>
+      dplyr::mutate(
+        dplyr::across(
+          tidyselect::matches("^u[0-9]"),
+          .fns = function(x) {
+            dplyr::lag(x, 1)
+          },
+          .names = "pq_{.col}"
+        )
+      ) |>
+      dplyr::ungroup()
+    
+    processing_steps <- c(
+      processing_steps,
+      "added_quartile_comparisons",
+      "added_lagged_values"
+    )
+  }
+  
   if (geometry) {
     shapes <- tigris::states() |>
-      select(NAME, geometry)
+      dplyr::select(NAME, geometry)
     
     if (shift_geometry) {
       shapes <- shapes |> 
         tigris::shift_geometry()
     }
-
+    
     salt_data <- salt_data |>
       dplyr::left_join(shapes, by = c("state" = "NAME")) |>
       sf::st_as_sf()
-
+    
     processing_steps <- c(processing_steps, "added U.S. state geometry")
   }
-
-  # Clean up temporary file
-  unlink(tf)
-
+  
   # Create simple download info (since this is Excel, not using fread_bls)
   download_info <- list(
     "salt_excel" = list(
@@ -238,15 +268,7 @@ get_salt <- function(
       warnings = character(0)
     )
   )
-
-  # # Create BLS data collection object
-  # result <- create_bls_object(
-  #   data = salt_data,
-  #   downloads = list("salt_excel" = list(diagnostics = download_info$salt_excel)),
-  #   data_type = "SALT",
-  #   processing_steps = processing_steps
-  # )
-
+  
   # Create the BLS data collection object
   bls_collection <- create_bls_object(
     data = salt_data,
@@ -256,24 +278,18 @@ get_salt <- function(
     data_type = "SALT",
     processing_steps = processing_steps
   )
-
-  # Display warnings if requested
+  
+  # Print messages/warnings if not suppressed
   if (!suppress_warnings) {
+    message("SALT data download and processing complete.\n")
+    message("Final dimensions: ", paste(dim(salt_data), collapse = " x "), "\n")
     print_bls_warnings(bls_collection, detailed = FALSE)
   }
-
+  
   # Return either the collection object or just the data
   if (return_diagnostics) {
     return(bls_collection)
   } else {
     return(salt_data)
   }
-
-  # Print download complete, if warnings not disabled.
-  if (!suppress_warnings) {
-    message("SALT data download and processing complete.\n")
-    message("Final dimensions:", paste(dim(salt_data), collapse = " x "), "\n")
-  }
-
-  return(result)
 }
