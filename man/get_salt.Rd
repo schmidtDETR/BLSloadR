@@ -6,6 +6,7 @@
 \usage{
 get_salt(
   only_states = TRUE,
+  add_analytics = TRUE,
   geometry = FALSE,
   shift_geometry = FALSE,
   suppress_warnings = TRUE,
@@ -16,6 +17,8 @@ get_salt(
 \arguments{
 \item{only_states}{Logical. If TRUE (default), includes only state-level data.
 If FALSE, includes sub-state areas like New York City where available.}
+
+\item{add_analytics}{Logical.  If TRUE (default), adds additional analytic columns nased on the raw data in the table from BLS. If FALSE, only returns columns in original data.}
 
 \item{geometry}{Logical. If TRUE, uses tigris::states() to download shapefiles for the states
 to include in the data. If FALSE (default), only returns data table.}
