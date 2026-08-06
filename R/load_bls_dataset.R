@@ -49,7 +49,7 @@
 #' @importFrom data.table rbindlist
 #' @importFrom data.table :=
 #' @importFrom rvest read_html html_elements html_attr
-#' @importFrom httr GET add_headers stop_for_status content
+#' @importFrom httr GET add_headers content status_code
 #' @importFrom dplyr left_join
 #' @importFrom stats setNames
 #' @importFrom utils head
@@ -92,34 +92,34 @@
 #' }
 
 load_bls_dataset <- function(
-  database_code,
-  return_full = FALSE,
-  simplify_table = TRUE,
-  suppress_warnings = FALSE,
-  which_data = NULL,
-  cache = check_bls_cache_env(),
-  user_agent = NULL
+    database_code,
+    return_full = FALSE,
+    simplify_table = TRUE,
+    suppress_warnings = FALSE,
+    which_data = NULL,
+    cache = check_bls_cache_env(),
+    user_agent = NULL
 ) {
   # Validate inputs
   if (!is.character(database_code) || length(database_code) != 1) {
     stop("database_code must be a single character string")
   }
-
+  
   # Validate which_data input
   if (
     !is.null(which_data) &&
-      (!is.character(which_data) ||
-        length(which_data) != 1 ||
-        !which_data %in% c("all", "current"))
+    (!is.character(which_data) ||
+     length(which_data) != 1 ||
+     !which_data %in% c("all", "current"))
   ) {
     stop("which_data must be NULL, 'all', or 'current'")
   }
-
+  
   base_url <- sprintf(
     "https://download.bls.gov/pub/time.series/%s/",
     database_code
   )
-
+  
   # Function to scrape directory contents with proper headers
   get_directory_files <- function(url, prefix) {
     tryCatch({
@@ -128,11 +128,14 @@ load_bls_dataset <- function(
       
       # Make request with headers
       response <- httr::GET(url, httr::add_headers(.headers = headers))
-      httr::stop_for_status(response)
       
-      # Exit function if download failed.
-      if(is.null(downloads)){
-        stop("Download of BLS data failed.  Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.")
+      # Graceful, informative exit on HTTP error 
+      # (replaces stop_for_status() and the invalid 'downloads' scope error)
+      if (httr::status_code(response) >= 400) {
+        stop(sprintf(
+          "Download of BLS data failed with HTTP status %s. Please run with suppress_warnings = FALSE for additional status messages. Consider setting the BLS_USER_AGENT environment variable to your email address to avoid Status 403 errors from BLS.",
+          httr::status_code(response)
+        ))
       }
       
       # Parse HTML content
@@ -157,71 +160,71 @@ load_bls_dataset <- function(
       stop("Could not access BLS directory: ", url, "\nError: ", e$message)
     })
   }
-
+  
   # Get all valid files from the directory
   file_names <- get_directory_files(base_url, database_code)
-
+  
   if (length(file_names) == 0) {
     stop(
       "No valid files found in the BLS database directory for code: ",
       database_code
     )
   }
-
+  
   # Create file table and classify by pattern
   file_table <- data.table(file_name = file_names)
   file_table[,
-    file_type := fcase(
-      grepl("\\.data\\.", file_name)       , "data"   ,
-      grepl("\\.series($|\\.)", file_name) , "series" ,
-      grepl("\\.aspect($|\\.)", file_name) , "aspect" ,
-      default = "mapping"
-    )
+             file_type := fcase(
+               grepl("\\.data\\.", file_name)       , "data"   ,
+               grepl("\\.series($|\\.)", file_name) , "series" ,
+               grepl("\\.aspect($|\\.)", file_name) , "aspect" ,
+               default = "mapping"
+             )
   ]
-
+  
   # Identify files
   mapping_files <- file_table[file_type == "mapping", file_name]
   data_files <- file_table[file_type == "data", file_name]
   series_file <- file_table[file_type == "series", file_name]
   aspect_files <- file_table[file_type == "aspect", file_name]
-
+  
   if (length(series_file) == 0) {
     stop("Could not find a series file in the BLS database directory.")
   }
-
+  
   # Handle multiple series files (prompt user to choose)
   if (length(series_file) > 1) {
     message("Multiple series files found. Please select a file to load:\n")
     for (i in seq_along(series_file)) {
       message(i, ": ", series_file[i], "\n")
     }
-
+    
     # Get user input for series file selection
     selected_series_index <- as.integer(readline(
       prompt = "Enter the number of the series file you want to load: "
     ))
-
+    
     # Validate the input
     if (
       is.na(selected_series_index) ||
-        selected_series_index < 1 ||
-        selected_series_index > length(series_file)
+      selected_series_index < 1 ||
+      selected_series_index > length(series_file)
     ) {
       stop(
         "Invalid selection. Please run the function again and enter a valid number."
       )
     }
-
+    
     # Get the selected series file name
     series_file <- series_file[selected_series_index]
     message("Loading series file:", series_file, "\n")
   } else if (length(series_file) == 1) {
     message("Loading series file:", series_file, "\n")
   }
-
+  
   # --- Logic for data file selection ---
   selected_data_file <- NULL
-
+  
   # 1. Attempt Auto-selection if requested
   if (!is.null(which_data)) {
     pattern <- NULL
@@ -230,12 +233,12 @@ load_bls_dataset <- function(
     } else if (which_data == "current") {
       pattern <- "Current"
     }
-
+    
     if (!is.null(pattern)) {
       # Look for files containing the pattern (case insensitive)
       # We check if pattern is in the filename
       matches <- grep(pattern, data_files, ignore.case = TRUE, value = TRUE)
-
+      
       if (length(matches) > 0) {
         # Use the first match
         selected_data_file <- matches[1]
@@ -255,7 +258,7 @@ load_bls_dataset <- function(
       }
     }
   }
-
+  
   # 2. Fallback to Prompt or Single File Logic if not auto-selected
   if (is.null(selected_data_file)) {
     if (length(data_files) > 1) {
@@ -264,23 +267,23 @@ load_bls_dataset <- function(
       for (i in seq_along(data_files)) {
         message(i, ": ", data_files[i], "\n")
       }
-
+      
       # Get user input for file selection
       selected_index <- as.integer(readline(
         prompt = "Enter the number of the file you want to load: "
       ))
-
+      
       # Validate the input
       if (
         is.na(selected_index) ||
-          selected_index < 1 ||
-          selected_index > length(data_files)
+        selected_index < 1 ||
+        selected_index > length(data_files)
       ) {
         stop(
           "Invalid selection. Please run the function again and enter a valid number."
         )
       }
-
+      
       # Get the selected file name
       selected_data_file <- data_files[selected_index]
       message("Loading:", selected_data_file, "\n")
@@ -292,7 +295,7 @@ load_bls_dataset <- function(
       stop("No data files found in the BLS database directory.")
     }
   }
-
+  
   # --- Logic for aspect file selection ---
   selected_aspect_file <- NULL
   if (length(aspect_files) > 1) {
@@ -300,23 +303,23 @@ load_bls_dataset <- function(
     for (i in seq_along(aspect_files)) {
       message(i, ": ", aspect_files[i], "\n")
     }
-
+    
     # Get user input for aspect file selection
     selected_aspect_index <- as.integer(readline(
       prompt = "Enter the number of the aspect file you want to load: "
     ))
-
+    
     # Validate the input
     if (
       is.na(selected_aspect_index) ||
-        selected_aspect_index < 1 ||
-        selected_aspect_index > length(aspect_files)
+      selected_aspect_index < 1 ||
+      selected_aspect_index > length(aspect_files)
     ) {
       stop(
         "Invalid selection. Please run the function again and enter a valid number."
       )
     }
-
+    
     # Get the selected aspect file name
     selected_aspect_file <- aspect_files[selected_aspect_index]
     message("Loading aspect file:", selected_aspect_file, "\n")
@@ -329,13 +332,13 @@ load_bls_dataset <- function(
       message("No aspect files found in the BLS database directory.")
     }
   }
-
+  
   # Create URLs for downloading
   urls <- c(
     setNames(paste0(base_url, selected_data_file), selected_data_file),
     setNames(paste0(base_url, series_file), series_file)
   )
-
+  
   # Add aspect file URL if it exists
   if (!is.null(selected_aspect_file)) {
     aspect_url <- setNames(
@@ -344,24 +347,24 @@ load_bls_dataset <- function(
     )
     urls <- c(urls, aspect_url)
   }
-
+  
   # Add mapping file URLs
   if (length(mapping_files) > 0) {
     mapping_urls <- setNames(paste0(base_url, mapping_files), mapping_files)
     urls <- c(urls, mapping_urls)
   }
-
+  
   # Download all files using the new system
   downloads <- download_bls_files(
     urls,
     suppress_warnings = suppress_warnings,
     cache = cache
   )
-
+  
   # Extract data from downloads
   data_dt <- get_bls_data(downloads[[selected_data_file]])
   series_dt <- get_bls_data(downloads[[series_file]])
-
+  
   # Remove unwanted columns from all files
   columns_to_remove <- c(
     "display_level",
@@ -372,23 +375,23 @@ load_bls_dataset <- function(
   data_dt <- data_dt |> dplyr::select(-tidyselect::any_of(columns_to_remove))
   series_dt <- series_dt |>
     dplyr::select(-tidyselect::any_of(columns_to_remove))
-
+  
   # Track processing steps
   processing_steps <- character(0)
-
+  
   # STEP 1: Join data to series first to get lookup codes
   if (!suppress_warnings) {
     message("Joining data to series file...")
   }
   full_dt <- left_join(data_dt, series_dt, by = "series_id")
   processing_steps <- c(processing_steps, "joined_data_to_series")
-
+  
   # Memory cleanup after initial large join (skip if return_full=TRUE needs these)
   if (!return_full) {
     rm(data_dt, series_dt)
     gc(verbose = FALSE)
   }
-
+  
   # STEP 2: Join aspect file if it exists (after series, before mapping files)
   if (
     !is.null(selected_aspect_file) && selected_aspect_file %in% names(downloads)
@@ -399,21 +402,21 @@ load_bls_dataset <- function(
           message("Joining aspect file...")
         }
         aspect_dt <- get_bls_data(downloads[[selected_aspect_file]])
-
+        
         # Remove unwanted columns from aspect file
         aspect_dt <- aspect_dt |>
           dplyr::select(-tidyselect::any_of(columns_to_remove))
-
+        
         # Rename the value column in aspect file to aspect_value to avoid conflicts
         if ("value" %in% names(aspect_dt)) {
           aspect_dt <- aspect_dt |>
             dplyr::rename(aspect_value = value)
         }
-
+        
         # Join aspect file on series_id, year, and period
         join_cols <- c("series_id", "year", "period")
         available_join_cols <- intersect(join_cols, names(aspect_dt))
-
+        
         if (length(available_join_cols) > 0) {
           full_dt <- left_join(full_dt, aspect_dt, by = available_join_cols)
           processing_steps <- c(processing_steps, "joined_aspect_file")
@@ -443,22 +446,22 @@ load_bls_dataset <- function(
       }
     )
   }
-
+  
   # STEP 3: Now join mapping files to the combined table
   for (map_file in mapping_files) {
     if (map_file %in% names(downloads)) {
       tryCatch(
         {
           map_dt <- get_bls_data(downloads[[map_file]])
-
+          
           # Remove unwanted columns from mapping file
           map_dt <- map_dt |>
             dplyr::select(-tidyselect::any_of(columns_to_remove))
-
+          
           if (ncol(map_dt) == 2) {
             # For mapping files with exactly 2 columns, assume first is join column
             join_col <- names(map_dt)[1]
-
+            
             if (join_col %in% names(full_dt)) {
               if (!suppress_warnings) {
                 message(
@@ -488,7 +491,7 @@ load_bls_dataset <- function(
             # For mapping files with >2 columns, use all except last as potential join columns
             potential_join_cols <- names(map_dt)[1:(ncol(map_dt) - 1)]
             join_cols <- intersect(potential_join_cols, names(full_dt))
-
+            
             if (length(join_cols) > 0) {
               if (!suppress_warnings) {
                 message(
@@ -522,13 +525,13 @@ load_bls_dataset <- function(
       )
     }
   }
-
+  
   # STEP 4: Apply table simplification if requested
   if (simplify_table) {
     if (!suppress_warnings) {
       message("Simplifying table structure...")
     }
-
+    
     full_dt <- full_dt |>
       dplyr::mutate(
         value = as.numeric(value),
@@ -544,10 +547,10 @@ load_bls_dataset <- function(
         )
       ) |>
       dplyr::select(-tidyselect::contains("_code"))
-
+    
     processing_steps <- c(processing_steps, "simplified_table")
   }
-
+  
   # Create the BLS data collection object
   bls_collection <- create_bls_object(
     data = full_dt,
@@ -555,7 +558,7 @@ load_bls_dataset <- function(
     data_type = paste0("BLS-", toupper(database_code)),
     processing_steps = processing_steps
   )
-
+  
   # Print summary unless suppressed
   if (!suppress_warnings) {
     if (has_bls_issues(bls_collection)) {
@@ -568,7 +571,7 @@ load_bls_dataset <- function(
       message("\nDownload completed successfully with no issues detected.\n")
     }
   }
-
+  
   # Return based on return_full parameter
   if (return_full) {
     return(list(
