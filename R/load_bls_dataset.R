@@ -36,6 +36,8 @@
 #'   }
 #'   If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.
 #'
+#' @param default_series Logical. Defaults to FALSE. If TRUE, the function automatically selects a series file that ends exactly with ".series". If FALSE, or if no such file is detected, it falls back to the default behavior of prompting the user if multiple series files exist.
+#'
 #' @param cache Logical.  Uses USE_BLS_CACHE environment variable, or defaults to FALSE. If TRUE, will download a cached file from BLS server and update cache if BLS server indicates an updated file.
 #' 
 #' @param user_agent Optional character string which provides a USER_AGENT value for the HTTP request for data form BLS.
@@ -97,12 +99,17 @@ load_bls_dataset <- function(
     simplify_table = TRUE,
     suppress_warnings = FALSE,
     which_data = NULL,
+    default_series = FALSE,
     cache = check_bls_cache_env(),
     user_agent = NULL
 ) {
   # Validate inputs
   if (!is.character(database_code) || length(database_code) != 1) {
     stop("database_code must be a single character string")
+  }
+  
+  if (!is.logical(default_series) || length(default_series) != 1 || is.na(default_series)) {
+    stop("default_series must be TRUE or FALSE")
   }
   
   # Validate which_data input
@@ -192,34 +199,51 @@ load_bls_dataset <- function(
     stop("Could not find a series file in the BLS database directory.")
   }
   
-  # Handle multiple series files (prompt user to choose)
-  if (length(series_file) > 1) {
-    message("Multiple series files found. Please select a file to load:\n")
-    for (i in seq_along(series_file)) {
-      message(i, ": ", series_file[i], "\n")
+  # --- Logic for series file selection ---
+  auto_series_selected <- FALSE
+  
+  if (default_series) {
+    # Check for a file that strictly ends in .series
+    series_match <- grep("\\.series$", series_file, value = TRUE)
+    if (length(series_match) >= 1) {
+      series_file <- series_match[1]
+      message("Auto-selected default series file: ", series_file, "\n")
+      auto_series_selected <- TRUE
+    } else {
+      message("Warning: default_series = TRUE but no file ending exactly in '.series' was found. Falling back to default selection.\n")
     }
-    
-    # Get user input for series file selection
-    selected_series_index <- as.integer(readline(
-      prompt = "Enter the number of the series file you want to load: "
-    ))
-    
-    # Validate the input
-    if (
-      is.na(selected_series_index) ||
-      selected_series_index < 1 ||
-      selected_series_index > length(series_file)
-    ) {
-      stop(
-        "Invalid selection. Please run the function again and enter a valid number."
-      )
+  }
+  
+  if (!auto_series_selected) {
+    # Handle multiple series files (prompt user to choose)
+    if (length(series_file) > 1) {
+      message("Multiple series files found. Please select a file to load:\n")
+      for (i in seq_along(series_file)) {
+        message(i, ": ", series_file[i], "\n")
+      }
+      
+      # Get user input for series file selection
+      selected_series_index <- as.integer(readline(
+        prompt = "Enter the number of the series file you want to load: "
+      ))
+      
+      # Validate the input
+      if (
+        is.na(selected_series_index) ||
+        selected_series_index < 1 ||
+        selected_series_index > length(series_file)
+      ) {
+        stop(
+          "Invalid selection. Please run the function again and enter a valid number."
+        )
+      }
+      
+      # Get the selected series file name
+      series_file <- series_file[selected_series_index]
+      message("Loading series file:", series_file, "\n")
+    } else if (length(series_file) == 1) {
+      message("Loading series file:", series_file, "\n")
     }
-    
-    # Get the selected series file name
-    series_file <- series_file[selected_series_index]
-    message("Loading series file:", series_file, "\n")
-  } else if (length(series_file) == 1) {
-    message("Loading series file:", series_file, "\n")
   }
   
   # --- Logic for data file selection ---
