@@ -192,7 +192,7 @@ ces_seasonal <- get_national_ces(
 )
 
 print(paste("Seasonally adjusted data:", nrow(ces_seasonal), "rows"))
-#> [1] "Seasonally adjusted data: 399831 rows"
+#> [1] "Seasonally adjusted data: 400673 rows"
 ```
 
 ``` r
@@ -204,7 +204,7 @@ ces_earnings <- get_national_ces(
 )
 
 print(paste("Real earnings data:", nrow(ces_earnings), "rows"))
-#> [1] "Real earnings data: 533780 rows"
+#> [1] "Real earnings data: 535824 rows"
 print("Sample of data types included:")
 #> [1] "Sample of data types included:"
 print(head(unique(ces_earnings$data_type_text), 5))

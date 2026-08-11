@@ -15,7 +15,7 @@ will prompt for an input of which file to use."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">BLSloadR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@ will prompt for an input of which file to use.</p>
 <span>  simplify_table <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  suppress_warnings <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  which_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  default_series <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cache <span class="op">=</span> <span class="fu"><a href="check_bls_cache_env.html">check_bls_cache_env</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  user_agent <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -109,6 +110,10 @@ and generates a date column from the year and period columns in the data.</p></d
 <li><p>"current" - Automatically selects the data file containing "Current" (e.g., "ce.data.0.Current").</p></li>
 <li><p>NULL - Default behavior. Prompts the user to select a file if multiple exist, or selects the single available file.</p></li>
 </ul><p>If the requested pattern is not found, the function falls back to the default behavior, prompting the user to select a file.</p></dd>
+
+
+<dt id="arg-default-series">default_series<a class="anchor" aria-label="anchor" href="#arg-default-series"></a></dt>
+<dd><p>Logical. Defaults to FALSE. If TRUE, the function automatically selects a series file that ends exactly with ".series". If FALSE, or if no such file is detected, it falls back to the default behavior of prompting the user if multiple series files exist.</p></dd>
 
 
 <dt id="arg-cache">cache<a class="anchor" aria-label="anchor" href="#arg-cache"></a></dt>

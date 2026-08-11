@@ -10,6 +10,7 @@ unemployment rate (U-3).
 ``` r
 get_salt(
   only_states = TRUE,
+  add_analytics = TRUE,
   geometry = FALSE,
   shift_geometry = FALSE,
   suppress_warnings = TRUE,
@@ -24,6 +25,12 @@ get_salt(
 
   Logical. If TRUE (default), includes only state-level data. If FALSE,
   includes sub-state areas like New York City where available.
+
+- add_analytics:
+
+  Logical. If TRUE (default), adds additional analytic columns nased on
+  the raw data in the table from BLS. If FALSE, only returns columns in
+  original data.
 
 - geometry:
 

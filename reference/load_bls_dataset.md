@@ -17,6 +17,7 @@ load_bls_dataset(
   simplify_table = TRUE,
   suppress_warnings = FALSE,
   which_data = NULL,
+  default_series = FALSE,
   cache = check_bls_cache_env(),
   user_agent = NULL
 )
@@ -74,6 +75,13 @@ load_bls_dataset(
 
   If the requested pattern is not found, the function falls back to the
   default behavior, prompting the user to select a file.
+
+- default_series:
+
+  Logical. Defaults to FALSE. If TRUE, the function automatically
+  selects a series file that ends exactly with ".series". If FALSE, or
+  if no such file is detected, it falls back to the default behavior of
+  prompting the user if multiple series files exist.
 
 - cache:
 
